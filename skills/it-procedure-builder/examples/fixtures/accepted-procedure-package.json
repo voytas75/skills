@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "1.0",
+  "requestId": "fixture-accepted-procedure",
+  "title": "Fixture Accepted Procedure",
+  "sourceRequestSummary": "Exercise the Builder contract with a bounded local fixture.",
+  "sections": {
+    "executiveSummary": "A deterministic contract fixture.",
+    "scope": "Contract validation only.",
+    "assumptions": "Node.js is available locally.",
+    "dependencies": "The local validator script.",
+    "rolesAndResponsibilities": "The Builder produces an accepted package.",
+    "phasedImplementationPlan": "Validate, render, and verify.",
+    "detailedExecutionSteps": "Run the local contract test.",
+    "deliverables": "A validated procedure package.",
+    "riskRegister": "No production system is affected.",
+    "validationPlan": "Expect a successful validator result.",
+    "rollbackPlan": "Discard temporary test files.",
+    "successMetrics": "The validator returns accepted true.",
+    "mermaidDiagram": "flowchart TD\nA[Validate] --> B[Accept]",
+    "openQuestions": "None."
+  },
+  "claims": [
+    {
+      "text": "This fixture is local and deterministic.",
+      "status": "confirmed",
+      "evidenceIds": ["fixture-local-1"]
+    }
+  ]
+}

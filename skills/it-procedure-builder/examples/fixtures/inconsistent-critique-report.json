@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "1.0",
+  "requestId": "fixture-accepted-procedure",
+  "scores": {
+    "completeness": 4.5,
+    "executability": 4.5,
+    "safety": 5,
+    "evidenceAlignment": 4.5,
+    "validationAndRollback": 4.5
+  },
+  "missingRequiredSections": [],
+  "criticalIssues": [],
+  "requiredFixes": [],
+  "decision": "revision_required"
+}
