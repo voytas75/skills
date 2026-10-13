@@ -3,13 +3,12 @@ name: python-optional-integration-boundaries
 description: "Keep optional SDK seams lazy, typed, and testable."
 license: MIT
 metadata:
-  status: local-draft
-  provenance: TO VERIFY
+  status: ready
+  provenance: owner-confirmed
 ---
 
-> LOCAL DRAFT — not publication-ready. Repository MIT convention is provisional
-> for this draft; original authorship and redistribution rights are TO VERIFY.
-> See [draft provenance](../../DRAFT-PROVENANCE.md).
+> Based on owner-confirmed original operational procedures; distributed under MIT.
+> See [provenance](../../DRAFT-PROVENANCE.md).
 
 # Optional Python integration boundaries
 

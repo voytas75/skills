@@ -13,14 +13,14 @@ Practical skills for AI agents, each focused on a specific task.
 - **[IT Procedure Builder](skills/it-procedure-builder/SKILL.md)** — Build and review an IT procedure with structured steps and local contract checks.
 - **[Evidence-led Deliberation](skills/evidence-led-deliberation/SKILL.md)** — Coordinate OpenClaw subagents around evidence, disagreements, and bounded corrections.
 
-## Coming next · local drafts
+## Python and delivery workflows
 
 - **[GitHub Delivery Verification](skills/github-delivery-verification/SKILL.md)** — Verify the pushed commit, remote content, and CI results before calling delivery complete.
 - **[Cross-platform Python Runtime Recovery](skills/cross-platform-python-runtime-recovery/SKILL.md)** — Trace Python startup failures across Windows and Linux without mixing their environments.
 - **[uv Sync vs Dev Extras](skills/uv-sync-vs-dev-extras/SKILL.md)** — Explain missing packages and choose the right dependency groups, extras, and sync options.
 - **[Python Optional Integration Boundaries](skills/python-optional-integration-boundaries/SKILL.md)** — Keep optional SDKs from breaking the core application and test their failure paths without a provider.
 
-These four drafts are not published. Redistribution rights remain to be confirmed; see [draft provenance](DRAFT-PROVENANCE.md).
+These four skills use MIT with owner-confirmed provenance; see [provenance](DRAFT-PROVENANCE.md).
 
 ## Install
 
