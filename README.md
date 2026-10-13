@@ -1,58 +1,35 @@
 # Agent Skills
 
-Six reusable skills for bounded planning, evidence-led review, and clear output.
+Plan smaller changes. Review the evidence. Fix the right problem.
 
-## Catalog
+Practical skills for AI agents, each focused on a specific task.
 
-| Skill | Use it for |
-| --- | --- |
-| [Divide and Conquer Analysis](skills/divide-and-conquer-analysis/SKILL.md) | Break a subject into meaningful parts, check dependencies, and synthesize a verified conclusion. |
-| [Implementation Reviewer](skills/implementation-reviewer/SKILL.md) | Compare delivered work with one brief or acceptance contract; distinguish gaps, scope drift, and unknowns. |
-| [Feature Slice Planner](skills/feature-slice-planner/SKILL.md) | Choose one small implementation slice with concrete acceptance checks, rollback, and anti-goals. |
-| [Image Prompt Analyzer and Refactorer](skills/ai-image-prompt-analyzer-and-refactorer/SKILL.md) | Separate image-edit targets, preserved properties, reference roles, and real output settings. |
-| [IT Procedure Builder](skills/it-procedure-builder/SKILL.md) | Produce and critique chat-only IT procedure packages with bundled schemas, prompts, and local contract tests. |
-| [Evidence-led Deliberation](skills/evidence-led-deliberation/SKILL.md) | Coordinate native OpenClaw subagents through a lightweight ledger and bounded evidence-based repair rounds. |
+## Pick a skill
 
-Reviewer, planner, and image refactorer are instruction-only. Procedure helpers
-require Node.js 18+ and no third-party Node packages. Deliberation requires an
-OpenClaw host with suitable native subagent tools and an authorized work area.
-No private project runtime or machine-specific path is required.
+- **[Feature Slice Planner](skills/feature-slice-planner/SKILL.md)** — Turn a feature into one manageable change with clear acceptance checks.
+- **[Implementation Reviewer](skills/implementation-reviewer/SKILL.md)** — Check delivered work against the brief and identify gaps or scope drift.
+- **[Divide and Conquer Analysis](skills/divide-and-conquer-analysis/SKILL.md)** — Break down a complex subject and bring the findings back into one conclusion.
+- **[Image Prompt Analyzer and Refactorer](skills/ai-image-prompt-analyzer-and-refactorer/SKILL.md)** — Clarify what an image edit should change, preserve, and take from each reference.
+- **[IT Procedure Builder](skills/it-procedure-builder/SKILL.md)** — Build and review an IT procedure with structured steps and local contract checks.
+- **[Evidence-led Deliberation](skills/evidence-led-deliberation/SKILL.md)** — Coordinate OpenClaw subagents around evidence, disagreements, and bounded corrections.
 
-## Installation
+## Coming next · local drafts
 
-With a GitHub CLI version supporting the preview `gh skill` commands:
+- **[GitHub Delivery Verification](skills/github-delivery-verification/SKILL.md)** — Verify the pushed commit, remote content, and CI results before calling delivery complete.
+- **[Cross-platform Python Runtime Recovery](skills/cross-platform-python-runtime-recovery/SKILL.md)** — Trace Python startup failures across Windows and Linux without mixing their environments.
+- **[uv Sync vs Dev Extras](skills/uv-sync-vs-dev-extras/SKILL.md)** — Explain missing packages and choose the right dependency groups, extras, and sync options.
+- **[Python Optional Integration Boundaries](skills/python-optional-integration-boundaries/SKILL.md)** — Keep optional SDKs from breaking the core application and test their failure paths without a provider.
+
+These four drafts are not published. Redistribution rights remain to be confirmed; see [draft provenance](DRAFT-PROVENANCE.md).
+
+## Install
+
+With GitHub CLI's preview `gh skill` commands:
 
 ```bash
 gh skill install voytas75/skills feature-slice-planner
 ```
 
-Replace the final name with any catalog skill. Consult `gh skill install --help`
-for agent and installation scope. Alternatively, install the complete linked
-skill directory following your agent's local-skill instructions; keep its assets.
+Replace `feature-slice-planner` with a skill from the main catalog. Requirements and examples are in each skill's `SKILL.md`.
 
-## Local validation
-
-From the repository root:
-
-```bash
-gh skill publish --dry-run
-git diff --check
-node skills/it-procedure-builder/scripts/test-contracts.mjs
-node skills/it-procedure-builder/scripts/validate-package.mjs \
-  skills/it-procedure-builder/examples/fixtures/accepted-procedure-package.json \
-  skills/it-procedure-builder/examples/fixtures/accepted-critique-report.json
-```
-
-Dry-run validates skill packaging, not model behavior or publication readiness.
-The procedure helper tests a local contract subset, not full JSON Schema,
-evidence-source truth, infrastructure safety, or image/model output quality.
-
-## License and provenance
-
-The repository contains an [MIT license](LICENSE). The five added packages were
-adapted from owner-supplied local skill sources for portability; those sources
-contained no package-level license, author attribution, or third-party notices.
-That absence does **not** establish authorship or redistribution rights. Their
-original authorship and compatibility with the repository MIT grant remain
-unverified; the owner must confirm rights before redistribution or publication.
-No upstream provenance or license approval is claimed by these adaptations.
+[MIT license](LICENSE). Rights to the five earlier adaptations also remain unverified; absence of source attribution does not establish authorship or permission to redistribute.
