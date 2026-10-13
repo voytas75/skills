@@ -93,7 +93,7 @@ Artykuł inżynierski wymienia jako swoich autorów **Barry'ego Zhanga, Keitha L
 
 Na początek przeczytaj [Feature Slice Planner](skills/feature-slice-planner/SKILL.md): zobacz, jak zapisano warunki użycia, oczekiwany wynik i kontrolę zakresu. Potem porównaj go z [Implementation Reviewer](skills/implementation-reviewer/SKILL.md), który sprawdza wykonanie wobec briefu, czyli opisu zadania. To pokazuje różnicę między instrukcją planowania a instrukcją oceny.
 
-README rozdziela główny katalog od szkiców i sygnalizuje nieustalone prawa do części adaptacji. Zapoznaj się z [informacjami o pochodzeniu szkiców](DRAFT-PROVENANCE.md); dostępność pliku na GitHubie nie jest dowodem autorstwa ani pozwolenia na dalszą dystrybucję.
+README opisuje katalog i sygnalizuje nieustalone prawa do pięciu wcześniejszych adaptacji. Dla czterech skills dotyczących Pythona i dostarczania zmian właściciel potwierdził pochodzenie z własnych procedur oraz udostępnienie na licencji MIT — zobacz [informacje o pochodzeniu](DRAFT-PROVENANCE.md). To potwierdzenie właściciela, nie niezależna ocena prawna; sama dostępność pliku na GitHubie nie dowodzi autorstwa ani prawa do dalszej dystrybucji.
 
 ## 5. Ograniczenia i bezpieczne korzystanie
 
