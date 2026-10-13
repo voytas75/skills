@@ -8,8 +8,7 @@ legal determination. The filename is retained to preserve existing links.
 An initial web and GitHub search identified related workflows but no independent
 source of copied distinctive wording or procedure. Search limits and absence of
 results do not establish authorship. Official Astral documentation informed the uv
-workflow. This confirmation covers only the four packages below; it does not
-resolve the separate rights notice for five earlier adaptations in README.
+workflow. This confirmation covers only the four packages below.
 
 | Skill | Procedure source snapshot SHA256 | Rights |
 | --- | --- | --- |

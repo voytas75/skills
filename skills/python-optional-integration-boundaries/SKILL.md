@@ -7,9 +7,6 @@ metadata:
   provenance: owner-confirmed
 ---
 
-> Based on owner-confirmed original operational procedures; distributed under MIT.
-> See [provenance](../../DRAFT-PROVENANCE.md).
-
 # Optional Python integration boundaries
 
 ## When to use

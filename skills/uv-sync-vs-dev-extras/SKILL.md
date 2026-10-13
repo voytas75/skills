@@ -7,9 +7,6 @@ metadata:
   provenance: owner-confirmed
 ---
 
-> Based on owner-confirmed original operational procedures; distributed under MIT.
-> See [provenance](../../DRAFT-PROVENANCE.md).
-
 # uv groups, extras, and reconciliation
 
 ## When to use

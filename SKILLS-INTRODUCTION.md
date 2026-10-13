@@ -103,7 +103,7 @@ The [`voytas75/skills` repository](README.md) is a practical collection of skill
 
 Start with [Feature Slice Planner](skills/feature-slice-planner/SKILL.md): notice its conditions for use, expected output, and scope controls. Then compare it with [Implementation Reviewer](skills/implementation-reviewer/SKILL.md), which checks delivered work against a brief — a description of the task. This illustrates the difference between planning instructions and evaluation instructions.
 
-The README describes the catalog and flags unverified rights to five earlier adaptations. For four Python and delivery workflow skills, the owner has confirmed that they derive from their own procedures and are shared under MIT — see the [provenance information](DRAFT-PROVENANCE.md). This is an owner's confirmation, not an independent legal assessment; a file being available on GitHub does not by itself prove authorship or permission to redistribute it.
+The README describes the catalog. For four Python and delivery workflow skills, the owner has confirmed that they derive from their own procedures and are shared under MIT — see the [provenance information](DRAFT-PROVENANCE.md). This is an owner's confirmation, not an independent legal assessment; a file being available on GitHub does not by itself prove authorship or permission to redistribute it.
 
 ## 5. Limitations and safe use
 

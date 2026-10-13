@@ -55,4 +55,4 @@ Replace `feature-slice-planner` with a skill from the main catalog. Requirements
 
 These are discovery and learning resources, not blanket endorsements. Review each package's instructions, scripts, dependencies, permissions, and license before use. Popularity does not establish safety or compatibility with your agent.
 
-[MIT license](LICENSE). Rights to the five earlier adaptations also remain unverified; absence of source attribution does not establish authorship or permission to redistribute.
+[MIT license](LICENSE).

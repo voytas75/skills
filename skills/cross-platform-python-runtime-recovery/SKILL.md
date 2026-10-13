@@ -7,9 +7,6 @@ metadata:
   provenance: owner-confirmed
 ---
 
-> Based on owner-confirmed original operational procedures; distributed under MIT.
-> See [provenance](../../DRAFT-PROVENANCE.md).
-
 # Cross-platform Python runtime recovery
 
 ## When to use
@@ -59,6 +56,7 @@ placeholders before running through `terminal`:
 
 `terminal(command="python \"<skill-directory>/scripts/acceptance.py\"")`
 
+The bundled synthetic check requires Python 3.11+ (`BaseException.add_note`).
 Use the supported Python interpreter available on the host. Quote paths,
 including paths with spaces; no repository-root working directory is required.
 This synthetic lifecycle test and static command review do not qualify native

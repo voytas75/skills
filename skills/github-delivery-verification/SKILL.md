@@ -7,9 +7,6 @@ metadata:
   provenance: owner-confirmed
 ---
 
-> Based on owner-confirmed original operational procedures; distributed under MIT.
-> See [provenance](../../DRAFT-PROVENANCE.md).
-
 # GitHub delivery verification
 
 ## When to use
