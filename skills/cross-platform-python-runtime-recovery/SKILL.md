@@ -51,7 +51,15 @@ noise. Do not stage widespread WSL-reported changes blindly. Driver and browser
 compatibility need their own version/probe evidence, not a Python-only test.
 
 ## Verification
-Run `terminal(command="python
-skills/cross-platform-python-runtime-recovery/scripts/acceptance.py")`.
+Locate the installed `SKILL.md` using the client's skill metadata; let
+`<skill-directory>` be its absolute parent directory. Resolve
+[scripts/acceptance.py](scripts/acceptance.py) from that directory, not the
+current working directory or a presumed repository checkout. Replace the
+placeholders before running through `terminal`:
+
+`terminal(command="python \"<skill-directory>/scripts/acceptance.py\"")`
+
+Use the supported Python interpreter available on the host. Quote paths,
+including paths with spaces; no repository-root working directory is required.
 This synthetic lifecycle test and static command review do not qualify native
 Windows, browser, driver, permissions, or the user's application.

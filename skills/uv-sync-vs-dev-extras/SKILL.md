@@ -47,8 +47,18 @@ wrong interpreter, stale locks, and optional imports are separate hypotheses.
 Do not use --active to modify the agent environment or auto-upgrade uv.
 
 ## Verification
-Run `terminal(command="python skills/uv-sync-vs-dev-extras/scripts/acceptance.py
-<authorized-scratch-directory>")`. The offline fixture uses synthetic wheels,
+Locate the installed `SKILL.md` using the client's skill metadata; let
+`<skill-directory>` be its absolute parent directory. Resolve
+[scripts/acceptance.py](scripts/acceptance.py) from that directory, not the
+current working directory or a presumed repository checkout. Replace the
+placeholders before running through `terminal`:
+
+`terminal(command="python \"<skill-directory>/scripts/acceptance.py\" \"<authorized-scratch-directory>\"")`
+
+Use the supported Python interpreter available on the host. Quote paths,
+including paths with spaces; no repository-root working directory is required.
+The scratch directory must already exist and be authorized for disposable writes.
+The offline fixture uses synthetic wheels,
 no registry or build backend; it checks groups, extras, exactness, and run flags.
 Current behavior references: [dependencies](https://docs.astral.sh/uv/concepts/projects/dependencies/)
 and [sync](https://docs.astral.sh/uv/concepts/projects/sync/).

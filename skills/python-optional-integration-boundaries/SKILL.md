@@ -45,8 +45,16 @@ Do not leak dynamic Any/Unknown payloads downstream or install an SDK just to
 quiet diagnostics. Do not label fake composition as live provider acceptance.
 
 ## Verification
-Run `terminal(command="python
-skills/python-optional-integration-boundaries/scripts/acceptance.py")`.
+Locate the installed `SKILL.md` using the client's skill metadata; let
+`<skill-directory>` be its absolute parent directory. Resolve
+[scripts/acceptance.py](scripts/acceptance.py) from that directory, not the
+current working directory or a presumed repository checkout. Replace the
+placeholders before running through `terminal`:
+
+`terminal(command="python \"<skill-directory>/scripts/acceptance.py\"")`
+
+Use the supported Python interpreter available on the host. Quote paths,
+including paths with spaces; no repository-root working directory is required.
 The example boundary is in [scripts/boundary.py](scripts/boundary.py); resolve
 assets from this skill directory. Its explicit fallback is illustrative, not
 permission to change an existing product's fallback semantics.

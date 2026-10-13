@@ -47,6 +47,14 @@ Green CI does not prove dependency-alert closure, native acceptance, or a later
 commit. Do not expand a non-security delivery into alert remediation.
 
 ## Verification
-Run the bundled synthetic check via `terminal(command="python
-skills/github-delivery-verification/scripts/acceptance.py")` from the repo root.
+Locate the installed `SKILL.md` using the client's skill metadata; let
+`<skill-directory>` be its absolute parent directory. Resolve
+[scripts/acceptance.py](scripts/acceptance.py) from that directory, not the
+current working directory or a presumed repository checkout. Replace the
+placeholders before running through `terminal`:
+
+`terminal(command="python \"<skill-directory>/scripts/acceptance.py\"")`
+
+Use the supported Python interpreter available on the host. Quote paths,
+including paths with spaces; no repository-root working directory is required.
 It tests SHA and exact-byte comparison only; no GitHub delivery occurs.
