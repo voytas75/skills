@@ -4,6 +4,8 @@ Plan smaller changes. Review the evidence. Fix the right problem.
 
 Practical skills for AI agents, each focused on a specific task.
 
+**New to Agent Skills? Start with the [English beginner introduction](SKILLS-INTRODUCTION.md).**
+
 ## Pick a skill
 
 - **[Feature Slice Planner](skills/feature-slice-planner/SKILL.md)** — Turn a feature into one manageable change with clear acceptance checks.
