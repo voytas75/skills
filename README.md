@@ -26,7 +26,7 @@ These four skills use MIT with owner-confirmed provenance; see [provenance](DRAF
 
 ## Install
 
-With GitHub CLI's preview `gh skill` commands:
+With GitHub CLI's preview [`gh skill`](https://cli.github.com/manual/gh_skill_install) commands:
 
 ```bash
 gh skill install voytas75/skills feature-slice-planner
