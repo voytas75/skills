@@ -48,7 +48,7 @@ description: Summarizes supplied meeting notes. Use when the user asks for decis
 4. Finish with open questions. Do not send the summary yourself.
 ```
 
-The required fields are `name` and `description`. The name must match the directory name; this example uses lowercase letters and single hyphens. The description should explain both **what the skill does** and **when to use it**. The specification limits names to 64 characters and descriptions to 1,024 characters.
+The specification requires `name` and `description`. The `name` must contain 1–64 characters, use lowercase letters, numbers, and hyphens only, and match the parent directory name. It must neither start nor end with a hyphen nor contain consecutive hyphens. The `description` must contain 1–1,024 characters; it should explain both **what the skill does** and **when to use it**.
 
 A larger folder might look like this:
 
@@ -60,7 +60,17 @@ meeting-summary/
 └── scripts/      # optional helper code
 ```
 
-The extra directories are optional. Start with one instruction file and add resources only when they help. The example above needs no script, email access, or calendar connection.
+The extra directories are optional organizational conventions, not required structure. As a recommended practice, start with one instruction file and add resources only when they help. The example above needs no script, email access, or calendar connection.
+
+### Check structure, then test behavior
+
+Check the metadata and directory name against the specification. For an optional structural check, the official [reference library](https://github.com/agentskills/agentskills/tree/main/skills-ref) provides this command after installation:
+
+```bash
+skills-ref validate path/to/skill
+```
+
+Its README explicitly describes the library as demonstration-only, not intended for production. Structural validation does not establish factual accuracy, safety, or client compatibility. Next, try representative tasks in your intended client, including incomplete inputs and cases where the skill should not apply, and inspect the results.
 
 ## 3. I want to understand more
 
@@ -74,7 +84,7 @@ A central principle is **progressive disclosure** — loading details gradually:
 
 Think of scanning folder labels, opening the relevant folder, and reading the necessary attachment. This helps limit the amount of material in the model's context. It does not provide an unlimited context window or guarantee that the agent always selects the right instructions.
 
-This is the pattern described in the specification and Anthropic's engineering article. Applications can differ in discovery, manual invocation, storage locations, and support for extra fields. **A portable format does not guarantee identical behavior**: tools, dependencies, permissions, and client implementations still matter.
+This is the pattern described in the specification and Anthropic's engineering article. **Agent Skills defines a portable file format, not a universal execution environment.** Each client determines how skills are discovered, selected, loaded, and used, including which tools and permissions are available. A valid folder does not guarantee automatic discovery or activation, access to its resources, or permission to execute scripts. Dependencies and support for extra fields also vary.
 
 ### Where did the format come from?
 
@@ -99,7 +109,13 @@ The README describes the catalog and flags unverified rights to five earlier ada
 
 A skill does not eliminate model errors. Ambiguous instructions, outdated resources, or missing data can still lead to bad results. Test it on several real tasks and inspect the output rather than judging only how fluent the response sounds.
 
-**Treat someone else's skill as unverified instructions and potentially untrusted code.** A Markdown file does not execute a program by itself, but it can prompt an agent to take unsafe actions. Scripts may modify files, download dependencies, or send data elsewhere.
+**Treat someone else's skill as unverified instructions and potentially untrusted code.** Consider three layers of risk:
+
+- **Instructions:** prompt injection — instructions designed to redirect the agent — conflicts with higher-priority rules, or attempts to disclose private data. Markdown does not execute code by itself, but can influence an agent's actions.
+- **Code:** scripts and dependencies may modify files, install software, or communicate over the network.
+- **Permissions:** the impact depends on which secrets, repositories, accounts, data, and tools the application makes accessible to the agent.
+
+Reading the files is useful, but is not a complete audit. Access controls and isolation must be enforced by the application or execution environment, not merely requested in the skill's text. Consequential operations still need appropriate oversight.
 
 Before use:
 
