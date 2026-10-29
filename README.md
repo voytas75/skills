@@ -1,30 +1,29 @@
 # Agent Skills
 
-Plan smaller changes. Review the evidence. Fix the right problem.
+Reusable instructions that guide AI agents through specific tasks, including planning software changes, reviewing implementations, designing dashboards, and troubleshooting Python applications.
 
-Practical skills for AI agents, each focused on a specific task.
+Choose a skill below to see when to use it, what it requires, and how it works.
 
-**New to Agent Skills? Start with the [English beginner introduction](SKILLS-INTRODUCTION.md).**
+New to agent skills? Read the [introduction](SKILLS-INTRODUCTION.md).
 
 ## Pick a skill
 
 - **[Feature Slice Planner](skills/feature-slice-planner/SKILL.md)** — Turn a feature into one manageable change with clear acceptance checks.
-- **[Implementation Reviewer](skills/implementation-reviewer/SKILL.md)** — Check delivered work against the brief and identify gaps or scope drift.
+- **[Implementation Reviewer](skills/implementation-reviewer/SKILL.md)** — Compare an implementation with the requirements and find missing work or changes outside the agreed scope.
 - **[Divide and Conquer Analysis](skills/divide-and-conquer-analysis/SKILL.md)** — Break down a complex subject and bring the findings back into one conclusion.
 - **[Image Prompt Analyzer and Refactorer](skills/ai-image-prompt-analyzer-and-refactorer/SKILL.md)** — Clarify what an image edit should change, preserve, and take from each reference.
-- **[IT Procedure Builder](skills/it-procedure-builder/SKILL.md)** — Build and review an IT procedure with structured steps and local contract checks.
-- **[Evidence-led Deliberation](skills/evidence-led-deliberation/SKILL.md)** — Coordinate OpenClaw subagents around evidence, disagreements, and bounded corrections.
-
-- **[Operational Dashboard Design](skills/operational-dashboard-design/SKILL.md)** — Build data-first dashboards with accessible exception cues and evidence-backed visual QA.
+- **[IT Procedure Builder](skills/it-procedure-builder/SKILL.md)** — Write an IT procedure and check for missing or inconsistent steps.
+- **[Evidence-led Deliberation](skills/evidence-led-deliberation/SKILL.md)** — Have OpenClaw agents investigate a question, compare their findings, and resolve disagreements.
+- **[Operational Dashboard Design](skills/operational-dashboard-design/SKILL.md)** — Design dashboards with clear problem indicators and checks for readability and accessibility.
 
 ## Python and delivery workflows
 
 - **[GitHub Delivery Verification](skills/github-delivery-verification/SKILL.md)** — Verify the pushed commit, remote content, and CI results before calling delivery complete.
 - **[Cross-platform Python Runtime Recovery](skills/cross-platform-python-runtime-recovery/SKILL.md)** — Trace Python startup failures across Windows and Linux without mixing their environments.
 - **[uv Sync vs Dev Extras](skills/uv-sync-vs-dev-extras/SKILL.md)** — Explain missing packages and choose the right dependency groups, extras, and sync options.
-- **[Python Optional Integration Boundaries](skills/python-optional-integration-boundaries/SKILL.md)** — Keep optional SDKs from breaking the core application and test their failure paths without a provider.
+- **[Python Optional Integration Boundaries](skills/python-optional-integration-boundaries/SKILL.md)** — Keep optional SDKs from breaking the application and test failures without calling an external AI service.
 
-These four skills use MIT with owner-confirmed provenance; see [provenance](DRAFT-PROVENANCE.md).
+These four skills are licensed under MIT. Their sources and licensing notes are documented in [provenance](DRAFT-PROVENANCE.md).
 
 ## Install
 
