@@ -15,6 +15,8 @@ Practical skills for AI agents, each focused on a specific task.
 - **[IT Procedure Builder](skills/it-procedure-builder/SKILL.md)** — Build and review an IT procedure with structured steps and local contract checks.
 - **[Evidence-led Deliberation](skills/evidence-led-deliberation/SKILL.md)** — Coordinate OpenClaw subagents around evidence, disagreements, and bounded corrections.
 
+- **[Operational Dashboard Design](skills/operational-dashboard-design/SKILL.md)** — Build data-first dashboards with accessible exception cues and evidence-backed visual QA.
+
 ## Python and delivery workflows
 
 - **[GitHub Delivery Verification](skills/github-delivery-verification/SKILL.md)** — Verify the pushed commit, remote content, and CI results before calling delivery complete.
