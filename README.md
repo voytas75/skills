@@ -35,6 +35,20 @@ gh skill install voytas75/skills feature-slice-planner
 
 Replace `feature-slice-planner` with a skill from the main catalog. Requirements and examples are in each skill's `SKILL.md`.
 
+## External skills by category
+
+Links to third-party skills, kept separate from this project's own packages. The linked content remains with its original authors; inclusion does not imply installation, testing, or endorsement.
+
+### Architecture and diagrams
+
+- **[Architecture Diagram Generator](https://github.com/liuarui/skillsmd/tree/main/architecture)** — From `liuarui/skillsmd`: create layered system architecture diagrams using HTML/CSS templates, reusable layouts, and color-coded components. Intended for architecture visualization, not architecture validation or general-purpose flowcharts.
+
+- **[Interactive Architecture Diagrams](https://github.com/konraddzbik/architecture-diagram-skill/tree/main/skills/architecture-diagram)** — From `konraddzbik/architecture-diagram-skill`: build a self-contained interactive HTML diagram with step-by-step data flows, deployment-mode toggles, and payload details, plus a companion Markdown description. Intended for browser-based exploration and workshops, not static inline diagrams or PDF handouts.
+
+### Information cards and editorial design
+
+- **[Infocard Generator](https://github.com/liuarui/skillsmd/tree/main/infocard)** — From `liuarui/skillsmd`: create editorial-style information cards with HTML/CSS embedded in Markdown for knowledge summaries, topic overviews, data highlights, and event announcements. Select layouts and typography based on content density, structure, and tone; not intended for architecture diagrams or data visualization.
+
 ## Worth exploring
 
 ### Find skills
