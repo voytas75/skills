@@ -49,6 +49,10 @@ Links to third-party skills, kept separate from this project's own packages. The
 
 - **[Infocard Generator](https://github.com/liuarui/skillsmd/tree/main/infocard)** — From `liuarui/skillsmd`: create editorial-style information cards with HTML/CSS embedded in Markdown for knowledge summaries, topic overviews, data highlights, and event announcements. Select layouts and typography based on content density, structure, and tone; not intended for architecture diagrams or data visualization.
 
+### Data visualization
+
+- **[Visualization](https://github.com/atlassian-labs/data-visualization-skill/tree/main/skills/visualization)** — From `atlassian-labs/data-visualization-skill`: choose chart types and create or restyle Plotly charts from DataFrames using a shared style configuration, consistent colors, and direct labels. Covers interactive HTML and static image export, with guidance on axes, readability, and creation-date annotations.
+
 ## Worth exploring
 
 ### Find skills
