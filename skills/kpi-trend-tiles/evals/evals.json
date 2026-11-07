@@ -1,0 +1,100 @@
+{
+  "skill_name": "kpi-trend-tiles",
+  "version": "1.1.0",
+  "description": "Evaluation cases for compact horizontal KPI tile composition, data integrity, and semantic trend interpretation.",
+  "evals": [
+    {
+      "id": "compact-default",
+      "prompt": "Create a compact KPI tile: latency is 18 ms, down 12% versus the previous 7 days, lower is better. A real ordered 7-day series is supplied.",
+      "expected": [
+        "uses horizontal compact composition",
+        "value is at left",
+        "label and delta are grouped",
+        "sparkline appears only from supplied series",
+        "period is explicit",
+        "better is supported by lower-is-better semantics"
+      ]
+    },
+    {
+      "id": "no-series-no-sparkline",
+      "prompt": "Create a compact tile for open backlog 236, down 14 versus previous week. No time series is available.",
+      "expected": [
+        "shows current value, label and delta",
+        "does not draw a sparkline",
+        "does not invent percentage change"
+      ]
+    },
+    {
+      "id": "unknown-desirability",
+      "prompt": "CPU utilization changed from 80% to 72%. Create a tile; no target or preferred range is defined.",
+      "expected": [
+        "shows decrease direction",
+        "does not label decrease better or worse",
+        "does not use semantic green/red status"
+      ]
+    },
+    {
+      "id": "zero-baseline",
+      "prompt": "A metric changed from 0 to 12. Show percentage change in a compact tile.",
+      "expected": [
+        "relative percentage change is stated as undefined",
+        "may show absolute +12",
+        "does not show infinity or fabricated percentage"
+      ]
+    },
+    {
+      "id": "percentage-points",
+      "prompt": "Conversion rate changed from 12% to 15%. Create a compact tile.",
+      "expected": [
+        "shows +3 pp as rate difference",
+        "does not confuse pp with relative percent",
+        "names comparison period only if supplied"
+      ]
+    },
+    {
+      "id": "period-ambiguity",
+      "prompt": "Show −12% vs 7 d.",
+      "expected": [
+        "prefers unambiguous wording such as vs previous 7 days",
+        "does not invent a date range or calendar interpretation"
+      ]
+    },
+    {
+      "id": "sparkline-period-mismatch",
+      "prompt": "Delta compares previous 7 days, but the supplied sparkline covers the previous 30 days.",
+      "expected": [
+        "does not imply both representations cover the same period",
+        "labels the series period separately or omits sparkline"
+      ]
+    },
+    {
+      "id": "value-only",
+      "prompt": "Create a tile with current value 236 and no previous value, target, or time series.",
+      "expected": [
+        "shows value and label",
+        "omits delta, arrow, sparkline and status",
+        "does not represent missing data as zero"
+      ]
+    },
+    {
+      "id": "target-rule-missing",
+      "prompt": "Current availability is 96%, target is 99.9%, but no status thresholds are defined.",
+      "expected": [
+        "may show target and numeric gap",
+        "does not invent red/amber/green status"
+      ]
+    },
+    {
+      "id": "responsive-html",
+      "prompt": "Generate self-contained HTML for eight compact KPI tiles.",
+      "expected": [
+        "semantic article elements",
+        "compact horizontal flex tile grammar",
+        "responsive wrapping",
+        "tabular numerals",
+        "accessible sparkline descriptions",
+        "no external dependencies"
+      ]
+    }
+  ]
+}

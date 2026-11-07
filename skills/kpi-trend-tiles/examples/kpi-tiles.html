@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Compact KPI tile variants</title>
+<style>
+  :root {
+    color-scheme: light;
+    --page: #f5f7fa;
+    --surface: #fff;
+    --border: #dce2ea;
+    --text: #17212f;
+    --muted: #647184;
+    --good: #24734a;
+    --bad: #a33b36;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 24px;
+    background: var(--page);
+    color: var(--text);
+    font: 14px/1.4 system-ui, sans-serif;
+  }
+  main { max-width: 760px; margin: auto; }
+  h1 { font-size: 18px; margin: 0 0 6px; }
+  .intro { color: var(--muted); margin: 0 0 22px; }
+  .group { display: grid; gap: 9px; margin: 0 0 24px; }
+  .group h2 { font-size: 12px; color: var(--muted); margin: 0 0 2px; font-weight: 650; }
+  .kpi {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    padding: 9px 11px;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    background: var(--surface);
+  }
+  .kpi__value {
+    flex: 0 0 auto;
+    margin: 0;
+    font-size: 20px;
+    line-height: 1;
+    font-weight: 650;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .kpi__meta { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  .kpi__label { margin: 0; font-size: 11px; font-weight: 650; }
+  .kpi__delta, .kpi__note { margin: 0; color: var(--muted); font-size: 10px; line-height: 1.3; }
+  .kpi__delta strong { font-weight: 700; color: inherit; }
+  .kpi__delta--good strong { color: var(--good); }
+  .kpi__delta--bad strong { color: var(--bad); }
+  .kpi__sparkline { flex: 0 0 80px; width: 80px; height: 24px; margin-left: auto; }
+  .kpi__sparkline polyline { fill: none; stroke: #647184; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+  .kpi__sparkline circle { fill: #647184; }
+  .kpi--bare { border-color: transparent; background: transparent; padding-left: 0; padding-right: 0; }
+  .kpi--target .kpi__meta { gap: 3px; }
+  @media (max-width: 440px) {
+    body { padding: 14px; }
+    .kpi { flex-wrap: wrap; }
+    .kpi__meta { flex: 1 1 140px; }
+    .kpi__sparkline { margin-left: auto; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <h1>Compact KPI tile patterns</h1>
+  <p class="intro">Illustrative values and series only. Use source data when generating real tiles.</p>
+
+  <section class="group" aria-labelledby="default">
+    <h2 id="default">A. Compact with sparkline (default when series exists)</h2>
+    <article class="kpi">
+      <p class="kpi__value">18 ms</p>
+      <div class="kpi__meta">
+        <p class="kpi__label">Latency</p>
+        <p class="kpi__delta">↓ −12% vs previous 7 days <span>(better)</span></p>
+      </div>
+      <svg class="kpi__sparkline" viewBox="0 0 80 24" role="img" aria-label="Illustrative latency series over the previous seven days, declining">
+        <polyline points="2,6 12,8 22,7 32,11 42,10 52,15 62,14 78,19"/>
+        <circle cx="78" cy="19" r="2.5"/>
+      </svg>
+    </article>
+  </section>
+
+  <section class="group" aria-labelledby="no-series">
+    <h2 id="no-series">B. Compact without sparkline (no time series supplied)</h2>
+    <article class="kpi">
+      <p class="kpi__value">236</p>
+      <div class="kpi__meta">
+        <p class="kpi__label">Open backlog</p>
+        <p class="kpi__delta">↓ 14 vs previous week</p>
+      </div>
+    </article>
+  </section>
+
+  <section class="group" aria-labelledby="neutral">
+    <h2 id="neutral">C. Neutral direction (desirability unknown)</h2>
+    <article class="kpi">
+      <p class="kpi__value">72%</p>
+      <div class="kpi__meta">
+        <p class="kpi__label">CPU utilization</p>
+        <p class="kpi__delta">↓ 8 pp vs previous 7 days</p>
+      </div>
+    </article>
+  </section>
+
+  <section class="group" aria-labelledby="delta">
+    <h2 id="delta">D. Delta-focused (explicit favorable direction)</h2>
+    <article class="kpi">
+      <p class="kpi__value">18 ms</p>
+      <div class="kpi__meta">
+        <p class="kpi__label">Latency</p>
+        <p class="kpi__delta kpi__delta--good"><strong>↓ −12%</strong> vs previous 7 days · better</p>
+      </div>
+    </article>
+  </section>
+
+  <section class="group" aria-labelledby="target">
+    <h2 id="target">E. Target note (only when target is supplied)</h2>
+    <article class="kpi kpi--target">
+      <p class="kpi__value">96%</p>
+      <div class="kpi__meta">
+        <p class="kpi__label">Availability</p>
+        <p class="kpi__delta">Target: 99.9% · gap: −3.9 pp</p>
+      </div>
+    </article>
+  </section>
+
+  <section class="group" aria-labelledby="value-only">
+    <h2 id="value-only">F. Value-only (no comparable prior value)</h2>
+    <article class="kpi kpi--bare">
+      <p class="kpi__value">1,284</p>
+      <div class="kpi__meta">
+        <p class="kpi__label">Requests resolved</p>
+        <p class="kpi__note">No comparable previous period</p>
+      </div>
+    </article>
+  </section>
+</main>
+</body>
+</html>

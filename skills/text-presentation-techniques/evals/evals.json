@@ -1,0 +1,132 @@
+{
+  "skill_name": "text-presentation-techniques",
+  "version": "1.0.0",
+  "source": "Techniki prezentacji tekstu — ściągawka (v3)",
+  "evals": [
+    {
+      "id": "select-comparison-table",
+      "prompt": "Compare four device groups across compliance, ownership and OS. Recommend a presentation format.",
+      "expected": [
+        "selects a comparison table or matrix",
+        "uses consistent columns",
+        "does not duplicate the table in prose",
+        "preserves scope and definitions"
+      ]
+    },
+    {
+      "id": "decision-branch",
+      "prompt": "Write a procedure where compliant devices are allowed and non-compliant devices are blocked pending remediation.",
+      "expected": [
+        "uses a decision tree or explicit branches",
+        "states both outcomes",
+        "does not hide remediation condition"
+      ]
+    },
+    {
+      "id": "causal-chain",
+      "prompt": "A certificate expired and a connection failed. Format as a causal chain.",
+      "expected": [
+        "does not claim causality unless mechanism is established",
+        "states the conditional evidence requirement",
+        "separates observed facts from inference if uncertain"
+      ]
+    },
+    {
+      "id": "compress-operational-procedure",
+      "prompt": "Compress an operational instruction into a compact technical reference.",
+      "expected": [
+        "retains actor/action/object when needed",
+        "retains preconditions and exceptions",
+        "retains success criterion",
+        "does not merely delete words"
+      ]
+    },
+    {
+      "id": "shared-context",
+      "prompt": "Several Windows devices share three configuration requirements. Present them compactly.",
+      "expected": [
+        "states scope once in a clear heading",
+        "ensures every item falls within scope",
+        "does not omit exceptions"
+      ]
+    },
+    {
+      "id": "status-accessibility",
+      "prompt": "Create a status legend for OK, warning, failure and not applicable.",
+      "expected": [
+        "pairs symbol with text",
+        "does not rely on color alone",
+        "uses a consistent legend"
+      ]
+    },
+    {
+      "id": "numeric-units",
+      "prompt": "Compare storage capacity and free space across volumes.",
+      "expected": [
+        "uses a table for repeated attributes",
+        "places units in headers when shared",
+        "right-aligns numeric values",
+        "uses consistent precision"
+      ]
+    },
+    {
+      "id": "sparkline-no-data",
+      "prompt": "Create a sparkline for a metric but only a current value is provided.",
+      "expected": [
+        "does not fabricate series points",
+        "uses value-only or another suitable format",
+        "states that time-series data is unavailable if necessary"
+      ]
+    },
+    {
+      "id": "chart-selection",
+      "prompt": "Show a result against a defined target and performance bands.",
+      "expected": [
+        "selects bullet graph",
+        "uses target marker",
+        "requires sourced target and band definitions",
+        "does not invent thresholds"
+      ]
+    },
+    {
+      "id": "monospace-bars",
+      "prompt": "Present CPU, disk and RAM percentages in a terminal-friendly text bar.",
+      "expected": [
+        "uses monospace alignment",
+        "uses one fixed scale",
+        "includes exact numeric values",
+        "defines bar scale"
+      ]
+    },
+    {
+      "id": "density",
+      "prompt": "Fit a technical reference onto one page without making it hard to read.",
+      "expected": [
+        "removes redundancy before reducing font size",
+        "groups semantically",
+        "selects compact rather than maximum by default",
+        "checks print rendering"
+      ]
+    },
+    {
+      "id": "palette-evidence",
+      "prompt": "Choose a palette that is proven to improve memory retention.",
+      "expected": [
+        "does not claim a universally best palette",
+        "distinguishes color accessibility from memory claims",
+        "notes that warm/cool evidence is weak in source"
+      ]
+    },
+    {
+      "id": "html-reference-sheet",
+      "prompt": "Build an interactive HTML reference sheet with five categories, filters, density controls and print output.",
+      "expected": [
+        "semantic controls and accessible states",
+        "stable category mapping",
+        "responsive layout",
+        "print stylesheet",
+        "content remains understandable without color"
+      ]
+    }
+  ]
+}

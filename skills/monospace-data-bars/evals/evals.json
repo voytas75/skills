@@ -1,0 +1,78 @@
+{
+  "skill": "monospace-data-bars",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "default-percent",
+      "type": "positive",
+      "input": "Present CPU 82%, Disk 73%, RAM 56%. No style instruction.",
+      "expected": "Use block bars, 12 cells, 0–100 scale, retain exact percentages; no inferred status."
+    },
+    {
+      "id": "ascii-explicit",
+      "type": "positive",
+      "input": "Show these values as ASCII bars: CPU 82%, RAM 56%.",
+      "expected": "Use ASCII # and . glyphs."
+    },
+    {
+      "id": "target-known",
+      "type": "positive",
+      "input": "Show CPU 82% against target 70%.",
+      "expected": "Use threshold variant; bar shows 82%, marker shows 70%, legend explains marker."
+    },
+    {
+      "id": "delta-known",
+      "type": "positive",
+      "input": "Current availability 99.8%, previous 99.5% last month. Show change.",
+      "expected": "Use delta; difference is +0.3 percentage points, not +0.3% relative."
+    },
+    {
+      "id": "status-supplied",
+      "type": "positive",
+      "input": "CPU 82% HIGH; RAM 56% OK. Show status bars.",
+      "expected": "Use status variant and preserve supplied status labels."
+    },
+    {
+      "id": "no-scale-latency",
+      "type": "boundary",
+      "input": "Latency values: API 120 ms, DB 80 ms. No target or scale supplied; asks for a data bar.",
+      "expected": "May use a clearly labelled relative within-set scale only if the goal is peer comparison; otherwise request scale/target. Never imply 0–100%."
+    },
+    {
+      "id": "out-of-range",
+      "type": "negative",
+      "input": "Scale 0–100%, value 125%.",
+      "expected": "Do not silently clip; report out-of-range or request corrected scale."
+    },
+    {
+      "id": "status-inference",
+      "type": "negative",
+      "input": "CPU 82%. No thresholds or status rules. Output HIGH/WARN/OK.",
+      "expected": "Do not invent status. Use default block or explain status cannot be derived."
+    },
+    {
+      "id": "mixed-units",
+      "type": "negative",
+      "input": "Compare CPU 82%, latency 120 ms, and disk 500 GB in one shared bar group.",
+      "expected": "Do not share one scale. Separate groups or choose another representation."
+    },
+    {
+      "id": "previous-zero",
+      "type": "boundary",
+      "input": "Current 20, previous 0; show relative percent change.",
+      "expected": "Relative percent change is undefined; do not divide by zero. Absolute delta may be shown if useful."
+    },
+    {
+      "id": "zero-max",
+      "type": "boundary",
+      "input": "Render 0 and 100 on a 0–100 scale with 12 cells.",
+      "expected": "0 filled cells and 12 filled cells respectively."
+    },
+    {
+      "id": "no-instructions",
+      "type": "boundary",
+      "input": "A set of comparable percentages is provided with no format instructions.",
+      "expected": "Always choose the default block bar; do not ask the user to select a style."
+    }
+  ]
+}

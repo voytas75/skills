@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Text presentation techniques — reference</title>
+<style>
+:root{color-scheme:light dark;--bg:#edf1f5;--paper:#fff;--ink:#17212b;--muted:#526273;--line:#d7dfe7;--soft:#f2f5f8;--accent:#155eef;--mono:ui-monospace,Consolas,monospace}
+@media(prefers-color-scheme:dark){:root{--bg:#0f151c;--paper:#18212b;--ink:#e6edf4;--muted:#9aabbc;--line:#2d3b4a;--soft:#202b37;--accent:#7aa7ff}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:13px/1.35 system-ui,sans-serif}
+.toolbar{position:sticky;top:0;z-index:2;display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:9px 12px;background:#17212b;color:white}
+.toolbar strong{margin-right:auto;letter-spacing:.04em}.toolbar button,.toolbar select{font:inherit;padding:4px 8px;border:1px solid #718196;border-radius:4px;background:#2a3949;color:white}
+main{max-width:1400px;margin:12px auto;padding:0 12px}header{display:flex;gap:12px;align-items:baseline;flex-wrap:wrap;border-bottom:2px solid var(--ink);padding-bottom:8px;margin-bottom:10px}
+h1{font-size:20px;margin:0}.sub{color:var(--muted)}.filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.filters button{border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:4px;padding:5px 9px}
+.filters button[aria-pressed=true]{outline:2px solid var(--accent)}
+.grid{columns:3 260px;column-gap:9px}.card{break-inside:avoid;background:var(--paper);border:1px solid var(--line);border-left:4px solid var(--cat);border-radius:5px;padding:8px;margin:0 0 9px}
+.card h2{font-size:13px;margin:-8px -8px 7px;padding:5px 8px;background:color-mix(in srgb,var(--cat) 16%,transparent)}
+.card p{margin:4px 0}.limit{font-size:11px;color:var(--muted)}.limit:before{content:"LIMIT · ";font:700 9px var(--mono)}
+.card code,.card pre{font-family:var(--mono);background:var(--soft);border-radius:3px}.card code{padding:1px 3px}.card pre{white-space:pre-wrap;overflow-wrap:anywhere;padding:6px}
+[data-cat="conciseness"]{--cat:#E69F00}[data-cat="flow"]{--cat:#0072B2}[data-cat="structure"]{--cat:#009E73}[data-cat="numbers"]{--cat:#CC79A7}[data-cat="commands"]{--cat:#56B4E9}
+body.compact .card{padding:5px;margin-bottom:6px}body.compact .card h2{margin:-5px -5px 4px;padding:3px 5px}
+body.max{font-size:11px}body.max .card{padding:3px;margin-bottom:4px}body.max .card h2{font-size:11px;margin:-3px -3px 3px;padding:2px 3px}
+footer{border-top:1px solid var(--line);margin:14px 0;padding:8px 0;color:var(--muted);font-size:11px}
+@media(max-width:600px){main{padding:0 7px}.grid{columns:1}}
+@media print{.toolbar,.filters{display:none}body{background:white;color:#111;font-size:9pt}main{max-width:none;margin:0;padding:0}.grid{columns:3 220px}.card{break-inside:avoid;background:white}}
+</style>
+</head>
+<body>
+<nav class="toolbar" aria-label="Display controls">
+<strong>TEXT PRESENTATION / SKILL</strong>
+<label for="density">Density</label>
+<select id="density"><option value="">Normal</option><option value="compact" selected>Compact</option><option value="max">Maximum</option></select>
+<button id="print" type="button">Print / PDF</button>
+</nav>
+<main>
+<header><h1>Text presentation techniques</h1><span class="sub">Choose the form that best exposes the information structure.</span></header>
+<div class="filters" role="group" aria-label="Filter category">
+<button type="button" data-filter="all" aria-pressed="true">All</button>
+<button type="button" data-filter="conciseness" aria-pressed="false">Conciseness</button>
+<button type="button" data-filter="flow" aria-pressed="false">Flow</button>
+<button type="button" data-filter="structure" aria-pressed="false">Structure</button>
+<button type="button" data-filter="numbers" aria-pressed="false">Numbers and status</button>
+<button type="button" data-filter="commands" aria-pressed="false">Commands and code</button>
+</div>
+<section class="grid" id="cards">
+<article class="card" data-cat="conciseness"><h2>01 · Definition in one sentence</h2><p><b>Term</b> — inputs → function or decision.</p><p class="limit">Keep the scope; do not remove what the term governs.</p></article>
+<article class="card" data-cat="flow"><h2>07 · Decision tree</h2><pre>Compliant?
+├ yes → allow
+└ no  → block / remediate</pre><p class="limit">Use when a condition changes the next path.</p></article>
+<article class="card" data-cat="structure"><h2>05 · Comparison table</h2><table><tr><th>Attribute</th><th>A</th><th>B</th></tr><tr><td>Managed</td><td>yes</td><td>no</td></tr><tr><td>Policy</td><td>compliant</td><td>MFA</td></tr></table><p class="limit">Use for repeated comparable attributes.</p></article>
+<article class="card" data-cat="numbers"><h2>26 · Status symbol + word</h2><p><b>● OK</b> · <b>▲ WARN</b> · <b>✖ FAIL</b> · <b>○ N/A</b></p><p class="limit">Never encode status using color alone.</p></article>
+<article class="card" data-cat="commands"><h2>33 · Command + expected output</h2><pre>&gt; command --check
+Status : OK</pre><p class="limit">Separate input from output; use grounded output.</p></article>
+</section>
+<footer>Governing rule: minimize reading effort without losing conditions, exceptions, units, scope, or relationships.</footer>
+</main>
+<script>
+const density=document.querySelector("#density");
+density.addEventListener("change",()=>{document.body.classList.remove("compact","max");if(density.value)document.body.classList.add(density.value)});
+document.querySelector("#print").addEventListener("click",()=>window.print());
+document.querySelector(".filters").addEventListener("click",e=>{
+ const b=e.target.closest("button[data-filter]");if(!b)return;
+ document.querySelectorAll(".filters button").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));
+ document.querySelectorAll(".card").forEach(c=>c.hidden=b.dataset.filter!=="all"&&c.dataset.cat!==b.dataset.filter);
+});
+</script>
+</body>
+</html>

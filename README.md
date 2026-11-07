@@ -23,6 +23,9 @@ Choose by the outcome you need. Each link opens the full instructions.
 | [Cross-platform Python Runtime Recovery](skills/cross-platform-python-runtime-recovery/SKILL.md) | Trace Python startup failures across Windows and Linux without mixing their environments. |
 | [uv Sync vs Dev Extras](skills/uv-sync-vs-dev-extras/SKILL.md) | Explain missing packages and choose the right dependency groups, extras, and sync options. |
 | [Python Optional Integration Boundaries](skills/python-optional-integration-boundaries/SKILL.md) | Keep optional SDKs from breaking the application and test failures without calling an external AI service. |
+| [KPI Trend Tiles](skills/kpi-trend-tiles/SKILL.md) | Create compact horizontal metric tiles with grounded values, comparison periods, and optional time-series sparklines. |
+| [Monospace Data Bars](skills/monospace-data-bars/SKILL.md) | Render validated numeric data as aligned text bars with explicit scales, units, and optional supplied targets or deltas. |
+| [Text Presentation Techniques](skills/text-presentation-techniques/SKILL.md) | Choose concise text structures, tables, diagrams, and reference-sheet layouts while preserving scope, conditions, and evidence. |
 
 New to skills? Read the [introduction](SKILLS-INTRODUCTION.md).
 
