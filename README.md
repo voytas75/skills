@@ -51,6 +51,13 @@ Browse by task. Expand a category for source links, deliverables, and limitation
 > Third-party links are separate from this project's packages. Inclusion does not imply installation, testing, or endorsement; content remains with its original authors.
 
 <details>
+<summary><strong>Text compression and restructuring</strong></summary>
+
+- **[Compress Text](https://github.com/MartinForReal/compress-text-skill/tree/main/skills/compress-text)** — From `MartinForReal/compress-text-skill`: shorten and reorganize documents, prompts, or transcripts through semantic grouping, deduplication, and key-point-first structure, with readable and dense modes. Compares candidate rewrites and preserves distinct requirements, references, examples, and template tags; claimed meaning fidelity and token savings require independent checks, especially for protected or exact wording.
+
+</details>
+
+<details>
 <summary><strong>Architecture and diagrams</strong></summary>
 
 - **[Architecture Diagram Generator](https://github.com/liuarui/skillsmd/tree/main/architecture)** — From `liuarui/skillsmd`: create layered system architecture diagrams using HTML/CSS templates, reusable layouts, and color-coded components. Intended for architecture visualization, not architecture validation or general-purpose flowcharts.
@@ -61,6 +68,8 @@ Browse by task. Expand a category for source links, deliverables, and limitation
 
 <details>
 <summary><strong>Information cards and editorial design</strong></summary>
+
+- **[Magazine](https://github.com/barkleesanders/claude-code-starter/tree/main/skills/magazine)** — From `barkleesanders/claude-code-starter`: turn digests, meeting notes, research summaries, and curated lists into an HTML magazine with distinct full-viewport spreads and print/PDF styling. Uses the package's design-system and spread references; its single-file output still loads Google Fonts externally, so offline use requires local or embedded fonts. Not intended for plain working documents or editable Google Docs.
 
 - **[Infocard Generator](https://github.com/liuarui/skillsmd/tree/main/infocard)** — From `liuarui/skillsmd`: create editorial-style information cards with HTML/CSS embedded in Markdown for knowledge summaries, topic overviews, data highlights, and event announcements. Select layouts and typography based on content density, structure, and tone; not intended for architecture diagrams or data visualization.
 
