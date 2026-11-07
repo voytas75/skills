@@ -1,6 +1,7 @@
 ---
 name: kpi-trend-tiles
-version: 1.1.0
+metadata:
+  version: "1.1.0"
 description: Create and review compact horizontal KPI tiles with a primary value, metric label, comparison delta, period context, and optional sparkline. Use for dense dashboards, operational summaries, reports, and HTML interfaces where metrics must be scanned quickly.
 ---
 
