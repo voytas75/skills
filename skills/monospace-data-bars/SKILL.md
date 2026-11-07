@@ -1,6 +1,7 @@
 ---
 name: monospace-data-bars
 metadata:
+  author: "https://github.com/voytas75/skills"
   version: "1.0.1"
 description: Select, construct, and validate compact monospace data bars for numeric values, comparisons, monitoring, thresholds, status, and change over time. Use when presenting quantitative data in terminal output, logs, Markdown, plain-text reports, email, or code blocks, especially when a visual bar should communicate magnitude without requiring graphical rendering.
 ---

@@ -1,6 +1,7 @@
 ---
 name: text-presentation-techniques
 metadata:
+  author: "https://github.com/voytas75/skills"
   version: "1.0.0"
 description: Select and compose text presentation techniques for dense, readable, operationally useful documents, reports, procedures, cheat sheets, dashboards, and technical communication. Use when structuring, compressing, formatting, comparing, annotating, or visually encoding text and data.
 ---

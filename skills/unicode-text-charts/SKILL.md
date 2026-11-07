@@ -2,6 +2,7 @@
 name: unicode-text-charts
 description: Create and review Unicode text sparklines, heatmaps, trees, timelines, Gantt charts, and Braille plots. Use for text-only reports or monospace output when relationships, time, or distributions matter more than a single magnitude bar.
 metadata:
+  author: "https://github.com/voytas75/skills"
   version: "1.0.0"
 ---
 
