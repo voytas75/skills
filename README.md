@@ -128,6 +128,20 @@ Browse by task. Expand a category for source links, deliverables, and limitation
 
 </details>
 
+<details>
+<summary><strong>Research and evidence gathering</strong></summary>
+
+- **[Research](https://github.com/yeachan-heo/oh-my-claudecode/tree/main/skills/research)** — From `yeachan-heo/oh-my-claudecode`: investigate an open question using repository files and documentation first, official external documentation when needed, and complementary searches by file, symbol, caller, or history. Returns sourced findings, contradictions, and remaining uncertainty, with parallel investigation for independent questions; research explicitly excludes implementation as a side effect.
+
+</details>
+
+<details>
+<summary><strong>Software change impact and delivery review</strong></summary>
+
+- **[Change Impact Analysis](https://github.com/affaan-m/ECC/blob/main/skills/change-impact/SKILL.md)** — From `affaan-m/ECC`: map the evidence-backed impact of a planned change on callers, data, schemas, public contracts, tests, documentation, deployment, migration, and rollback, then reconcile that map with the implemented diff and verification results. Read-only by default, with explicit unknowns and checks for unauthorized scope drift; routes durable decisions, contracts, and regression evidence to related ECC skills and existing project records rather than creating parallel sources of truth. Its companion skills are separate dependencies, not inspected or included by this listing.
+
+</details>
+
 ## Libraries and references
 
 <details>
