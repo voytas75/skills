@@ -109,6 +109,8 @@ Browse by task. Expand a category for source links, deliverables, and limitation
 <details>
 <summary><strong>Data visualization</strong></summary>
 
+- **[Data Visualization (Anthropic)](https://github.com/anthropics/knowledge-work-plugins/blob/main/data/skills/data-visualization/SKILL.md)** — From `anthropics/knowledge-work-plugins`: choose charts by data relationship and create static figures or interactive HTML using Python, matplotlib, seaborn, and Plotly. Covers readable labels, meaningful scales, uncertainty, purposeful color, and accessible alternatives; code examples and accessibility guidance require execution and inspection on the actual data rather than being treated as validated outputs.
+
 - **[Visualization](https://github.com/atlassian-labs/data-visualization-skill/tree/main/skills/visualization)** — From `atlassian-labs/data-visualization-skill`: choose chart types and create or restyle Plotly charts from DataFrames using a shared style configuration, consistent colors, and direct labels. Covers interactive HTML and static image export, with guidance on axes, readability, and creation-date annotations.
 
 </details>
@@ -131,6 +133,8 @@ Browse by task. Expand a category for source links, deliverables, and limitation
 <details>
 <summary><strong>Research and evidence gathering</strong></summary>
 
+- **[Root Cause Analysis](https://microsoft.github.io/cat-agent-skills/skills/root-cause-analysis)** — From Microsoft's CAT Agent Skills gallery (credited to Nayananshu Garai): diagnose incidents and recurring failures through a precise problem statement, 5 Whys, and a six-category Fishbone diagram, separating root causes from contributing factors and prioritizing corrective actions. Requires the bundled HTML diagram template and labels factors as confirmed, unverified, or disproven; its confirmation rule refers only to facts supplied by the user, not independent system verification. Intended for structured diagnosis and post-mortems rather than general planning.
+
 - **[Research](https://github.com/yeachan-heo/oh-my-claudecode/tree/main/skills/research)** — From `yeachan-heo/oh-my-claudecode`: investigate an open question using repository files and documentation first, official external documentation when needed, and complementary searches by file, symbol, caller, or history. Returns sourced findings, contradictions, and remaining uncertainty, with parallel investigation for independent questions; research explicitly excludes implementation as a side effect.
 
 </details>
@@ -138,7 +142,18 @@ Browse by task. Expand a category for source links, deliverables, and limitation
 <details>
 <summary><strong>Software change impact and delivery review</strong></summary>
 
+- **[ADR Skill](https://github.com/vercel/ai/tree/main/skills/adr-skill)** — From `vercel/ai`: create, consult, and maintain Architecture Decision Records for agent-assisted implementation, starting with repository discovery and a human-confirmed intent summary. Captures alternatives, measurable constraints, non-goals, affected paths, implementation plans, and verification criteria, with templates and Node.js helpers for records, statuses, and indexes. Marked internal in its metadata; bundled helpers and review resources are required for the full workflow, and an accepted ADR is not proof that its implementation has been verified.
+
 - **[Change Impact Analysis](https://github.com/affaan-m/ECC/blob/main/skills/change-impact/SKILL.md)** — From `affaan-m/ECC`: map the evidence-backed impact of a planned change on callers, data, schemas, public contracts, tests, documentation, deployment, migration, and rollback, then reconcile that map with the implemented diff and verification results. Read-only by default, with explicit unknowns and checks for unauthorized scope drift; routes durable decisions, contracts, and regression evidence to related ECC skills and existing project records rather than creating parallel sources of truth. Its companion skills are separate dependencies, not inspected or included by this listing.
+
+</details>
+
+<details>
+<summary><strong>Statistical analysis and analytical quality assurance</strong></summary>
+
+- **[Statistical Analysis](https://github.com/anthropics/knowledge-work-plugins/blob/main/data/skills/statistical-analysis/SKILL.md)** — From `anthropics/knowledge-work-plugins`: analyze distributions, trends, seasonality, outliers, correlations, and hypothesis tests, with descriptive statistics, simple forecasting, and Python examples. Emphasizes effect sizes, confidence intervals, practical significance, and common inferential pitfalls; its simplified test-selection rules and sample-size heuristics are starting points, not substitutes for checking assumptions, power, and the study design.
+
+- **[Validate Data](https://github.com/anthropics/knowledge-work-plugins/blob/main/data/skills/validate-data/SKILL.md)** — From `anthropics/knowledge-work-plugins`: review an analysis before sharing by checking methodology, population and metric definitions, data quality, SQL joins, denominators, period alignment, calculation spot-checks, charts, and supported conclusions. Returns prioritized issues, required caveats, and a readiness assessment; meaningful verification requires access to source data, queries, and results, while connector setup is documented separately in the parent plugin.
 
 </details>
 
@@ -152,6 +167,8 @@ Browse by task. Expand a category for source links, deliverables, and limitation
 - **[skills.sh](https://skills.sh)** — Search the Agent Skills directory and browse trending skills; follow each result to its original source before installing.
 
 ### Repositories and references
+
+- **[NVIDIA SkillEvaluator](https://github.com/NVIDIA/SkillEvaluator)** — An experimental evaluation tool, not a single standalone skill: check static quality and security, detect overlapping guidance, and compare sandboxed agent runs with and without a skill. Includes an agent-facing `skills/skillevaluator/` package and CI templates; basic quality checks can run without an LLM, while security scanning, deduplication, and live evaluation have separate scanner, provider, and sandbox requirements. Static scores do not establish safety or agent effectiveness; model and managed-sandbox use can incur charges. Licensed under Apache 2.0 with additional third-party notices.
 
 - **[Skill-kit](https://github.com/Youmair/skill-kit)** — A concept-organized design knowledge library for AI agents, covering visual styles, palettes, typography, UI patterns, components, charts, and workflow rules, with source metadata and reusable CSS/Tailwind snippets. Browse `_MOC.md` to select relevant files; aggregated content retains per-file upstream licenses, including CC-BY-SA and custom terms, rather than one blanket MIT license.
 
