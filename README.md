@@ -71,6 +71,8 @@ Browse by task. Expand a category for source links, deliverables, and limitation
 <details>
 <summary><strong>Information cards and editorial design</strong></summary>
 
+- **[Document Design](https://github.com/jamditis/claude-skills-journalism/tree/master/pdf-playground/skills/document-design)** — From `jamditis/claude-skills-journalism` (`pdf-playground`): create branded HTML proposals, reports, one-pagers, newsletters, slides, and flyers for browser-based PDF export, using bundled templates and brand configuration. Defaults to US Letter rather than A4; requires visual checks for content overflow and footer clearance, replacement of unresolved slide assets, and local or embedded fonts for offline use. Produces HTML with PDF export instructions, not an automatically verified final PDF.
+
 - **[Magazine](https://github.com/barkleesanders/claude-code-starter/tree/main/skills/magazine)** — From `barkleesanders/claude-code-starter`: turn digests, meeting notes, research summaries, and curated lists into an HTML magazine with distinct full-viewport spreads and print/PDF styling. Uses the package's design-system and spread references; its single-file output still loads Google Fonts externally, so offline use requires local or embedded fonts. Not intended for plain working documents or editable Google Docs.
 
 - **[Infocard Generator](https://github.com/liuarui/skillsmd/tree/main/infocard)** — From `liuarui/skillsmd`: create editorial-style information cards with HTML/CSS embedded in Markdown for knowledge summaries, topic overviews, data highlights, and event announcements. Select layouts and typography based on content density, structure, and tone; not intended for architecture diagrams or data visualization.
@@ -89,6 +91,10 @@ Browse by task. Expand a category for source links, deliverables, and limitation
 
 <details>
 <summary><strong>Web interface design</strong></summary>
+
+- **[UI/UX Pro Max](https://github.com/sidiangongyuan/codex-skills-library/blob/main/skills/ui-ux-pro-max/SKILL.md)** — From `sidiangongyuan/codex-skills-library`: design, implement, or review web and mobile interfaces using searchable product patterns, palettes, typography, charts, accessibility guidance, and frontend-stack recommendations. Requires Python 3 and bundled search scripts/data, with optional master and page-specific design-system files; prioritizes accessibility, safe interaction, and product fit over visual novelty. Recommendations remain candidates until checked against the existing product and validated in rendered states, supported viewports, and relevant devices.
+
+- **[HTML Design Styles](https://github.com/chrismccoy/forge/blob/master/lib/html-design-styles/SKILL.md)** — From `chrismccoy/forge`: build or restyle HTML/CSS pages and components using a user-selected named aesthetic, with prescribed palettes, typography, layouts, and component patterns rather than an improvised generic theme. The root file routes to shared and style-specific references via Claude plugin paths, which need adaptation in other runtimes; its default Tailwind CDN output is not offline self-contained. Review accessibility independently: the instructions permit specified styles to retain WCAG deviations with only a warning comment.
 
 - **[Web Design](https://github.com/pascalorg/skills/blob/main/web-design/SKILL.md)** — From `pascalorg/skills`: build and review web interfaces using a prioritized reference covering semantic HTML, responsive layout, typography, design tokens, component states, accessibility, motion, and performance, with CSS and Tailwind examples. Addresses interface implementation and design review rather than publication layout or presentation generation; its checklists do not replace browser, keyboard, and accessibility testing.
 
@@ -109,6 +115,8 @@ Browse by task. Expand a category for source links, deliverables, and limitation
 
 <details>
 <summary><strong>HTML presentations and visual summaries</strong></summary>
+
+- **[To HTML](https://github.com/pbi-agent/skills/blob/main/skills/to-html/SKILL.md)** — From `pbi-agent/skills`: turn concepts, analyses, implementation plans, and code reviews into task-focused HTML artifacts with cards, SVG charts, tables, annotated snippets, and lightweight interaction or copy/export controls. Defaults to a single file with inline CSS and JavaScript, grounded data, and separate evidence and interpretation; optional Mermaid rendering uses jsDelivr and is unsuitable for offline or confidential work without local adaptation. Requires browser checks at narrow and desktop widths and testing of every interactive control.
 
 - **[Visual Explainer (journalism adaptation)](https://github.com/jamditis/claude-skills-journalism/tree/master/visual-explainer)** — From `jamditis/claude-skills-journalism` (metadata credits `nicobailon` upstream and journalism adaptations by `jamditis`): create HTML explainers, diagrams, timelines, source networks, investigation maps, slide decks, and visual plan or diff reviews. Uses package-local templates, references, and vendored diagram libraries, including Mermaid zoom/pan controls; external font loading means a single HTML file does not guarantee offline self-containment. Browser opening and optional Vercel publication are separate delivery actions, not requirements for using the catalog link.
 
