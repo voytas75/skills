@@ -96,6 +96,8 @@ Browse by task. Expand a category for source links, deliverables, and limitation
 
 - **[Frontend Design](https://github.com/thekorn/agent-skills/blob/main/skills/frontend-design/SKILL.md)** — From `thekorn/agent-skills`: turn a brief into coded web pages or components by choosing one distinctive aesthetic direction and defining typography, color, layout, and motion before implementation. Calls for responsive, semantic interfaces with tokenized styling and full code deliverables; its emphasis on expressive visual identity is not a substitute for runtime, accessibility, or production-readiness testing.
 
+- **[Frontend Design (Anthropic)](https://github.com/anthropics/skills/blob/main/skills/frontend-design/SKILL.md)** — From `anthropics/skills`: build or reshape interfaces around the brief's subject, audience, and visual identity, using a compact palette, typography plan, and layout sketches before coding. Reviews the plan against generic defaults and combines restrained motion, clear interface copy, and screenshot-based self-critique; accessibility and responsive-design guidance still require implementation testing.
+
 </details>
 
 <details>
