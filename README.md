@@ -51,9 +51,11 @@ Browse by task. Expand a category for source links, deliverables, and limitation
 > Third-party links are separate from this project's packages. Inclusion does not imply installation, testing, or endorsement; content remains with its original authors.
 
 <details>
-<summary><strong>Text compression and restructuring</strong></summary>
+<summary><strong>Text analysis, compression and restructuring</strong></summary>
 
 - **[Compress Text](https://github.com/MartinForReal/compress-text-skill/tree/main/skills/compress-text)** — From `MartinForReal/compress-text-skill`: shorten and reorganize documents, prompts, or transcripts through semantic grouping, deduplication, and key-point-first structure, with readable and dense modes. Compares candidate rewrites and preserves distinct requirements, references, examples, and template tags; claimed meaning fidelity and token savings require independent checks, especially for protected or exact wording.
+
+- **[Text Density Analyzer](https://github.com/Max-Levitskiy/skills/tree/main/plugins/ml-slop/skills/text)** — From `Max-Levitskiy/skills` (`ml-slop` plugin): audit documents for semantic and thematic repetition, filler, and information density, or rewrite them in a separate fix mode. Coordinates parallel analysis agents and a composite score; its two-pass rewrite requires source-to-output checks for unique claims, qualifiers, quotes, links, paths, and code. Depends on the package's analysis-agent instructions; scores and information preservation require independent verification.
 
 </details>
 
