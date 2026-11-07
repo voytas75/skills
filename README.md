@@ -110,6 +110,8 @@ Browse by task. Expand a category for source links, deliverables, and limitation
 <details>
 <summary><strong>HTML presentations and visual summaries</strong></summary>
 
+- **[Visual Explainer (journalism adaptation)](https://github.com/jamditis/claude-skills-journalism/tree/master/visual-explainer)** — From `jamditis/claude-skills-journalism` (metadata credits `nicobailon` upstream and journalism adaptations by `jamditis`): create HTML explainers, diagrams, timelines, source networks, investigation maps, slide decks, and visual plan or diff reviews. Uses package-local templates, references, and vendored diagram libraries, including Mermaid zoom/pan controls; external font loading means a single HTML file does not guarantee offline self-containment. Browser opening and optional Vercel publication are separate delivery actions, not requirements for using the catalog link.
+
 - **[Visualize](https://github.com/careerhackeralex/visualize/tree/main/skills/visualize)** — From `careerhackeralex/visualize`: create single-file HTML presentations, dashboards, infographics, timelines, and visual summaries using a shared skeleton, themes, and browser libraries.
   - **Instruction inconsistencies:** competing chart lifecycle patterns (`ChartManager.safeInit()` versus direct `new Chart()` and canvas replacement); conflicting animation and style guidance, including a hover-transform checklist despite an explicit ban on translated/scaled card hovers. Reconcile these instructions before use.
   - **Offline limitation:** the claimed offline, self-contained output depends on CDN-hosted chart/export libraries and Google Fonts; reliable offline use requires local or embedded dependencies and an offline acceptance test.
