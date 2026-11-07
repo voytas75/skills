@@ -66,9 +66,9 @@ Use when a previous value is available and change is relevant. For percentages, 
 
 ```text
 Scale: 0–100%; marker = target 70%
-CPU   ██████████│░░ 82%
-Disk  █████████│░░░ 73%
-RAM   ███████│░░░░░ 56%
+CPU   ████████│██░░ 82%
+Disk  ████████│█░░░ 73%
+RAM   ███████░│░░░░ 56%
 ```
 
 The bar encodes the observed value; `│` marks the threshold/target. They are independent. For each row, the marker position is calculated from the same scale. If the target differs by row, state it per row or include it in the label. Do not label a target as a limit unless it is one.

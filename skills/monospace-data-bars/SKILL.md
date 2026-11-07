@@ -1,7 +1,7 @@
 ---
 name: monospace-data-bars
 metadata:
-  version: "1.0.0"
+  version: "1.0.1"
 description: Select, construct, and validate compact monospace data bars for numeric values, comparisons, monitoring, thresholds, status, and change over time. Use when presenting quantitative data in terminal output, logs, Markdown, plain-text reports, email, or code blocks, especially when a visual bar should communicate magnitude without requiring graphical rendering.
 ---
 
@@ -167,6 +167,8 @@ For a design/selection task, return:
 Do not expose the entire decision process unless the user asks for it.
 
 ## References
+
+Read [the character vocabulary](references/CHARACTERS.md) for implemented glyph families, optional annotations, compatibility constraints, and unimplemented candidates.
 
 Read `references/VARIANTS.md` when selecting or adapting a visual template.
 Read `references/RENDERER.md` when using the bundled script or preparing JSON input.
