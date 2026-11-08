@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.6.1",
+  "study_id": "example",
+  "required_modalities": [
+    "geometry",
+    "visual",
+    "font_identity"
+  ],
+  "entries": [
+    {
+      "entry_id": "mobile-footer-geometry",
+      "viewport_id": "mobile",
+      "theme": "light",
+      "state_id": "footer",
+      "modality": "geometry",
+      "status": "MEASURED",
+      "source_sample_id": "src-footer",
+      "target_sample_id": "dst-footer",
+      "alignment": {
+        "method": "shared_anchor",
+        "rationale": "document_bottom"
+      },
+      "metric": {
+        "name": "y_delta",
+        "value": 255,
+        "unit": "css_px"
+      },
+      "result": "FAIL",
+      "evidence_ids": [
+        "ev-1"
+      ]
+    },
+    {
+      "entry_id": "mobile-footer-visual",
+      "viewport_id": "mobile",
+      "theme": "light",
+      "state_id": "footer",
+      "modality": "visual",
+      "status": "NOT_COMPARABLE",
+      "reason": "Footer crop dimensions differ; equivalent region cannot be aligned.",
+      "evidence_ids": [
+        "ev-2"
+      ]
+    },
+    {
+      "entry_id": "mobile-footer-font",
+      "viewport_id": "mobile",
+      "theme": "light",
+      "state_id": "footer",
+      "modality": "font_identity",
+      "status": "NOT_TESTED",
+      "reason": "Resolved font identifiers unavailable for this capture.",
+      "evidence_ids": [
+        "ev-3"
+      ]
+    }
+  ]
+}

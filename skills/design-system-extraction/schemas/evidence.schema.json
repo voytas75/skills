@@ -1,52 +1,22 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "Design System Extraction evidence package",
+  "title": "DSE evidence package",
   "type": "object",
   "required": [
     "schema_version",
     "study_id",
     "task_type",
     "artifact_mode",
-    "created_at",
-    "target",
     "samples",
     "evidence_registry",
-    "findings",
-    "limitations",
-    "outcomes",
-    "results",
-    "fidelity"
+    "results"
   ],
   "properties": {
     "schema_version": {
-      "const": "1.6.0"
+      "const": "1.6.1"
     },
     "study_id": {
-      "type": "string",
-      "minLength": 1
-    },
-    "task_type": {
-      "enum": [
-        "analysis",
-        "reconstruction",
-        "comparison",
-        "audit"
-      ]
-    },
-    "artifact_mode": {
-      "enum": [
-        "snapshot",
-        "standalone_mockup",
-        "functional_implementation",
-        "not_applicable"
-      ]
-    },
-    "created_at": {
-      "type": "string",
-      "minLength": 1
-    },
-    "target": {
-      "type": "object"
+      "type": "string"
     },
     "samples": {
       "type": "array"
@@ -54,176 +24,11 @@
     "evidence_registry": {
       "type": "array"
     },
-    "findings": {
-      "type": "array"
-    },
-    "limitations": {
-      "type": "array"
-    },
-    "outcomes": {
-      "type": "object"
-    },
     "results": {
       "type": "object"
     },
-    "dependencies": {
-      "type": "array"
-    },
-    "comparison_file": {
-      "type": "string"
-    },
     "fidelity": {
-      "type": "object",
-      "required": [
-        "visual_fidelity",
-        "functional_fidelity",
-        "responsive_fidelity",
-        "content_fidelity",
-        "asset_fidelity"
-      ],
-      "properties": {
-        "visual_fidelity": {
-          "type": "object",
-          "required": [
-            "status",
-            "rationale",
-            "evidence_ids"
-          ],
-          "properties": {
-            "status": {
-              "enum": [
-                "PASS",
-                "PARTIAL",
-                "FAIL",
-                "NOT_TESTED"
-              ]
-            },
-            "rationale": {
-              "type": "string",
-              "minLength": 1
-            },
-            "evidence_ids": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
-          }
-        },
-        "functional_fidelity": {
-          "type": "object",
-          "required": [
-            "status",
-            "rationale",
-            "evidence_ids"
-          ],
-          "properties": {
-            "status": {
-              "enum": [
-                "PASS",
-                "PARTIAL",
-                "FAIL",
-                "NOT_TESTED"
-              ]
-            },
-            "rationale": {
-              "type": "string",
-              "minLength": 1
-            },
-            "evidence_ids": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
-          }
-        },
-        "responsive_fidelity": {
-          "type": "object",
-          "required": [
-            "status",
-            "rationale",
-            "evidence_ids"
-          ],
-          "properties": {
-            "status": {
-              "enum": [
-                "PASS",
-                "PARTIAL",
-                "FAIL",
-                "NOT_TESTED"
-              ]
-            },
-            "rationale": {
-              "type": "string",
-              "minLength": 1
-            },
-            "evidence_ids": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
-          }
-        },
-        "content_fidelity": {
-          "type": "object",
-          "required": [
-            "status",
-            "rationale",
-            "evidence_ids"
-          ],
-          "properties": {
-            "status": {
-              "enum": [
-                "PASS",
-                "PARTIAL",
-                "FAIL",
-                "NOT_TESTED"
-              ]
-            },
-            "rationale": {
-              "type": "string",
-              "minLength": 1
-            },
-            "evidence_ids": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
-          }
-        },
-        "asset_fidelity": {
-          "type": "object",
-          "required": [
-            "status",
-            "rationale",
-            "evidence_ids"
-          ],
-          "properties": {
-            "status": {
-              "enum": [
-                "PASS",
-                "PARTIAL",
-                "FAIL",
-                "NOT_TESTED"
-              ]
-            },
-            "rationale": {
-              "type": "string",
-              "minLength": 1
-            },
-            "evidence_ids": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
-          }
-        }
-      },
-      "additionalProperties": false
+      "type": "object"
     }
   },
   "additionalProperties": true

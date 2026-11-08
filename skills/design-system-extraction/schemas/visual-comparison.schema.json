@@ -1,52 +1,21 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "Design System Extraction visual comparison",
+  "title": "DSE visual comparison",
   "type": "object",
   "required": [
     "schema_version",
     "study_id",
-    "method",
-    "metric",
-    "thresholds",
     "pairs"
   ],
   "properties": {
     "schema_version": {
-      "const": "1.6.0"
+      "const": "1.6.1"
     },
     "study_id": {
-      "type": "string",
-      "minLength": 1
-    },
-    "method": {
-      "type": "string",
-      "minLength": 1
-    },
-    "metric": {
-      "type": "string",
-      "minLength": 1
-    },
-    "thresholds": {
-      "type": "object"
+      "type": "string"
     },
     "pairs": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "required": [
-          "viewport_id",
-          "theme",
-          "state_id",
-          "source_screenshot",
-          "target_screenshot",
-          "dimensions",
-          "metric_value",
-          "threshold",
-          "masked_regions",
-          "result",
-          "evidence_ids"
-        ]
-      }
+      "type": "array"
     }
   },
   "additionalProperties": true

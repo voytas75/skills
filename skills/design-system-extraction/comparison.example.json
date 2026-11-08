@@ -1,43 +1,62 @@
 {
-  "schema_version": "1.6.0",
-  "study_id": "replace-with-study-id",
+  "schema_version": "1.6.1",
+  "study_id": "example",
   "criteria": [
-    {
-      "criterion_id": "content_state",
-      "required": true,
-      "status": "NOT_TESTED",
-      "evidence_ids": []
-    },
     {
       "criterion_id": "geometry",
       "required": true,
-      "status": "NOT_TESTED",
-      "evidence_ids": []
-    },
-    {
-      "criterion_id": "important_styles",
-      "required": true,
-      "status": "NOT_TESTED",
-      "evidence_ids": []
-    },
-    {
-      "criterion_id": "document_overflow",
-      "required": true,
-      "status": "NOT_TESTED",
-      "evidence_ids": []
-    },
-    {
-      "criterion_id": "component_overflow",
-      "required": true,
-      "status": "NOT_TESTED",
-      "evidence_ids": []
-    },
-    {
-      "criterion_id": "asset_completeness",
-      "required": true,
-      "status": "NOT_TESTED",
-      "evidence_ids": []
+      "status": "FAIL",
+      "evidence_ids": [
+        "ev-1"
+      ],
+      "rationale": "Observed delta exceeds tolerance."
     }
   ],
-  "comparisons": []
+  "comparisons": [
+    {
+      "comparison_id": "cmp-1",
+      "viewport_id": "mobile",
+      "theme": "light",
+      "state_id": "footer",
+      "modality": "geometry",
+      "element_id": "footer",
+      "match_status": "matched",
+      "source_sample_id": "src-footer",
+      "target_sample_id": "dst-footer",
+      "source": {
+        "rect": {
+          "x": 0,
+          "y": 700,
+          "width": 390,
+          "height": 500
+        }
+      },
+      "target": {
+        "rect": {
+          "x": 0,
+          "y": 955,
+          "width": 390,
+          "height": 500
+        }
+      },
+      "deltas": {
+        "y": 255
+      },
+      "tolerances": {
+        "geometry_css_px": 2
+      },
+      "alignment": {
+        "method": "shared_anchor",
+        "rationale": "Both captures aligned to document_bottom",
+        "source_anchor": "document_bottom",
+        "target_anchor": "document_bottom",
+        "source_scroll_y": 1200,
+        "target_scroll_y": 1455
+      },
+      "result": "FAIL",
+      "evidence_ids": [
+        "ev-1"
+      ]
+    }
+  ]
 }

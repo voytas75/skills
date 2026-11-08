@@ -1,32 +1,15 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "Design System Extraction runtime tests",
+  "title": "DSE runtime tests",
   "type": "object",
   "required": [
     "interactions",
     "resolved_font_status",
-    "font_runs",
-    "limitations"
+    "font_runs"
   ],
   "properties": {
     "interactions": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "required": [
-          "control_id",
-          "role",
-          "accessible_name",
-          "source_status",
-          "source_action",
-          "source_result",
-          "target_status",
-          "target_action",
-          "target_result",
-          "result",
-          "evidence_ids"
-        ]
-      }
+      "type": "array"
     },
     "resolved_font_status": {
       "enum": [
@@ -36,18 +19,6 @@
       ]
     },
     "font_runs": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "required": [
-          "text",
-          "declared_family",
-          "resolved_families",
-          "fallback_detected"
-        ]
-      }
-    },
-    "limitations": {
       "type": "array"
     }
   },

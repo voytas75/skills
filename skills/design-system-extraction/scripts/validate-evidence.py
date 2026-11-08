@@ -1,420 +1,315 @@
 #!/usr/bin/env python3
-"""Validate Design System Extraction v1.5.x packages (Python standard library only)."""
+"""Validate Design System Extraction v1.6.1 evidence packages (stdlib only)."""
 from __future__ import annotations
-import json
-import sys
+import json, sys
 from pathlib import Path
 from datetime import datetime, timezone
 
-VERSION = "1.6.0"
-SCHEMA_VERSION = "1.6.0"
-TASKS = {"analysis", "reconstruction", "comparison", "audit"}
-ARTIFACTS = {"snapshot", "standalone_mockup", "functional_implementation", "not_applicable"}
-OUTCOMES = {"PASS", "PARTIAL", "FAIL", "NOT_TESTED"}
-READINESS = {"PASS", "FAIL", "NOT_APPLICABLE", "NOT_TESTED"}
-ROLES = {"source", "target"}
-REQUIRED_RECON_CHECKS = {"content_state", "geometry", "important_styles", "document_overflow", "component_overflow", "asset_completeness"}
+VERSION = "1.6.1"
+SCHEMA_VERSION = "1.6.1"
+OUTCOMES = {"PASS","PARTIAL","FAIL","NOT_TESTED"}
+LEDGER_STATES = {"MEASURED","NOT_TESTED","NOT_COMPARABLE","BLOCKED"}
+READINESS = {"PASS","FAIL","NOT_TESTED","NOT_APPLICABLE"}
+MODALITIES = {"content","geometry","styles","visual","responsive","interaction","font_identity","asset_identity"}
+CAPTURE_CONTROLS = {"url_identity","content_identity","render_stability","state_integrity","obstruction_check","capture_integrity"}
+TASKS = {"analysis","reconstruction","comparison","audit"}
+ARTIFACTS = {"snapshot","standalone_mockup","functional_implementation","not_applicable"}
 
 class Validator:
     def __init__(self, root: Path):
         self.root = root.resolve()
-        self.errors: list[str] = []
-        self.warnings: list[str] = []
-        self.checks: list[str] = []
-        self.files: dict[str, dict] = {}
-
-    def err(self, message: str) -> None:
-        self.errors.append(message)
-
-    def warn(self, message: str) -> None:
-        self.warnings.append(message)
-
-    def read_json(self, rel: str, required: bool = True):
-        p = self.safe_file(rel, required)
-        if p is None:
+        self.errors = []
+        self.warnings = []
+        self.checks = []
+    def err(self, msg): self.errors.append(msg)
+    def nonempty(self, x): return isinstance(x,str) and bool(x.strip())
+    def read(self, rel, required=True):
+        p=self.root/rel
+        if not p.is_file():
+            if required: self.err(f"missing required file: {rel}")
             return None
-        try:
-            return json.loads(p.read_text(encoding="utf-8"))
-        except (OSError, json.JSONDecodeError) as exc:
-            self.err(f"{rel}: invalid JSON: {exc}")
-            return None
-
-    def safe_file(self, value, required=True):
-        if not isinstance(value, str) or not value.strip():
-            if required:
-                self.err("missing required file path")
-            return None
-        rel = Path(value)
-        if rel.is_absolute() or ".." in rel.parts:
-            self.err(f"unsafe relative path: {value}")
-            return None
-        candidate = self.root / rel
-        try:
-            resolved = candidate.resolve(strict=True)
-            resolved.relative_to(self.root)
-        except FileNotFoundError:
-            if required:
-                self.err(f"file not found: {value}")
-            return None
-        except (ValueError, OSError):
-            self.err(f"path escapes package or cannot be resolved: {value}")
-            return None
-        if not resolved.is_file():
-            if required:
-                self.err(f"not a file: {value}")
-            return None
-        return resolved
-
-    @staticmethod
-    def nonempty(value):
-        return isinstance(value, str) and bool(value.strip())
-
-    def unique_ids(self, items, key, label):
-        seen = set()
-        if not isinstance(items, list):
-            self.err(f"{label} must be an array")
-            return
-        for i, item in enumerate(items):
-            if not isinstance(item, dict):
-                self.err(f"{label}[{i}] must be an object")
-                continue
-            ident = item.get(key)
-            if not self.nonempty(ident):
-                self.err(f"{label}[{i}].{key} is required")
-            elif ident in seen:
-                self.err(f"duplicate {key}: {ident}")
-            else:
-                seen.add(ident)
-
+        try: return json.loads(p.read_text(encoding="utf-8"))
+        except Exception as e:
+            self.err(f"{rel}: invalid JSON: {e}"); return None
+    def safe(self, rel):
+        if not self.nonempty(rel): self.err("empty package path"); return
+        p=(self.root/rel).resolve()
+        try: p.relative_to(self.root)
+        except ValueError: self.err(f"unsafe path escapes package: {rel}"); return
+        if not p.is_file(): self.err(f"referenced file missing: {rel}")
+    def ids(self, rows, field, label):
+        seen=set()
+        for i,row in enumerate(rows):
+            if not isinstance(row,dict): self.err(f"{label}[{i}] must be object"); continue
+            val=row.get(field)
+            if not self.nonempty(val): self.err(f"{label}[{i}].{field} required")
+            elif val in seen: self.err(f"duplicate {field}: {val}")
+            else: seen.add(val)
+        return seen
     def validate(self):
         self.checks.append("manifest")
-        execution = self.read_json("execution.json", required=False)
-        evidence = self.read_json("evidence.json")
-        self.safe_file("report.html")
-        if not isinstance(execution, dict):
-            if isinstance(evidence, dict):
-                self.err("legacy_schema_requires_migration: execution.json is absent or invalid; legacy packages are not silently upgraded")
+        ex=self.read("execution.json")
+        ev=self.read("evidence.json")
+        if not isinstance(ex,dict) or not isinstance(ev,dict): return self.report()
+        if ex.get("schema_version") != SCHEMA_VERSION: self.err(f"execution.json schema_version must be {SCHEMA_VERSION}")
+        if ev.get("schema_version") != SCHEMA_VERSION: self.err(f"evidence.json schema_version must be {SCHEMA_VERSION}")
+        task=ex.get("task_type"); artifact=ex.get("artifact_mode")
+        if task not in TASKS: self.err("execution.json task_type invalid")
+        if artifact not in ARTIFACTS: self.err("execution.json artifact_mode invalid")
+        sid=ex.get("study_id")
+        if not self.nonempty(sid) or ev.get("study_id") != sid: self.err("study_id missing or inconsistent")
+        if ev.get("task_type") != task or ev.get("artifact_mode") != artifact: self.err("evidence task/artifact mode mismatch")
+        target=ex.get("target")
+        if not isinstance(target,dict) or not self.nonempty(target.get("requested_url")) or not self.nonempty(target.get("final_url")):
+            self.err("execution target requested_url/final_url required")
+        scope=ex.get("scope") if isinstance(ex.get("scope"),dict) else {}
+        vps=scope.get("viewports")
+        if not isinstance(vps,list) or not vps: self.err("scope.viewports must be non-empty array"); vps=[]
+        vpids=set()
+        for i,v in enumerate(vps):
+            if not isinstance(v,dict): self.err(f"viewport[{i}] must be object"); continue
+            vid=v.get("id")
+            if not self.nonempty(vid) or vid in vpids: self.err(f"viewport[{i}] id missing/duplicate")
+            else: vpids.add(vid)
+            if not all(isinstance(v.get(k),int) and v[k]>0 for k in ("width","height")): self.err(f"viewport[{i}] dimensions invalid")
+        for k in ("pages","themes","states"):
+            if not isinstance(scope.get(k),list) or not scope[k]: self.err(f"scope.{k} must be non-empty array")
+        if not isinstance(scope.get("required_checks"),list): self.err("scope.required_checks must be array")
+        themes=scope.get("themes",[]); states=scope.get("states",[])
+        samples=ev.get("samples")
+        if not isinstance(samples,list): self.err("evidence.samples must be array"); samples=[]
+        self.ids(samples,"sample_id","samples")
+        smap={}
+        for i,s in enumerate(samples):
+            if not isinstance(s,dict): continue
+            sid0=s.get("sample_id")
+            if self.nonempty(sid0): smap[sid0]=s
+            if s.get("role") not in {"source","target"}: self.err(f"samples[{i}] role invalid")
+            if s.get("viewport_id") not in vpids or s.get("theme") not in themes or s.get("state_id") not in states:
+                self.err(f"samples[{i}] references undeclared viewport/theme/state")
+            if s.get("capture_status") not in {"valid","partial","invalid"}: self.err(f"samples[{i}] capture_status invalid")
+            cr=s.get("capture_readiness")
+            if not isinstance(cr,dict): self.err(f"samples[{i}] capture_readiness required"); cr={}
+            for c in CAPTURE_CONTROLS:
+                item=cr.get(c)
+                if not isinstance(item,dict) or item.get("status") not in READINESS or not self.nonempty(item.get("details")):
+                    self.err(f"samples[{i}] capture_readiness.{c} invalid")
+                elif item.get("status")=="NOT_APPLICABLE" and not self.nonempty(item.get("rationale")):
+                    self.err(f"samples[{i}] capture_readiness.{c} N/A requires rationale")
+            if s.get("capture_status")=="valid" and any(cr.get(c,{}).get("status") not in {"PASS","NOT_APPLICABLE"} for c in CAPTURE_CONTROLS):
+                self.err(f"samples[{i}] capture_status valid contradicts failed/untested capture readiness")
+            aa=s.get("asset_audit")
+            if not isinstance(aa,dict) or aa.get("status") not in OUTCOMES: self.err(f"samples[{i}] asset_audit status required")
             else:
-                self.err("execution.json is required for schema v1.6.0 validation")
-            return self.report()
-        if not isinstance(evidence, dict):
-            return self.report()
-
-        for label, data in (("execution.json", execution), ("evidence.json", evidence)):
-            if data.get("schema_version") != SCHEMA_VERSION:
-                self.err(f"{label}: schema_version must be {SCHEMA_VERSION}")
-
-        task = execution.get("task_type")
-        artifact = execution.get("artifact_mode")
-        if task not in TASKS: self.err("execution.json: invalid task_type")
-        if artifact not in ARTIFACTS: self.err("execution.json: invalid artifact_mode")
-        if evidence.get("task_type") != task: self.err("evidence.json: task_type differs from execution.json")
-        if evidence.get("artifact_mode") != artifact: self.err("evidence.json: artifact_mode differs from execution.json")
-        if evidence.get("study_id") != execution.get("study_id"): self.err("study_id differs between manifests")
-
-        target = execution.get("target")
-        if not isinstance(target, dict) or not self.nonempty(target.get("requested_url")) or not self.nonempty(target.get("final_url")):
-            self.err("execution.json: target.requested_url and target.final_url are required")
-        scope = execution.get("scope")
-        if not isinstance(scope, dict):
-            self.err("execution.json: scope object is required"); scope = {}
-        viewports = scope.get("viewports")
-        if not isinstance(viewports, list) or not viewports:
-            self.err("execution.json: scope.viewports must be a non-empty array"); viewports = []
-        vp_ids = set()
-        for i, vp in enumerate(viewports):
-            if not isinstance(vp, dict):
-                self.err(f"scope.viewports[{i}] must be object"); continue
-            vid = vp.get("id")
-            if not self.nonempty(vid) or vid in vp_ids: self.err(f"scope.viewports[{i}]: missing or duplicate id")
-            else: vp_ids.add(vid)
-            if not isinstance(vp.get("width"), int) or vp["width"] <= 0 or not isinstance(vp.get("height"), int) or vp["height"] <= 0:
-                self.err(f"scope.viewports[{i}]: width/height must be positive integers")
-        for field in ("pages", "themes", "states", "required_checks"):
-            if not isinstance(scope.get(field), list) or (field != "required_checks" and not scope[field]):
-                self.err(f"execution.json: scope.{field} must be an array" + (" and non-empty" if field != "required_checks" else ""))
-
-        samples = evidence.get("samples")
-        if not isinstance(samples, list): self.err("evidence.json: samples must be array"); samples = []
-        self.unique_ids(samples, "sample_id", "samples")
-        sample_map = {}
-        for i, sample in enumerate(samples):
-            if not isinstance(sample, dict): continue
-            sid = sample.get("sample_id")
-            if self.nonempty(sid): sample_map[sid] = sample
-            if sample.get("role") not in ROLES: self.err(f"samples[{i}].role must be source or target")
-            if sample.get("status") not in {"accepted", "rejected"}: self.err(f"samples[{i}].status invalid")
-            if sample.get("viewport_id") not in vp_ids: self.err(f"samples[{i}]: viewport_id not declared in execution scope")
-            if sample.get("theme") not in (scope.get("themes") or []): self.err(f"samples[{i}]: theme not declared in execution scope")
-            if sample.get("state_id") not in (scope.get("states") or []): self.err(f"samples[{i}]: state_id not declared in execution scope")
-            readiness = sample.get("readiness")
-            if not isinstance(readiness, dict) or not readiness:
-                self.err(f"samples[{i}]: readiness must be a non-empty object")
+                subs=aa.get("substitutions",[]); unresolved=aa.get("unresolved",[])
+                if not isinstance(subs,list) or not isinstance(unresolved,list): self.err(f"samples[{i}] asset_audit arrays invalid")
+                if aa.get("status")=="PASS" and (subs or unresolved): self.err(f"samples[{i}] asset_audit PASS contradicts substitutions/unresolved")
+            elig=s.get("measurement_eligibility")
+            if not isinstance(elig,dict): self.err(f"samples[{i}] measurement_eligibility required")
             else:
-                for name, control in readiness.items():
-                    if not isinstance(control, dict) or control.get("status") not in READINESS or not self.nonempty(control.get("details")):
-                        self.err(f"samples[{i}].readiness.{name}: requires valid status and non-empty details")
-                        continue
-                    if control["status"] == "NOT_APPLICABLE" and not self.nonempty(control.get("rationale")):
-                        self.err(f"samples[{i}].readiness.{name}: NOT_APPLICABLE requires rationale")
-            if sample.get("status") == "accepted" and isinstance(readiness, dict):
-                required_controls = {"url_identity", "content_identity", "stylesheet_readiness", "asset_readiness", "render_stability", "state_integrity", "obstruction_check", "capture_integrity"}
-                missing = required_controls - set(readiness)
-                if missing: self.err(f"samples[{i}]: accepted sample missing readiness controls: {', '.join(sorted(missing))}")
-                for name in required_controls & set(readiness):
-                    ctrl = readiness[name]
-                    if isinstance(ctrl, dict) and ctrl.get("status") not in {"PASS", "NOT_APPLICABLE"}:
-                        self.err(f"samples[{i}]: accepted sample has non-passing readiness {name}")
-            asset_ctrl = readiness.get("asset_readiness") if isinstance(readiness, dict) else None
-            if isinstance(asset_ctrl, dict):
-                substitutions = asset_ctrl.get("substitutions", [])
-                unresolved = asset_ctrl.get("unresolved", [])
-                if not isinstance(substitutions, list): self.err(f"samples[{i}].readiness.asset_readiness.substitutions must be array")
-                if not isinstance(unresolved, list): self.err(f"samples[{i}].readiness.asset_readiness.unresolved must be array")
-                if asset_ctrl.get("status") == "PASS" and (substitutions or unresolved):
-                    self.err(f"samples[{i}]: asset_readiness PASS contradicts non-empty substitutions/unresolved assets")
-            if not isinstance(sample.get("evidence_ids"), list): self.err(f"samples[{i}].evidence_ids must be array")
+                if s.get("capture_status")=="invalid" and any(isinstance(x,dict) and x.get("status")=="eligible" for x in elig.values()):
+                    self.err(f"samples[{i}] invalid capture cannot mark any modality eligible")
+                for mod,entry in elig.items():
+                    if mod not in MODALITIES or not isinstance(entry,dict) or entry.get("status") not in {"eligible","ineligible","partial"} or not self.nonempty(entry.get("reason")):
+                        self.err(f"samples[{i}] measurement_eligibility.{mod} invalid")
+            if not isinstance(s.get("evidence_ids"),list): self.err(f"samples[{i}] evidence_ids must be array")
 
-        registry = evidence.get("evidence_registry")
-        if not isinstance(registry, list): self.err("evidence_registry must be array"); registry = []
-        self.unique_ids(registry, "evidence_id", "evidence_registry")
-        evidence_ids = {e.get("evidence_id") for e in registry if isinstance(e, dict) and self.nonempty(e.get("evidence_id"))}
-        for i, ev in enumerate(registry):
-            if not isinstance(ev, dict): continue
-            if ev.get("type") not in {"screenshot","dom","computed_style","stylesheet","asset","network","manual_note","test_result"}:
-                self.err(f"evidence_registry[{i}].type invalid")
-            path = ev.get("path")
-            if path is not None: self.safe_file(path)
-            elif not self.nonempty(ev.get("source_ref")): self.err(f"evidence_registry[{i}]: path or source_ref required")
-        for i, sample in enumerate(samples):
-            if not isinstance(sample, dict): continue
-            for eid in sample.get("evidence_ids", []) if isinstance(sample.get("evidence_ids"), list) else []:
-                if eid not in evidence_ids: self.err(f"samples[{i}]: unknown evidence_id {eid}")
-
-        findings = evidence.get("findings")
-        if not isinstance(findings, list): self.err("findings must be array"); findings = []
-        self.unique_ids(findings, "finding_id", "findings")
-        for i, finding in enumerate(findings):
-            if not isinstance(finding, dict): continue
-            if not self.nonempty(finding.get("claim")): self.err(f"findings[{i}].claim required")
-            if finding.get("classification") not in {"observed","inferred","estimated","unknown","recommendation"}:
-                self.err(f"findings[{i}].classification invalid")
-            refs = finding.get("evidence_ids")
-            if not isinstance(refs, list): self.err(f"findings[{i}].evidence_ids must be array"); continue
-            if finding.get("classification") == "observed" and not refs: self.err(f"findings[{i}]: observed claim requires evidence")
+        registry=ev.get("evidence_registry")
+        if not isinstance(registry,list): self.err("evidence_registry must be array"); registry=[]
+        eids=self.ids(registry,"evidence_id","evidence_registry")
+        for i,item in enumerate(registry):
+            if not isinstance(item,dict): continue
+            if item.get("type") not in {"screenshot","dom","computed_style","stylesheet","asset","network","manual_note","test_result","metric"}:
+                self.err(f"evidence_registry[{i}] type invalid")
+            if item.get("path") is not None: self.safe(item.get("path"))
+            elif not self.nonempty(item.get("source_ref")): self.err(f"evidence_registry[{i}] path/source_ref required")
+        for i,s in enumerate(samples):
+            for eid in s.get("evidence_ids",[]) if isinstance(s.get("evidence_ids"),list) else []:
+                if eid not in eids: self.err(f"samples[{i}] unknown evidence_id {eid}")
+        findings=ev.get("findings",[])
+        if not isinstance(findings,list): self.err("findings must be array"); findings=[]
+        self.ids(findings,"finding_id","findings")
+        for i,f in enumerate(findings):
+            if not isinstance(f,dict): continue
+            if not self.nonempty(f.get("claim")): self.err(f"finding[{i}] claim required")
+            if f.get("classification") not in {"observed","inferred","estimated","unknown","recommendation"}: self.err(f"finding[{i}] classification invalid")
+            refs=f.get("evidence_ids",[])
+            if not isinstance(refs,list): self.err(f"finding[{i}] evidence_ids invalid"); refs=[]
+            if f.get("classification")=="observed" and not refs: self.err(f"finding[{i}] observed claim requires evidence")
+            if f.get("classification")=="estimated" and not self.nonempty(f.get("method")): self.err(f"finding[{i}] estimated claim requires method")
             for eid in refs:
-                if eid not in evidence_ids: self.err(f"findings[{i}]: unknown evidence_id {eid}")
-            if finding.get("classification") == "estimated" and not self.nonempty(finding.get("method")):
-                self.err(f"findings[{i}]: estimated claim requires method")
+                if eid not in eids: self.err(f"finding[{i}] unknown evidence_id {eid}")
 
-        outcomes = evidence.get("outcomes")
-        if not isinstance(outcomes, dict): self.err("outcomes object required"); outcomes = {}
-        for key, item in outcomes.items():
-            if not isinstance(item, dict) or item.get("status") not in OUTCOMES or not self.nonempty(item.get("rationale")):
-                self.err(f"outcomes.{key}: requires valid status and rationale")
-        results = evidence.get("results")
-        if not isinstance(results, dict): self.err("results object required"); results = {}
-        for key in ("execution_completeness", "package_validation", "task_acceptance"):
-            if not isinstance(results.get(key), str) or results[key] not in OUTCOMES:
-                self.err(f"results.{key}: valid outcome status required")
+        self.safe("report.html")
+        results=ev.get("results")
+        if not isinstance(results,dict): self.err("evidence.results required"); results={}
+        for k in ("execution_completeness","package_validation","task_acceptance"):
+            if results.get(k) not in OUTCOMES: self.err(f"results.{k} invalid")
+        fidelity=ev.get("fidelity",{})
+        if task=="reconstruction":
+            dims={"visual_fidelity","functional_fidelity","responsive_fidelity","content_fidelity","asset_fidelity"}
+            if not isinstance(fidelity,dict): self.err("evidence.fidelity required"); fidelity={}
+            for d in dims:
+                item=fidelity.get(d)
+                if not isinstance(item,dict) or item.get("status") not in OUTCOMES or not self.nonempty(item.get("rationale")):
+                    self.err(f"fidelity.{d} requires status/rationale")
+                elif item.get("status")=="PASS" and not item.get("evidence_ids"):
+                    self.err(f"fidelity.{d} PASS requires evidence")
+                elif isinstance(item,dict):
+                    for eid in item.get("evidence_ids",[]):
+                        if eid not in eids: self.err(f"fidelity.{d} unknown evidence_id {eid}")
 
-        if task in {"reconstruction", "comparison"}:
-            self.checks.append("paired-comparison")
-            comp = self.read_json("comparison.json")
-            if not isinstance(comp, dict): comp = {}
-            if comp.get("schema_version") != SCHEMA_VERSION: self.err(f"comparison.json: schema_version must be {SCHEMA_VERSION}")
-            if comp.get("study_id") != execution.get("study_id"): self.err("comparison.json: study_id mismatch")
-            criteria = comp.get("criteria")
-            if not isinstance(criteria, list): self.err("comparison.json: criteria must be array"); criteria = []
-            crit_map = {}
-            for c in criteria:
-                if isinstance(c, dict) and self.nonempty(c.get("criterion_id")):
-                    if c["criterion_id"] in crit_map: self.err(f"duplicate criterion_id {c['criterion_id']}")
-                    crit_map[c["criterion_id"]] = c
-            for req in scope.get("required_checks", []):
-                if req not in crit_map: self.err(f"comparison.json: required criterion missing: {req}")
-            for c in criteria:
-                if not isinstance(c, dict): continue
-                if c.get("status") not in OUTCOMES: self.err(f"criterion {c.get('criterion_id')}: invalid status")
-                if c.get("required") is True and c.get("status") == "PASS" and not c.get("evidence_ids"):
-                    self.err(f"criterion {c.get('criterion_id')}: PASS requires evidence_ids")
-                for eid in c.get("evidence_ids", []):
-                    if eid not in evidence_ids: self.err(f"criterion {c.get('criterion_id')}: unknown evidence_id {eid}")
-            comparisons = comp.get("comparisons")
-            if not isinstance(comparisons, list): self.err("comparison.json: comparisons must be array"); comparisons = []
-            self.unique_ids(comparisons, "comparison_id", "comparisons")
-            pair_coverage = set()
-            for i, pair in enumerate(comparisons):
-                if not isinstance(pair, dict): continue
-                for f in ("viewport_id","theme","state_id","element_id","match_status","source_sample_id","target_sample_id","source","target","deltas","tolerances","result","evidence_ids"):
-                    if f not in pair: self.err(f"comparisons[{i}]: missing {f}")
-                if pair.get("match_status") not in {"matched","unmatched","ambiguous"}: self.err(f"comparisons[{i}]: invalid match_status")
-                if pair.get("result") not in OUTCOMES: self.err(f"comparisons[{i}]: invalid result")
-                src = sample_map.get(pair.get("source_sample_id")); dst = sample_map.get(pair.get("target_sample_id"))
-                if not src or src.get("role") != "source" or not dst or dst.get("role") != "target":
-                    self.err(f"comparisons[{i}]: source/target sample references invalid")
-                else:
-                    if src.get("status") != "accepted" or dst.get("status") != "accepted":
-                        self.err(f"comparisons[{i}]: rejected sample cannot be compared")
-                    if src.get("viewport_id") != pair.get("viewport_id") or dst.get("viewport_id") != pair.get("viewport_id"):
-                        self.err(f"comparisons[{i}]: viewport mismatch")
-                    if src.get("theme") != pair.get("theme") or dst.get("theme") != pair.get("theme"):
-                        self.err(f"comparisons[{i}]: theme mismatch")
-                    if src.get("state_id") != pair.get("state_id") or dst.get("state_id") != pair.get("state_id"):
-                        self.err(f"comparisons[{i}]: state mismatch")
-                if pair.get("match_status") == "matched" and not self.nonempty(pair.get("element_id")):
-                    self.err(f"comparisons[{i}]: matched pair requires element_id")
-                tol = pair.get("tolerances")
-                if not isinstance(tol, dict) or not tol:
-                    self.err(f"comparisons[{i}]: tolerances required")
-                else:
-                    for k, v in tol.items():
-                        if not isinstance(v, (int,float)) or v < 0: self.err(f"comparisons[{i}]: tolerance {k} must be non-negative number")
-                for eid in pair.get("evidence_ids", []):
-                    if eid not in evidence_ids: self.err(f"comparisons[{i}]: unknown evidence_id {eid}")
-                pair_coverage.add((pair.get("viewport_id"),pair.get("theme"),pair.get("state_id")))
-            required_combos = {(v.get("id"),t,s) for v in viewports if isinstance(v,dict) for t in scope.get("themes",[]) for s in scope.get("states",[])}
-            # At least one paired comparison per required viewport/theme/state; element coverage is checked separately by required criteria.
-            missing = required_combos - pair_coverage
-            if missing: self.err(f"comparison.json: missing paired coverage combinations: {sorted(missing)}")
-            deps = evidence.get("dependencies", [])
-            if artifact == "standalone_mockup":
-                if not isinstance(deps, list): self.err("standalone_mockup: dependencies must be array"); deps=[]
-                for dep in deps:
-                    if isinstance(dep, dict) and dep.get("disposition") == "retained" and dep.get("runtime_origin") == "source_origin":
-                        self.err("standalone_mockup cannot retain runtime dependency on source origin")
-
-        # v1.6.0 fidelity, interaction, and screenshot gates.
-        if task == "reconstruction":
-            self.checks.append("fidelity-runtime")
-            fidelity = evidence.get("fidelity")
-            required_dims = {"visual_fidelity", "functional_fidelity", "responsive_fidelity", "content_fidelity", "asset_fidelity"}
-            if not isinstance(fidelity, dict):
-                self.err("evidence.json: fidelity object required for reconstruction")
-                fidelity = {}
-            for dim in required_dims:
-                item = fidelity.get(dim)
-                if not isinstance(item, dict) or item.get("status") not in OUTCOMES or not self.nonempty(item.get("rationale")):
-                    self.err(f"fidelity.{dim}: requires valid status and rationale")
-                elif item.get("status") == "PASS" and not item.get("evidence_ids"):
-                    self.err(f"fidelity.{dim}: PASS requires evidence_ids")
-                elif isinstance(item, dict):
-                    for eid in item.get("evidence_ids", []):
-                        if eid not in evidence_ids: self.err(f"fidelity.{dim}: unknown evidence_id {eid}")
-
-            runtime = self.read_json("measurements/runtime-tests.json", required=False)
-            if not isinstance(runtime, dict):
-                self.err("reconstruction requires measurements/runtime-tests.json")
-                runtime = {}
-            interactions = runtime.get("interactions")
-            if not isinstance(interactions, list):
-                self.err("runtime-tests.json: interactions array required")
-                interactions = []
-            controls = [x for x in interactions if isinstance(x, dict)]
-            for i, control in enumerate(controls):
-                for field in ("control_id", "role", "accessible_name", "source_status", "source_action", "source_result", "target_status", "target_action", "target_result", "result", "evidence_ids"):
-                    if field not in control: self.err(f"runtime-tests.interactions[{i}]: missing {field}")
-                if control.get("source_status") not in OUTCOMES or control.get("target_status") not in OUTCOMES or control.get("result") not in OUTCOMES:
-                    self.err(f"runtime-tests.interactions[{i}]: invalid source/target/result status")
-                for eid in control.get("evidence_ids", []):
-                    if eid not in evidence_ids: self.err(f"runtime-tests.interactions[{i}]: unknown evidence_id {eid}")
-            if fidelity.get("functional_fidelity", {}).get("status") == "PASS" and any(
-                x.get("source_status") != "PASS" or x.get("target_status") != "PASS" or x.get("result") != "PASS"
-                for x in controls
-            ):
-                self.err("functional_fidelity PASS contradicts untested or failed interaction coverage")
-            if runtime.get("resolved_font_status") not in {"PASS", "FAIL", "NOT_TESTED"}:
-                self.err("runtime-tests.json: resolved_font_status required")
-            if not isinstance(runtime.get("font_runs"), list): self.err("runtime-tests.json: font_runs array required")
-
-            visual = self.read_json("visual-comparison.json", required=False)
-            if not isinstance(visual, dict):
-                self.err("reconstruction requires visual-comparison.json")
-                visual = {}
-            if visual.get("schema_version") != SCHEMA_VERSION: self.err("visual-comparison.json: schema_version must be 1.6.0")
-            if visual.get("study_id") != execution.get("study_id"): self.err("visual-comparison.json: study_id mismatch")
-            pairs = visual.get("pairs")
-            if not isinstance(pairs, list): self.err("visual-comparison.json: pairs array required"); pairs = []
-            visual_coverage = set()
-            for i, pair in enumerate(pairs):
-                if not isinstance(pair, dict): self.err(f"visual-comparison.pairs[{i}] must be object"); continue
-                for field in ("viewport_id", "theme", "state_id", "source_screenshot", "target_screenshot", "dimensions", "metric_value", "threshold", "masked_regions", "result", "evidence_ids"):
-                    if field not in pair: self.err(f"visual-comparison.pairs[{i}]: missing {field}")
-                for field in ("source_screenshot", "target_screenshot"):
-                    self.safe_file(pair.get(field))
-                if pair.get("result") not in OUTCOMES: self.err(f"visual-comparison.pairs[{i}]: invalid result")
-                if not isinstance(pair.get("dimensions"), dict): self.err(f"visual-comparison.pairs[{i}]: dimensions object required")
-                if not isinstance(pair.get("masked_regions"), list): self.err(f"visual-comparison.pairs[{i}]: masked_regions array required")
-                for eid in pair.get("evidence_ids", []):
-                    if eid not in evidence_ids: self.err(f"visual-comparison.pairs[{i}]: unknown evidence_id {eid}")
-                visual_coverage.add((pair.get("viewport_id"), pair.get("theme"), pair.get("state_id")))
-            required_visual = {(v.get("id"), t, st) for v in viewports if isinstance(v, dict) for t in scope.get("themes", []) for st in scope.get("states", [])}
-            missing_visual = required_visual - visual_coverage
-            if missing_visual: self.err(f"visual-comparison.json: missing screenshot comparison coverage: {sorted(missing_visual)}")
-            if fidelity.get("visual_fidelity", {}).get("status") == "PASS" and any(
-                p.get("result") != "PASS" for p in pairs if isinstance(p, dict)
-            ):
-                self.err("visual_fidelity PASS contradicts non-passing screenshot comparison")
-
-        # Enforce outcome consistency against required comparison criteria.
-        if task in {"reconstruction","comparison"} and isinstance(comp, dict):
-            req_statuses = [c.get("status") for c in comp.get("criteria", []) if isinstance(c,dict) and c.get("required") is True]
-            acceptance = results.get("task_acceptance")
-            if acceptance == "PASS" and any(s != "PASS" for s in req_statuses):
-                self.err("task_acceptance PASS contradicts required comparison criterion")
-            if acceptance == "PASS" and any(s != "PASS" for s in req_statuses):
-                self.err("task_acceptance PASS requires every required criterion to PASS")
-            if acceptance == "PASS" and not req_statuses:
-                self.err("task_acceptance PASS requires at least one required criterion")
-            if acceptance == "PASS" and task == "reconstruction":
-                fidelity = evidence.get("fidelity", {})
-                required_dims = {"visual_fidelity", "functional_fidelity", "responsive_fidelity", "content_fidelity", "asset_fidelity"}
-                nonpassing = [d for d in required_dims if not isinstance(fidelity.get(d), dict) or fidelity[d].get("status") != "PASS"]
-                if nonpassing:
-                    self.err(f"task_acceptance PASS requires all fidelity dimensions to PASS: {sorted(nonpassing)}")
-        if task in {"analysis","audit"} and results.get("task_acceptance") == "PASS":
-            if not samples or any(s.get("status") != "accepted" for s in samples if isinstance(s,dict)):
-                self.err("analysis/audit task_acceptance PASS requires accepted samples")
-        if artifact == "not_applicable" and task == "reconstruction":
-            self.err("reconstruction task cannot use artifact_mode not_applicable")
-
+        if task in {"reconstruction","comparison"}:
+            self.checks.append("pair-ledger")
+            comp=self.read("comparison.json")
+            ledger=self.read("pair-ledger.json")
+            if isinstance(comp,dict):
+                if comp.get("schema_version")!=SCHEMA_VERSION or comp.get("study_id")!=ex.get("study_id"): self.err("comparison manifest schema/study mismatch")
+                crit=comp.get("criteria",[])
+                if not isinstance(crit,list): self.err("comparison.criteria must be array"); crit=[]
+                cmap={}
+                for c in crit:
+                    if isinstance(c,dict) and self.nonempty(c.get("criterion_id")): cmap[c["criterion_id"]]=c
+                for req in scope.get("required_checks",[]):
+                    if req not in cmap: self.err(f"comparison missing required criterion {req}")
+                for c in crit:
+                    if isinstance(c,dict) and c.get("status") not in OUTCOMES: self.err(f"criterion {c.get('criterion_id')} status invalid")
+                rows=comp.get("comparisons",[])
+                if not isinstance(rows,list): self.err("comparison.comparisons must be array"); rows=[]
+                self.ids(rows,"comparison_id","comparisons")
+                for i,p in enumerate(rows):
+                    if not isinstance(p,dict): continue
+                    if p.get("result") not in OUTCOMES: self.err(f"comparison[{i}] result invalid")
+                    if p.get("match_status") not in {"matched","unmatched","ambiguous"}: self.err(f"comparison[{i}] match_status invalid")
+                    src=smap.get(p.get("source_sample_id")); dst=smap.get(p.get("target_sample_id"))
+                    if not src or not dst or src.get("role")!="source" or dst.get("role")!="target": self.err(f"comparison[{i}] sample refs invalid")
+                    else:
+                        if src.get("viewport_id")!=p.get("viewport_id") or dst.get("viewport_id")!=p.get("viewport_id"): self.err(f"comparison[{i}] viewport mismatch")
+                        if src.get("theme")!=p.get("theme") or dst.get("theme")!=p.get("theme"): self.err(f"comparison[{i}] theme mismatch")
+                        if src.get("state_id")!=p.get("state_id") or dst.get("state_id")!=p.get("state_id"): self.err(f"comparison[{i}] state mismatch")
+                        modality=p.get("modality","geometry")
+                        for side,sample in (("source",src),("target",dst)):
+                            ent=sample.get("measurement_eligibility",{}).get(modality,{})
+                            if ent.get("status")=="ineligible": self.err(f"comparison[{i}] {side} sample ineligible for {modality}")
+                    if p.get("match_status")=="matched" and not self.nonempty(p.get("element_id")): self.err(f"comparison[{i}] matched requires element_id")
+                    if not isinstance(p.get("evidence_ids"),list) or not p.get("evidence_ids"): self.err(f"comparison[{i}] evidence_ids required")
+                    for eid in p.get("evidence_ids",[]):
+                        if eid not in eids: self.err(f"comparison[{i}] unknown evidence_id {eid}")
+                    if not isinstance(p.get("tolerances"),dict) or not p.get("tolerances"): self.err(f"comparison[{i}] tolerances required")
+                    align=p.get("alignment")
+                    if not isinstance(align,dict) or align.get("method") not in {"exact_scroll","shared_anchor","normalized_document_progress","region_crop"}:
+                        self.err(f"comparison[{i}] alignment method invalid")
+                    elif align.get("method")!="exact_scroll" and not self.nonempty(align.get("rationale")):
+                        self.err(f"comparison[{i}] non-exact alignment requires rationale")
+            if isinstance(ledger,dict):
+                if ledger.get("schema_version")!=SCHEMA_VERSION or ledger.get("study_id")!=ex.get("study_id"): self.err("pair-ledger schema/study mismatch")
+                reqmods=ledger.get("required_modalities")
+                if not isinstance(reqmods,list) or not reqmods or any(m not in MODALITIES for m in reqmods): self.err("pair-ledger required_modalities invalid")
+                entries=ledger.get("entries")
+                if not isinstance(entries,list): self.err("pair-ledger entries must be array"); entries=[]
+                self.ids(entries,"entry_id","pair-ledger.entries")
+                actual=set()
+                for i,e in enumerate(entries):
+                    if not isinstance(e,dict): continue
+                    key=(e.get("viewport_id"),e.get("theme"),e.get("state_id"),e.get("modality"))
+                    if key in actual: self.err(f"duplicate ledger combination {key}")
+                    actual.add(key)
+                    if e.get("viewport_id") not in vpids or e.get("theme") not in themes or e.get("state_id") not in states or e.get("modality") not in reqmods: self.err(f"ledger[{i}] references undeclared combination")
+                    status=e.get("status")
+                    if status not in LEDGER_STATES: self.err(f"ledger[{i}] status invalid")
+                    if status=="MEASURED":
+                        if e.get("result") not in {"PASS","PARTIAL","FAIL"}: self.err(f"ledger[{i}] MEASURED requires PASS/PARTIAL/FAIL result")
+                        if not self.nonempty(e.get("source_sample_id")) or not self.nonempty(e.get("target_sample_id")): self.err(f"ledger[{i}] MEASURED requires source/target samples")
+                        if not e.get("evidence_ids"): self.err(f"ledger[{i}] MEASURED requires evidence")
+                        if not isinstance(e.get("metric"),dict) and not self.nonempty(e.get("measurement_ref")): self.err(f"ledger[{i}] MEASURED requires metric or measurement_ref")
+                        if not isinstance(e.get("alignment"),dict) or e["alignment"].get("method") not in {"exact_scroll","shared_anchor","normalized_document_progress","region_crop"}:
+                            self.err(f"ledger[{i}] MEASURED requires valid alignment")
+                    else:
+                        if not self.nonempty(e.get("reason")): self.err(f"ledger[{i}] {status} requires reason")
+                        if "metric" in e or "result" in e: self.err(f"ledger[{i}] non-measured entry cannot contain metric/result")
+                    for eid in e.get("evidence_ids",[]):
+                        if eid not in eids: self.err(f"ledger[{i}] unknown evidence_id {eid}")
+                    if status=="MEASURED":
+                        src=smap.get(e.get("source_sample_id")); dst=smap.get(e.get("target_sample_id"))
+                        if not src or not dst or src.get("role")!="source" or dst.get("role")!="target": self.err(f"ledger[{i}] invalid source/target sample refs")
+                        else:
+                            mod=e.get("modality")
+                            for side,sample in (("source",src),("target",dst)):
+                                elig=sample.get("measurement_eligibility",{}).get(mod,{})
+                                if elig.get("status")=="ineligible": self.err(f"ledger[{i}] {side} sample ineligible for {mod}")
+                expected={(v.get("id"),t,s,m) for v in vps if isinstance(v,dict) for t in themes for s in states for m in (reqmods or [])}
+                missing=expected-actual
+                extra=actual-expected
+                if missing: self.err(f"pair-ledger missing coverage: {sorted(missing)}")
+                if extra: self.err(f"pair-ledger unexpected coverage: {sorted(extra)}")
+                if results.get("execution_completeness")=="PASS" and any(e.get("status")!="MEASURED" for e in entries if isinstance(e,dict)):
+                    self.err("execution_completeness PASS contradicts incomplete ledger")
+                if results.get("task_acceptance")=="PASS" and any(e.get("status")!="MEASURED" or e.get("result")!="PASS" for e in entries if isinstance(e,dict)):
+                    self.err("task_acceptance PASS contradicts ledger")
+                if results.get("task_acceptance")=="PASS":
+                    if any(c.get("required") is True and c.get("status")!="PASS" for c in (comp.get("criteria",[]) if isinstance(comp,dict) else []) if isinstance(c,dict)):
+                        self.err("task_acceptance PASS contradicts required comparison criteria")
+                    if task=="reconstruction" and any(not isinstance(fidelity.get(d),dict) or fidelity[d].get("status")!="PASS" for d in ("visual_fidelity","functional_fidelity","responsive_fidelity","content_fidelity","asset_fidelity")):
+                        self.err("task_acceptance PASS requires all fidelity dimensions PASS")
+            deps=ev.get("dependencies",[])
+            if artifact=="standalone_mockup" and isinstance(deps,list):
+                for d in deps:
+                    if isinstance(d,dict) and d.get("disposition")=="retained" and d.get("runtime_origin")=="source_origin":
+                        self.err("standalone_mockup retains source-origin runtime dependency")
+        if task=="reconstruction":
+            runtime=self.read("measurements/runtime-tests.json",required=False)
+            if not isinstance(runtime,dict): self.err("runtime-tests.json required"); runtime={}
+            if runtime.get("resolved_font_status") not in {"PASS","FAIL","NOT_TESTED"}: self.err("runtime-tests resolved_font_status invalid")
+            if not isinstance(runtime.get("font_runs"),list): self.err("runtime-tests font_runs required")
+            controls=runtime.get("interactions",[])
+            if not isinstance(controls,list): self.err("runtime-tests interactions must be array"); controls=[]
+            if fidelity.get("functional_fidelity",{}).get("status")=="PASS":
+                if any(c.get("result")!="PASS" or c.get("source_status")!="PASS" or c.get("target_status")!="PASS" for c in controls if isinstance(c,dict)):
+                    self.err("functional_fidelity PASS contradicts interaction failures/untested controls")
+            if "visual" in (ledger.get("required_modalities",[]) if isinstance(ledger,dict) else []):
+                visual=self.read("visual-comparison.json")
+                if isinstance(visual,dict):
+                    if visual.get("schema_version")!=SCHEMA_VERSION or visual.get("study_id")!=ex.get("study_id"): self.err("visual-comparison schema/study mismatch")
+                    # Visual comparisons are represented by the visual modality in the ledger.
+                    # Each MEASURED ledger item must reference a real source and target screenshot.
+                    visual_pairs=visual.get("pairs",[])
+                    if not isinstance(visual_pairs,list): self.err("visual-comparison pairs must be array"); visual_pairs=[]
+                    visual_keys=set()
+                    for i,p in enumerate(visual_pairs):
+                        if not isinstance(p,dict): self.err(f"visual pair[{i}] invalid"); continue
+                        for k in ("source_screenshot","target_screenshot"): self.safe(p.get(k))
+                        if p.get("result") not in {"PASS","PARTIAL","FAIL"}: self.err(f"visual pair[{i}] result invalid")
+                        key=(p.get("viewport_id"),p.get("theme"),p.get("state_id"))
+                        if None in key: self.err(f"visual pair[{i}] missing viewport/theme/state")
+                        if key in visual_keys: self.err(f"duplicate visual pair {key}")
+                        visual_keys.add(key)
+                    if isinstance(ledger,dict):
+                        for entry in ledger.get("entries",[]):
+                            if isinstance(entry,dict) and entry.get("modality")=="visual" and entry.get("status")=="MEASURED":
+                                key=(entry.get("viewport_id"),entry.get("theme"),entry.get("state_id"))
+                                if key not in visual_keys: self.err(f"visual ledger MEASURED missing screenshot pair {key}")
+                                elif not any(isinstance(p,dict) and (p.get("viewport_id"),p.get("theme"),p.get("state_id"))==key and p.get("result")==entry.get("result") for p in visual_pairs):
+                                    self.err(f"visual screenshot result does not match ledger {key}")
         self.checks.append("outcome-consistency")
         return self.report()
-
     def report(self):
-        return {
-            "validator_version": VERSION,
-            "schema_version": SCHEMA_VERSION,
-            "validation_status": "PASS" if not self.errors else "FAIL",
-            "errors": self.errors,
-            "warnings": self.warnings,
-            "checks_run": self.checks,
-            "timestamp": datetime.now(timezone.utc).isoformat()
-        }
+        return {"validator_version":VERSION,"schema_version":SCHEMA_VERSION,
+                "validation_status":"PASS" if not self.errors else "FAIL",
+                "errors":self.errors,"warnings":self.warnings,"checks_run":self.checks,
+                "timestamp":datetime.now(timezone.utc).isoformat()}
 
-def main() -> int:
-    if len(sys.argv) != 2:
-        print("Usage: python scripts/validate-evidence.py <package-directory>", file=sys.stderr)
-        return 2
-    root = Path(sys.argv[1]).expanduser()
-    if not root.is_dir():
-        print(f"ERROR: package directory not found: {root}", file=sys.stderr)
-        return 2
-    validator = Validator(root)
-    report = validator.validate()
-    validation_dir = root / "validation"
+def main():
+    if len(sys.argv)!=2:
+        print("Usage: python scripts/validate-evidence.py <package-directory>",file=sys.stderr); return 2
+    root=Path(sys.argv[1]).expanduser()
+    if not root.is_dir(): print(f"Not a directory: {root}",file=sys.stderr); return 2
+    report=Validator(root).validate()
+    out=root/"validation"/"validator-report.json"
     try:
-        validation_dir.mkdir(exist_ok=True)
-        (validation_dir / "validator-report.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
-    except OSError:
-        pass
-    if report["errors"]:
-        print(f"FAIL: {len(report['errors'])} validation error(s)")
-        for error in report["errors"]:
-            print(f"- {error}")
-        return 1
-    print("PASS: schema, references, declared scope and outcome consistency validated")
-    return 0
+        out.parent.mkdir(exist_ok=True); out.write_text(json.dumps(report,indent=2),encoding="utf-8")
+    except OSError: pass
+    print(("PASS" if not report["errors"] else "FAIL")+f": {len(report['errors'])} validation error(s)")
+    for e in report["errors"]: print("- "+e)
+    return 0 if not report["errors"] else 1
 
-if __name__ == "__main__":
-    raise SystemExit(main())
+if __name__=="__main__": raise SystemExit(main())

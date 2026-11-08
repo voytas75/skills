@@ -1,0 +1,4 @@
+# Execution contract
+Freeze before work: `study_id`, `task_type`, `artifact_mode`, target(s), pages, viewports (id/width/height), themes, states, required modalities/checks, interaction scope, asset policy, browser/engine/DPR/zoom, capture method, tolerances, exclusions, acceptance gates, capabilities, constraints. Record UTC timestamps. Any later scope change creates a new contract revision and explains impact; never silently waive a failed criterion.
+
+Tasks: `analysis|reconstruction|comparison|audit`. Artifacts: `snapshot|standalone_mockup|functional_implementation|not_applicable`. Do not label a dependent capture as standalone. `standalone_mockup` forbids runtime source-origin dependencies. `functional_implementation` requires behavior tests. User constraints override defaults; unsafe/unauthorized actions remain out of scope.
