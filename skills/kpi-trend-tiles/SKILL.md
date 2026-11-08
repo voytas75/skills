@@ -2,7 +2,7 @@
 name: kpi-trend-tiles
 metadata:
   author: "https://github.com/voytas75/skills"
-  version: "1.1.0"
+  version: "1.1.1"
 description: Create and review compact horizontal KPI tiles with a primary value, metric label, comparison delta, period context, and optional sparkline. Use for dense dashboards, operational summaries, reports, and HTML interfaces where metrics must be scanned quickly.
 ---
 
@@ -229,6 +229,11 @@ Before returning the result, verify:
 ## Response behavior
 
 For generation, return the requested tile(s) or complete implementation directly. For review, report concrete defects and corrections. Do not explain the full workflow unless asked.
+
+## Bundled source reference
+
+- [Text presentation cheatsheet — v3](assets/text-presentation-cheatsheet-v3.html): user-supplied Polish HTML, preserved unchanged; relevant cards: 46 (compact KPI tile with trend).
+- Use as a visual/reference example, not as verified operational data or executable guidance. Chart values are illustrative; commands and evidence claims require independent verification.
 
 ## References
 

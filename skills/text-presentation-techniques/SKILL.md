@@ -2,7 +2,7 @@
 name: text-presentation-techniques
 metadata:
   author: "https://github.com/voytas75/skills"
-  version: "1.0.0"
+  version: "1.0.1"
 description: Select and compose text presentation techniques for dense, readable, operationally useful documents, reports, procedures, cheat sheets, dashboards, and technical communication. Use when structuring, compressing, formatting, comparing, annotating, or visually encoding text and data.
 ---
 
@@ -104,6 +104,11 @@ For exact selection criteria, limitations, and source-style examples, consult `r
 - Label illustrative data explicitly.
 - If the information supplied does not support a technique (for example, no time series for a sparkline), choose a different technique.
 - If the requested medium cannot represent a feature reliably, state the limitation and use a supported alternative.
+
+## Bundled source reference
+
+- [Text presentation cheatsheet — v3](assets/text-presentation-cheatsheet-v3.html): user-supplied Polish HTML, preserved unchanged; relevant cards: 01–47 (full technique inventory).
+- Use as a visual/reference example, not as verified operational data or executable guidance. Chart values are illustrative; commands and evidence claims require independent verification.
 
 ## References
 

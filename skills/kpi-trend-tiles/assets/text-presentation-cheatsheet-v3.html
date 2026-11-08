@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Techniki prezentacji tekstu — ściągawka</title>
+<style>
+:root{--bg:#edf1f5;--paper:#fff;--ink:#17212b;--muted:#526273;--line:#d7dfe7;--soft:#f2f5f8;--accent:#155eef;--good:#e9f6ed;--bad:#fdeeec;--bar:#17212b;--font:Arial,Helvetica,sans-serif;--mono:Consolas,"SFMono-Regular",monospace;--size:11px;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#0f151c;--paper:#18212b;--ink:#e6edf4;--muted:#9aabbc;--line:#2d3b4a;--soft:#202b37;--accent:#7aa7ff;--good:#14301f;--bad:#3a1d1a;--bar:#0b1015}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#0f151c;--paper:#18212b;--ink:#e6edf4;--muted:#9aabbc;--line:#2d3b4a;--soft:#202b37;--accent:#7aa7ff;--good:#14301f;--bad:#3a1d1a;--bar:#0b1015}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:var(--size)/1.25 var(--font)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bar);z-index:10}
+button,select{font:inherit}
+.toolbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:11;display:flex;align-items:center;flex-wrap:wrap;gap:8px;padding:7px 12px;background:var(--bar);color:#fff;font-size:12px}
+.brand{font-weight:800;letter-spacing:.04em;margin-right:auto}
+.toolbar select,.toolbar button{background:#2a3949;color:#fff;border:1px solid #718196;border-radius:4px;padding:3px 8px;cursor:pointer}
+.toolbar button[aria-pressed=true]{background:#155eef;border-color:#9bbcff}
+main{width:min(1500px,calc(100% - 12px));margin:8px auto;padding:10px}
+header{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;border-bottom:2px solid var(--ink);padding-bottom:6px;margin-bottom:8px}
+h1{font-size:18px;letter-spacing:-.03em;margin:0}
+.sub{font-size:10.5px;color:var(--muted);flex:1 1 320px}
+.grid{column-width:265px;column-gap:8px}
+.c{break-inside:avoid;background:var(--paper);border:1px solid var(--line);border-radius:5px;padding:5px 6px;margin:0 0 7px}
+h3{margin:0 0 3px;font-size:11.5px;display:flex;gap:5px;align-items:baseline}
+h3 i{font:700 9px var(--mono);color:var(--accent)}
+.l{display:block;color:var(--muted);font-size:10px;margin-top:2px}
+.l::before{content:"LIMIT ";font:700 8px var(--mono)}
+table{width:100%;border-collapse:collapse;margin:2px 0 0;font-size:10.5px}
+th,td{border:1px solid var(--line);padding:1px 4px;text-align:left}
+th{background:var(--soft)}
+code{font:.95em var(--mono);background:var(--soft);padding:0 3px;border-radius:3px}
+.footer{border-top:1px solid var(--line);padding-top:6px;margin-top:4px;font-size:10px;color:var(--muted)}
+.sec{font-size:13px;margin:8px 0 6px;padding-bottom:3px;border-bottom:1px solid var(--line)}
+.d{margin:2px 0;padding:3px 5px;border-radius:3px;background:var(--soft)}
+pre.d{white-space:pre-wrap;overflow-wrap:anywhere;font:10.5px/1.3 var(--mono);color:var(--ink)}
+.d p{margin:2px 0}
+kbd{font:10px var(--mono);border:1px solid var(--line);border-bottom-width:2px;border-radius:3px;padding:0 4px;background:var(--paper)}
+.d table{margin:0}
+th.r,td.r{text-align:right;font-variant-numeric:tabular-nums}
+body.n{--size:12.5px}body.u{--size:10px}
+body,body[data-th=o]{--kz:#E69F00;--kp:#0072B2;--ks:#009E73;--kl:#CC79A7;--kk:#56B4E9}
+body[data-th=n]{--kz:#7b8794;--kp:#7b8794;--ks:#7b8794;--kl:#7b8794;--kk:#7b8794}
+body[data-th=w]{--kz:#D64550;--kp:#F28F3B;--ks:#E9C46A;--kl:#B5446E;--kk:#8C5E3C}
+body[data-th=c]{--kz:#2A9D8F;--kp:#3A6EA5;--ks:#6A4C93;--kl:#4CAF50;--kk:#00A6C0}
+.c[data-k=z],.lg [data-k=z]{--kc:var(--kz)}.c[data-k=p],.lg [data-k=p]{--kc:var(--kp)}.c[data-k=s],.lg [data-k=s]{--kc:var(--ks)}.c[data-k=l],.lg [data-k=l]{--kc:var(--kl)}.c[data-k=k],.lg [data-k=k]{--kc:var(--kk)}
+body.foc[data-th=n] .c:not(.dim){--kc:var(--accent)}
+.c{border-left:4px solid var(--kc,var(--line));transition:opacity .15s}
+.c.dim{opacity:.28}
+h3{margin:-5px -6px 4px;padding:3px 6px;background:color-mix(in srgb,var(--kc) 18%,transparent);border-radius:0 4px 0 0}
+h3 i{cursor:pointer}
+h3::after{margin-left:auto;font:700 9px var(--mono);color:var(--muted);white-space:nowrap}
+.c[data-s=g] h3::after{content:"✓ znam"}.c[data-s=y] h3::after{content:"▲ powtórz"}.c[data-s=b] h3::after{content:"● uczyć się"}
+.lg{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 8px}
+.lg button{border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:4px;padding:2px 8px;cursor:pointer;font-size:10.5px}
+.lg button i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;background:var(--kc,transparent)}
+.lg button[aria-pressed=true]{border-color:var(--accent);outline:1px solid var(--accent)}
+@media print{*{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+svg.m{display:block;width:100%;height:auto;margin:2px 0}
+.ln{fill:none;stroke:var(--muted);stroke-width:1.5;stroke-linejoin:round}.ln.hi{stroke:var(--accent);stroke-width:2}
+.ax{stroke:var(--line);stroke-width:1}.dt{fill:var(--accent)}.dh{fill:var(--paper);stroke:var(--muted);stroke-width:1.2}
+.bar{fill:var(--muted)}.bar.hi{fill:var(--accent)}.bg{fill:var(--line)}.bd{fill:var(--ink)}
+.tx{fill:var(--ink);font:9px var(--font)}.tm{fill:var(--muted);font:8px var(--font)}.tk{stroke:var(--ink);stroke-width:2}
+.we{fill:#E9A100}.fl{fill:#D64550}.wt{fill:#fff;font:700 9px var(--font)}
+.kpi{display:flex;align-items:center;gap:8px}.kpi b{font-size:20px;line-height:1}.kpi span{font-size:10px;color:var(--muted)}
+.heat td{text-align:center;font-variant-numeric:tabular-nums}
+@media(max-width:700px){main{padding:6px}.brand{width:100%}}
+@media print{.toolbar,body::before{display:none}@page{size:A4 landscape;margin:7mm}body{background:#fff;font-size:7.5pt}main{width:100%;margin:0;padding:0}.grid{column-count:4;column-width:auto}}
+</style>
+</head>
+<body>
+<nav class="toolbar" aria-label="Ustawienia">
+  <span class="brand">TEXT PRESENTATION / V3</span>
+  <label for="dens">Gęstość</label>
+  <select id="dens"><option value="n">Normalna</option><option value="" selected>Kompaktowa</option><option value="u">Maksymalna</option></select>
+  <label for="th">Motyw</label><select id="th"><option value="o">Okabe–Ito (bezpieczny dla daltonistów)</option><option value="n">Neutralny + izolacja</option><option value="w">Ciepłe (słabe dowody)</option><option value="c">Chłodne (słabe dowody)</option></select>
+  <button onclick="window.print()">Drukuj / PDF</button>
+</nav>
+<main>
+<header>
+  <h1>Techniki prezentacji tekstu</h1>
+  <div class="sub">Ściągawka technik zapisu tekstu. Kolor = kategoria (5), stosowany spójnie. Klik w numer karty: status znam / powtórz / uczyć się.</div>
+  </header>
+<div class="lg"><button data-k="all" aria-pressed="true">Wszystkie</button><button data-k="z"><i></i>Zwięzłość</button><button data-k="p"><i></i>Przepływ</button><button data-k="s"><i></i>Struktura</button><button data-k="l"><i></i>Liczby i statusy</button><button data-k="k"><i></i>Polecenia i kody</button></div>
+
+<div class="grid">
+
+<article class="c" data-k="z"><h3><i>01</i>Definicja → jedno zdanie</h3>
+<p class="d"><b>Conditional Access</b> — sygnały (tożsamość, urządzenie, lokalizacja, ryzyko) → decyzja o dostępie do zasobu.</p>
+<small class="l">termin + funkcja + zakres; nie gub zakresu</small></article>
+
+<article class="c" data-k="z"><h3><i>02</i>Składnia telegraficzna</h3>
+<p class="d"><b>Restore:</b> restart usługi → weryfikacja: Running.</p>
+<small class="l">zostaw wykonawcę, warunek i kryterium sukcesu</small></article>
+
+<article class="c" data-k="p"><h3><i>03</i>Procedura → czasownik + obiekt</h3>
+<p class="d"><b>Login failure:</b> sign-in logs → applied policy → failed condition.</p>
+<small class="l">łańcuch zakłada znajomość terminów; kolejność musi być oczywista</small></article>
+
+<article class="c" data-k="s"><h3><i>04</i>Parametry → etykieta : wartość</h3>
+<p class="d"><b>Users:</b> all − break-glass · <b>Apps:</b> selected · <b>Grant:</b> MFA · <b>Session:</b> 12 h</p>
+<small class="l">etykiety krótsze od wartości; wyjątek (−) musi zostać</small></article>
+
+<article class="c" data-k="s"><h3><i>05</i>Porównanie → tabela</h3>
+<div class="d"><table><tr><th>Cecha</th><th>Managed</th><th>Unmanaged</th></tr><tr><td>Zgodność</td><td>oceniana</td><td>brak</td></tr><tr><td>Wymóg w CA</td><td>compliant device</td><td>inna kontrola (np. MFA)</td></tr></table></div>
+<small class="l">tabela wygrywa przy tych samych cechach; dla 1–2 faktów zdanie jest krótsze</small></article>
+
+<article class="c" data-k="s"><h3><i>06</i>Macierz zależności</h3>
+<div class="d"><table><tr><th>Rola</th><th>Read</th><th>Write</th><th>Admin</th></tr><tr><td>Reader</td><td>✓</td><td>—</td><td>—</td></tr><tr><td>Operator</td><td>✓</td><td>✓</td><td>—</td></tr><tr><td>Admin</td><td>✓</td><td>✓</td><td>✓</td></tr></table></div>
+<small class="l">✓ = dozwolone, — = brak; legenda obowiązkowa</small></article>
+
+<article class="c" data-k="p"><h3><i>07</i>Drzewo decyzji</h3>
+<pre class="d">Zgodne?
+├ tak → dostęp
+└ nie → blokada / naprawa</pre>
+<small class="l">gdy jeden warunek zmienia dalszą ścieżkę</small></article>
+
+<article class="c" data-k="p"><h3><i>08</i>Przejścia stanów</h3>
+<pre class="d">Pending →approve→ Active
+Active →disable→ Disabled
+Active →expire→ Expired</pre>
+<small class="l">dodaj warunek przejścia, jeśli nieoczywisty</small></article>
+
+<article class="c" data-k="p"><h3><i>09</i>Łańcuch przyczynowy</h3>
+<p class="d">Expired cert → TLS validation fail → połączenie odrzucone ⇒ odnów cert + retest.</p>
+<small class="l">korelacja ≠ przyczyna; łańcuch tylko dla znanego mechanizmu</small></article>
+
+<article class="c" data-k="z"><h3><i>10</i>Wspólny kontekst raz</h3>
+<p class="d"><b>Wszystkie stacje Windows:</b> BitLocker on · Defender AV wymuszony · zgodność wymagana.</p>
+<small class="l">zakres w nagłówku musi obejmować każdy punkt</small></article>
+
+<article class="c" data-k="z"><h3><i>11</i>Odwołanie zamiast powtórzenia</h3>
+<p class="d"><code>PRE-01</code> = kopia konfiguracji · okno serwisowe · zgoda właściciela. Wdrożenie, wycofanie, migracja: wymagane PRE-01.</p>
+<small class="l">odwołanie musi wskazywać istniejący, łatwy do znalezienia element</small></article>
+
+<article class="c" data-k="z"><h3><i>12</i>Skrót + legenda</h3>
+<p class="d"><b>PRT</b> = Primary Refresh Token. PRT: SSO · wygaśnięcie ⇒ reuwierzytelnienie · powiązany z urządzeniem.</p>
+<small class="l">definicja przy pierwszym użyciu; bez skrótów ad hoc</small></article>
+
+<article class="c" data-k="z"><h3><i>13</i>Symbole relacji</h3>
+<p class="d">dostęp ⇐ (tożsamość ∧ kontekst) ∨ break-glass</p>
+<small class="l">legenda: ∧ i · ∨ lub · ⇐ wynika z; tylko dla odbiorcy znającego notację</small></article>
+
+<article class="c" data-k="l"><h3><i>14</i>Agregacja</h3>
+<p class="d">Odpowiedź [ms]: n=9 · med 6 · zakres 4–40 (odstająca: 40)</p>
+<small class="l">gdy potrzebne rekordy, nie agreguj; mediana zamiast średniej przy outlierach</small></article>
+
+<article class="c" data-k="l"><h3><i>15</i>Normalizacja jednostek</h3>
+<p class="d">Opóźnienie [ms]: A 12 · B 18 · C 9</p>
+<small class="l">jednostka raz, ta sama precyzja w serii</small></article>
+
+<article class="c" data-k="l"><h3><i>16</i>Sparkline</h3>
+<p class="d">Requests (8 okr.): ▁▂▂▄▃▅▆▇ <b>1240</b></p>
+<small class="l">pokazuje kształt, nie wartości; podaj okres i wartość końcową</small></article>
+
+<article class="c" data-k="s"><h3><i>17</i>Grupowanie semantyczne</h3>
+<p class="d"><b>Identity:</b> user · group · role | <b>Device:</b> OS · zgodność · własność | <b>Network:</b> IP · lokalizacja · VPN | <b>Risk:</b> user · sign-in</p>
+<small class="l">cel to szybsze wyszukiwanie, nie mniej znaków; wynik może być dłuższy</small></article>
+
+<article class="c" data-k="p"><h3><i>18</i>Oś czasu</h3>
+<p class="d">T0 polityka · +5 min propagacja · +15 min test logowania · +30 min przegląd logów</p>
+<small class="l">tylko gdy czas ma znaczenie operacyjne</small></article>
+
+<article class="c" data-k="p"><h3><i>19</i>Frontloading</h3>
+<p class="d"><b>DENIED.</b> Przyczyna: urządzenie niezgodne. Akcja: napraw → ponów.</p>
+<small class="l">wynik pierwszy; nie pomijaj informacji krytycznych dla bezpieczeństwa</small></article>
+
+<article class="c" data-k="k"><h3><i>20</i>Opis kroków → pipeline</h3>
+<pre class="d">Get-MgUser -All -Property AccountEnabled,UserPrincipalName | ? {!$_.AccountEnabled} | select UserPrincipalName</pre>
+<small class="l">składnia zastępuje opis tylko dla odbiorcy znającego cmdlety; przetestuj przed użyciem</small></article>
+
+
+
+<article class="c" data-k="k"><h3><i>21</i>Notacja składni</h3>
+<pre class="d">Restart-Service -Name &lt;nazwa&gt; [-Force] [-PassThru]
+Set-ADUser &lt;identity&gt; -Enabled {$true | $false}</pre>
+<p class="d">&lt;x&gt; wymagane · [x] opcjonalne · {a | b} jedna z opcji · … powtarzalne</p>
+<small class="l">legenda raz, spójnie w całym dokumencie</small></article>
+
+<article class="c" data-k="k"><h3><i>22</i>Indeks zadanie → polecenie</h3>
+<div class="d"><table><tr><th>Zadanie</th><th>Polecenie</th></tr><tr><td>Wymuś GPO</td><td><code>gpupdate /force</code></td></tr><tr><td>Zastosowane GPO</td><td><code>gpresult /r</code></td></tr><tr><td>Stan urządzenia w Entra</td><td><code>dsregcmd /status</code></td></tr><tr><td>Podsumowanie replikacji AD</td><td><code>repadmin /replsummary</code></td></tr><tr><td>Cache DNS klienta</td><td><code>ipconfig /flushdns</code></td></tr></table></div>
+<small class="l">kolumna zadań w języku użytkownika, polecenia w monospace; sortuj wg częstości użycia</small></article>
+
+<article class="c" data-k="p"><h3><i>23</i>Ścieżka nawigacji</h3>
+<p class="d"><b>Entra admin center</b> › Protection › Conditional Access › Policies</p>
+<p class="d"><b>Windows</b> › Settings › Accounts › Access work or school</p>
+<small class="l">jeden separator (›), pierwszy element wskazuje punkt startu; interfejsy zmieniają nazwy</small></article>
+
+<article class="c" data-k="k"><h3><i>24</i>Skróty klawiszowe</h3>
+<div class="d"><p><kbd>Win</kbd>+<kbd>R</kbd> Uruchom</p><p><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Esc</kbd> Menedżer zadań</p><p><kbd>Win</kbd>+<kbd>X</kbd> menu zaawansowane</p></div>
+<small class="l">klawisze wizualnie odróżnione od opisu; opis po skrócie</small></article>
+
+<article class="c" data-k="s"><h3><i>25</i>Checklista ze stanem</h3>
+<div class="d"><p>☑ kopia konfiguracji</p><p>☑ okno serwisowe</p><p>☐ zgoda właściciela</p><p><b>Gotowe, gdy:</b> wszystkie ☑</p></div>
+<small class="l">dodaj kryterium zakończenia; symbole ☑ ☐ wymagają druku lub renderowania Unicode</small></article>
+
+<article class="c" data-k="l"><h3><i>26</i>Status: symbol + słowo</h3>
+<div class="d"><p><b>● OK</b> zgodne · <b>▲ WARN</b> do przeglądu</p><p><b>✖ FAIL</b> niezgodne · <b>○ N/A</b> nie dotyczy</p></div>
+<small class="l">nie koduj statusu samym kolorem (druk czarno-biały, dostępność)</small></article>
+
+<article class="c" data-k="l"><h3><i>27</i>Progi i zakresy</h3>
+<div class="d"><table><tr><th>Wolne miejsce (przykład)</th><th>Status</th></tr><tr><td>&gt;20%</td><td>● OK</td></tr><tr><td>10–20%</td><td>▲ WARN</td></tr><tr><td>&lt;10%</td><td>✖ FAIL</td></tr></table></div>
+<small class="l">przedziały rozłączne i pokrywające całą skalę; progi dobierz do środowiska</small></article>
+
+<article class="c" data-k="z"><h3><i>28</i>Przypisy zamiast nawiasów</h3>
+<div class="d"><p>Wyklucz konta awaryjne¹ i konta usług².</p><p>¹ break-glass, monitorowane.</p><p>² wykluczenie wymaga osobnej kontroli.</p></div>
+<small class="l">zdanie główne zostaje płynne; przypis tuż pod blokiem, nie na końcu dokumentu</small></article>
+
+<article class="c" data-k="s"><h3><i>29</i>Numeracja hierarchiczna</h3>
+<pre class="d">1 Diagnostyka
+  1.1 Sign-in logs
+  1.2 Applied policy
+2 Remediacja
+  2.1 Korekta warunku
+  2.2 Test</pre>
+<small class="l">umożliwia odwołania „zob. 1.2”; maks. 2–3 poziomy</small></article>
+
+<article class="c" data-k="k"><h3><i>30</i>Kod → znaczenie (monospace)</h3>
+<pre class="d">4624  logon udany
+4625  logon nieudany
+4740  konto zablokowane
+4672  uprawnienia specjalne</pre>
+<small class="l">stała szerokość kolumny kodu; sortuj po kodzie lub częstości</small></article>
+
+<article class="c" data-k="l"><h3><i>31</i>Liczby wyrównane do prawej</h3>
+<div class="d"><table><tr><th>Wolumin</th><th class="r">Rozmiar [GB]</th><th class="r">Wolne [GB]</th></tr><tr><td>C:</td><td class="r">238</td><td class="r">41</td></tr><tr><td>D:</td><td class="r">931</td><td class="r">612</td></tr><tr><td>E:</td><td class="r">1862</td><td class="r">1100</td></tr></table></div>
+<small class="l">jednostka w nagłówku, wyrównanie do cyfr jedności, stała precyzja</small></article>
+
+<article class="c" data-k="l"><h3><i>32</i>Marker opcji zalecanej</h3>
+<div class="d"><table><tr><th>Metoda uwierzytelniania</th><th>Gdzie działa</th></tr><tr><td>★ Password hash sync</td><td>chmura</td></tr><tr><td>Pass-through auth</td><td>AD lokalny (agent)</td></tr><tr><td>Federation</td><td>AD FS</td></tr></table></div>
+<p class="d">★ = zalecane / domyślne</p>
+<small class="l">jeden marker na listę; legenda obowiązkowa</small></article>
+
+<article class="c" data-k="k"><h3><i>33</i>Polecenie + oczekiwany wynik</h3>
+<pre class="d">&gt; dsregcmd /status | findstr AzureAdJoined
+AzureAdJoined : YES</pre>
+<small class="l">znak zachęty odróżnia wejście od wyjścia; pokaż wynik tylko dla kluczowej linii</small></article>
+
+</div>
+
+<h2 class="sec">Mini wykresy i wizualizacja danych (dane ilustracyjne)</h2>
+<div class="grid">
+
+<article class="c" data-k="l"><h3><i>34</i>Dobór mini wykresu do pytania</h3>
+<div class="d"><table><tr><th>Pytanie</th><th>Wykres</th></tr><tr><td>Trend w czasie</td><td>sparkline, linia</td></tr><tr><td>Porównanie kategorii</td><td>słupki posortowane</td></tr><tr><td>Udział w całości</td><td>waffle, pasek 100%</td></tr><tr><td>Rozkład, wartości odstające</td><td>zakres min–med–max</td></tr><tr><td>Wynik vs cel</td><td>bullet graph</td></tr><tr><td>Stan w czasie</td><td>pasek statusów</td></tr><tr><td>Zmiana A → B</td><td>slopegraph</td></tr><tr><td>Dwa wymiary</td><td>heatmapa z liczbami</td></tr></table></div>
+<small class="l">jedno pytanie = jeden wykres; unikaj 3D i dekoracji</small></article>
+
+<article class="c" data-k="l"><h3><i>35</i>Sparkline z markerami</h3>
+<svg class="m" viewBox="0 0 250 34" role="img" aria-label="Sparkline żądań, 12 tygodni, ostatnia wartość 1240"><polyline class="ln" points="5,22 25,20 45,26 65,18 85,21 105,15 125,17 145,12 165,14 185,9 205,11 225,5"/><circle class="dh" cx="45" cy="26" r="2.5"/><circle class="dt" cx="225" cy="5" r="3"/></svg>
+<p class="d">Requests, 12 tyg.: min 310 (○) · <b>ostatni 1 240</b> (●)</p>
+<small class="l">kształt i wartość końcowa; podaj okres, jednostkę i oznacz tylko min/max/ostatni punkt</small></article>
+
+<article class="c" data-k="l"><h3><i>36</i>Sparkbar (mini kolumny)</h3>
+<svg class="m" viewBox="0 0 250 44" role="img" aria-label="Zgłoszenia miesięcznie, 12 miesięcy, ostatni 38"><rect class="bar" x="5" y="30" width="14" height="10"/><rect class="bar" x="25" y="26" width="14" height="14"/><rect class="bar" x="45" y="28" width="14" height="12"/><rect class="bar" x="65" y="22" width="14" height="18"/><rect class="bar" x="85" y="18" width="14" height="22"/><rect class="bar" x="105" y="23" width="14" height="17"/><rect class="bar" x="125" y="14" width="14" height="26"/><rect class="bar" x="145" y="16" width="14" height="24"/><rect class="bar" x="165" y="10" width="14" height="30"/><rect class="bar" x="185" y="12" width="14" height="28"/><rect class="bar" x="205" y="6" width="14" height="34"/><rect class="bar hi" x="225" y="2" width="14" height="38"/><line class="ax" x1="0" y1="40" x2="250" y2="40"/></svg>
+<p class="d">Zgłoszenia / mies. · ostatni: <b>38</b></p>
+<small class="l">baza od zera; akcent tylko na jednym słupku; dla wartości dyskretnych</small></article>
+
+<article class="c" data-k="l"><h3><i>37</i>Small multiples (wspólna skala)</h3>
+<svg class="m" viewBox="0 0 270 74" role="img" aria-label="Trzy mini wykresy regionów na wspólnej skali: North plus 18%, South minus 12%, West plus 9%"><text class="tx" x="0" y="12">North</text><polyline class="ln" points="55,15 75,13 95,11 115,10 135,8 155,6 175,7 195,3 215,2"/><text class="tx" x="224" y="12">+18%</text><text class="tx" x="0" y="38">South</text><polyline class="ln hi" points="55,28 75,30 95,32 115,34 135,36 155,37 175,39 195,41 215,42"/><text class="tx" x="224" y="38">−12%</text><text class="tx" x="0" y="64">West</text><polyline class="ln" points="55,67 75,65 95,66 115,63 135,64 155,61 175,62 195,59 215,58"/><text class="tx" x="224" y="64">+9%</text></svg>
+<small class="l">te same osie i skala dla wszystkich; akcent tylko na odchyleniu; 12 m, dane ilustracyjne</small></article>
+
+<article class="c" data-k="l"><h3><i>38</i>Słupki z podpisami bezpośrednimi</h3>
+<svg class="m" viewBox="0 0 250 60" role="img" aria-label="CPU 82 procent, Disk 73 procent, RAM 56 procent"><text class="tx" x="0" y="11">CPU</text><rect class="bar hi" x="55" y="0" width="131" height="14"/><text class="tx" x="190" y="11">82%</text><text class="tx" x="0" y="33">Disk</text><rect class="bar" x="55" y="22" width="117" height="14"/><text class="tx" x="176" y="33">73%</text><text class="tx" x="0" y="55">RAM</text><rect class="bar" x="55" y="44" width="90" height="14"/><text class="tx" x="149" y="55">56%</text></svg>
+<small class="l">sortuj malejąco; etykieta i wartość przy słupku zamiast legendy; baza od zera</small></article>
+
+<article class="c" data-k="l"><h3><i>39</i>Bullet graph (wynik vs cel)</h3>
+<svg class="m" viewBox="0 0 260 46" role="img" aria-label="Zgodność z patchami 72 procent, cel 90 procent"><text class="tx" x="0" y="23">Patche</text><rect class="bd" opacity=".22" x="60" y="10" width="114" height="20"/><rect class="bd" opacity=".12" x="174" y="10" width="47.5" height="20"/><rect class="bd" opacity=".06" x="221.5" y="10" width="28.5" height="20"/><rect class="bd" x="60" y="16" width="136.8" height="8"/><line class="tk" x1="231" y1="8" x2="231" y2="32"/><text class="tm" x="60" y="42">0</text><text class="tm" x="250" y="42" text-anchor="end">100%</text></svg>
+<p class="d">Patch compliance: <b>72%</b> · cel (|) 90% · pasma: &lt;60 / 60–85 / &gt;85</p>
+<small class="l">jeden wskaźnik; pasma jako tło, cel jako znacznik; pasma zdefiniuj w legendzie</small></article>
+
+<article class="c" data-k="l"><h3><i>40</i>Zakres min–mediana–max</h3>
+<svg class="m" viewBox="0 0 260 34" role="img" aria-label="Zakres czasu odpowiedzi: mediana 6, kwartyle 5 do 7, odstająca 40"><line class="ln" x1="34" y1="14" x2="58" y2="14"/><rect class="bar" x="40" y="9" width="12" height="10"/><line class="tk" x1="46" y1="7" x2="46" y2="21"/><circle class="dt" cx="250" cy="14" r="3"/><text class="tm" x="250" y="31" text-anchor="end">odstająca 40</text></svg>
+<p class="d">Odpowiedź [ms]: n=9 · med 6 · Q1–Q3 5–7 · min 4 · odstająca 40</p>
+<small class="l">pokazuje rozkład i odstające, nie tylko średnią; liczby w tekście obok</small></article>
+
+<article class="c" data-k="l"><h3><i>41</i>Slopegraph (zmiana A → B)</h3>
+<svg class="m" viewBox="0 0 260 80" role="img" aria-label="Latencja 2025 do 2026: B 18 do 20, A 12 do 9, C 16 do 6"><text class="tm" x="70" y="10" text-anchor="middle">2025</text><text class="tm" x="190" y="10" text-anchor="middle">2026</text><line class="ln" x1="70" y1="26" x2="190" y2="20"/><line class="ln" x1="70" y1="46" x2="190" y2="55"/><line class="ln hi" x1="70" y1="33" x2="190" y2="65"/><circle class="bar" cx="70" cy="26" r="2.5"/><circle class="bar" cx="190" cy="20" r="2.5"/><circle class="bar" cx="70" cy="46" r="2.5"/><circle class="bar" cx="190" cy="55" r="2.5"/><circle class="dt" cx="70" cy="33" r="3"/><circle class="dt" cx="190" cy="65" r="3"/><text class="tx" x="62" y="29" text-anchor="end">B 18</text><text class="tx" x="62" y="36" text-anchor="end">C 16</text><text class="tx" x="62" y="49" text-anchor="end">A 12</text><text class="tx" x="198" y="23">20</text><text class="tx" x="198" y="58">9</text><text class="tx" x="198" y="68">6</text></svg>
+<small class="l">tylko dwa punkty w czasie; jednostka [ms] w tytule; akcent na największej zmianie</small></article>
+
+<article class="c" data-k="l"><h3><i>42</i>Heatmapa z liczbami</h3>
+<div class="d heat"><table><tr><th>Zmiana</th><th>Pn</th><th>Wt</th><th>Śr</th><th>Cz</th><th>Pt</th></tr><tr><td>I</td><td style="background:color-mix(in srgb,var(--accent) 15%,transparent)">3</td><td style="background:color-mix(in srgb,var(--accent) 25%,transparent)">5</td><td style="background:color-mix(in srgb,var(--accent) 20%,transparent)">4</td><td style="background:color-mix(in srgb,var(--accent) 10%,transparent)">2</td><td style="background:color-mix(in srgb,var(--accent) 5%,transparent)">1</td></tr><tr><td>II</td><td style="background:color-mix(in srgb,var(--accent) 30%,transparent)">6</td><td style="background:color-mix(in srgb,var(--accent) 45%,transparent)">9</td><td style="background:color-mix(in srgb,var(--accent) 35%,transparent)">7</td><td style="background:color-mix(in srgb,var(--accent) 20%,transparent)">4</td><td style="background:color-mix(in srgb,var(--accent) 10%,transparent)">2</td></tr><tr><td>III</td><td style="background:color-mix(in srgb,var(--accent) 10%,transparent)">2</td><td style="background:color-mix(in srgb,var(--accent) 15%,transparent)">3</td><td style="background:color-mix(in srgb,var(--accent) 10%,transparent)">2</td><td style="background:color-mix(in srgb,var(--accent) 5%,transparent)">1</td><td style="background:color-mix(in srgb,var(--accent) 5%,transparent)">1</td></tr></table></div>
+<small class="l">intensywność tła + liczba w komórce (nie sam kolor); jedna barwa, jedna skala</small></article>
+
+<article class="c" data-k="l"><h3><i>43</i>Pasek statusów w czasie</h3>
+<svg class="m" id="st" viewBox="0 0 252 34" role="img" aria-label="Status 24 godzin: ostrzeżenie 09:00–10:59, awaria 17:00"></svg>
+<p class="d">▲ WARN 09:00–10:59 · ✖ FAIL 17:00 · reszta OK (szare)</p>
+<small class="l">kolorem tylko anomalie; glif w komórce; legenda i oś godzin</small></article>
+
+<article class="c" data-k="l"><h3><i>44</i>Adnotacja na wykresie</h3>
+<svg class="m" viewBox="0 0 250 56" role="img" aria-label="Wykres P95 z pikiem w momencie deploy v2.3"><line class="ax" x1="10" y1="50" x2="244" y2="50"/><text class="tm" x="0" y="8">ms</text><polyline class="ln" points="10,40 28,41 46,39 64,40 82,38 100,40 118,12 136,30 154,38 172,39 190,40 208,38 226,39 244,38"/><circle class="dt" cx="118" cy="12" r="3"/><text class="tx" x="126" y="14">deploy v2.3</text></svg>
+<small class="l">podpis zdarzenia przy punkcie, nie w legendzie; adnotuj tylko zdarzenia istotne dla decyzji</small></article>
+
+<article class="c" data-k="l"><h3><i>45</i>Waffle 10×10 (udział)</h3>
+<svg class="m" viewBox="0 0 250 100" role="img" aria-label="37 ze 100 hostów niezgodnych"><g id="wf"></g><text class="tx" x="118" y="48" style="font-size:22px;font-weight:700">37 / 100</text><text class="tm" x="118" y="64">hostów niezgodnych</text></svg>
+<small class="l">mianownik jawny; dla prostych proporcji; przy dokładnych wartościach podaj też %</small></article>
+
+<article class="c" data-k="l"><h3><i>46</i>Kafelek KPI z trendem</h3>
+<div class="d kpi"><b>18 ms</b><span>Latency<br>▼ −12% vs 7 d (lepiej)</span><svg viewBox="0 0 80 24" width="80" height="24" role="img" aria-label="Trend latencji, spadek"><polyline class="ln" points="2,6 12,8 22,7 32,11 42,10 52,15 62,14 78,19"/><circle class="dt" cx="78" cy="19" r="2.5"/></svg></div>
+<small class="l">wartość + zmiana + okres porównania; napisz, czy kierunek jest dobry czy zły</small></article>
+
+<article class="c" data-k="l"><h3><i>47</i>Pasek tekstowy (monospace)</h3>
+<pre class="d">CPU  ██████████░░ 82%
+Disk █████████░░░ 73%
+RAM  ███████░░░░░ 56%</pre>
+<small class="l">stała skala: 12 znaków = 100%; do terminala, logów i e-maili tekstowych</small></article>
+
+</div>
+
+<footer class="footer"><b>Reguła nadrzędna:</b> minimalizuj koszt odczytu bez utraty warunków, wyjątków, jednostek, zakresów i relacji. <b>Zasady kodowania kolorem</b> (z przeglądów, nie gwarancja): (1) kolor niesie znaczenie kategorii i jest użyty spójnie; (2) maks. ok. 5 odcieni, bo nadmiar kolorów i wyróżnień osłabia efekt izolacji (von Restorff, 1933); (3) kolor nigdy nie jest jedynym nośnikiem informacji, zawsze towarzyszy mu etykieta tekstowa; (4) tekst zachowuje wysoki kontrast, kolor jest tłem nagłówka i krawędzią. <b>Motywy:</b> Okabe–Ito to paleta zaprojektowana pod daltonizm (Okabe i Ito, 2008). „Ciepłe” i „Chłodne” opierają się na pojedynczym badaniu szkolnym (48 uczniów) i są hipotezą do własnego testu. Nie ma potwierdzonej „najlepszej palety” dla pamięci. <b>Źródła:</b> Dzulkifli i Mustafar (2013), przegląd; Lamberski i Dwyer (1983); von Restorff (1933); Dunlosky i in. (2013). Dane na wykresach są ilustracyjne. Przykłady dotyczą środowiska Microsoft i wymagają weryfikacji przed użyciem produkcyjnym.</footer>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+(function(){const e=$("st");let h="";for(let i=0;i<24;i++){const x=i*10.5,w=i===9||i===10,f=i===17;h+=`<rect x="${x}" y="0" width="9" height="16" class="${f?"fl":w?"we":"bg"}"/>`;if(f)h+=`<text class="wt" x="${x+4.5}" y="12" text-anchor="middle">✖</text>`;if(w)h+=`<text class="tx" x="${x+4.5}" y="12" text-anchor="middle">▲</text>`}
+h+='<text class="tm" x="0" y="28">00</text><text class="tm" x="126" y="28" text-anchor="middle">12</text><text class="tm" x="252" y="28" text-anchor="end">24</text>';e.innerHTML=h;
+let q="";for(let i=0;i<100;i++)q+=`<rect x="${(i%10)*11}" y="${(9-Math.floor(i/10))*11}" width="9" height="9" class="${i<37?"dt":"bg"}"/>`;$("wf").innerHTML=q})();
+$("dens").onchange=e=>{document.body.classList.remove("n","u");if(e.target.value)document.body.classList.add(e.target.value)};
+$("th").onchange=e=>{document.body.dataset.th=e.target.value};
+const lg=document.querySelector(".lg");
+lg.onclick=e=>{const b=e.target.closest("button");if(!b)return;const k=b.dataset.k;
+ lg.querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));
+ document.body.classList.toggle("foc",k!=="all");
+ document.querySelectorAll(".c").forEach(c=>c.classList.toggle("dim",k!=="all"&&c.dataset.k!==k))};
+const K={},ST=["","g","y","b"];
+try{Object.assign(K,JSON.parse(localStorage.getItem("cs_s")||"{}"))}catch(e){}
+document.querySelectorAll(".c").forEach(c=>{
+ const i=c.querySelector("h3 i"),id=i.textContent;
+ if(K[id])c.dataset.s=K[id];
+ i.tabIndex=0;i.setAttribute("role","button");i.title="Status: znam / powtórz / uczyć się";
+ const t=()=>{const nx=ST[(ST.indexOf(c.dataset.s||"")+1)%4];if(nx)c.dataset.s=nx;else delete c.dataset.s;K[id]=nx;try{localStorage.setItem("cs_s",JSON.stringify(K))}catch(e){}};
+ i.onclick=t;i.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();t()}};
+});
+</script>
+</body>
+</html>

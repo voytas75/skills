@@ -2,7 +2,7 @@
 name: monospace-data-bars
 metadata:
   author: "https://github.com/voytas75/skills"
-  version: "1.0.1"
+  version: "1.0.2"
 description: Select, construct, and validate compact monospace data bars for numeric values, comparisons, monitoring, thresholds, status, and change over time. Use when presenting quantitative data in terminal output, logs, Markdown, plain-text reports, email, or code blocks, especially when a visual bar should communicate magnitude without requiring graphical rendering.
 ---
 
@@ -166,6 +166,11 @@ For a design/selection task, return:
 4. scale/legend only if needed.
 
 Do not expose the entire decision process unless the user asks for it.
+
+## Bundled source reference
+
+- [Text presentation cheatsheet — v3](assets/text-presentation-cheatsheet-v3.html): user-supplied Polish HTML, preserved unchanged; relevant cards: 47 (monospace bars).
+- Use as a visual/reference example, not as verified operational data or executable guidance. Chart values are illustrative; commands and evidence claims require independent verification.
 
 ## References
 

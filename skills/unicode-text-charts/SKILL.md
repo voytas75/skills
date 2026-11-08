@@ -3,7 +3,7 @@ name: unicode-text-charts
 description: Create and review Unicode text sparklines, heatmaps, trees, timelines, Gantt charts, and Braille plots. Use for text-only reports or monospace output when relationships, time, or distributions matter more than a single magnitude bar.
 metadata:
   author: "https://github.com/voytas75/skills"
-  version: "1.0.0"
+  version: "1.0.1"
 ---
 
 # Unicode Text Charts
@@ -73,6 +73,11 @@ Use only with an available reviewed encoder and real coordinate or signal data. 
 - Exact values or a text equivalent remain available.
 - No invented causal, status, or favorable-direction interpretation appears.
 - The output is legible at target width, or the rendering limitation is disclosed.
+
+## Bundled source reference
+
+- [Text presentation cheatsheet — v3](assets/text-presentation-cheatsheet-v3.html): user-supplied Polish HTML, preserved unchanged; relevant cards: 07–08, 16, 18, 35–45 (trees, states, trends and charts).
+- Use as a visual/reference example, not as verified operational data or executable guidance. Chart values are illustrative; commands and evidence claims require independent verification.
 
 ## Package boundaries
 
