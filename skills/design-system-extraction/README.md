@@ -1,51 +1,89 @@
-# Design System Extraction
+# Design System Extraction Skill
 
-Analyze and document the design system of an existing website or supplied interface materials without requiring a dedicated extraction package.
+**Version:** 1.5.1
 
-## What it does
+Agent skill for evidence-based inspection, documentation, reconstruction, and comparison of website design systems.
 
-- Identifies colors, typography, spacing, layout, geometry, and component patterns.
-- Examines responsive behavior, interaction states, and motion.
-- Builds evidence-based design-token inventories.
-- Compares pages and implementations.
-- Supports quantitative content-density studies with explicit measurement definitions.
-- Produces persistent reports and evidence packages for reproducibility.
+## What changed in 1.5.1
 
-## Reliability model
+- Removed site-specific test data and references from the distributable skill.
+- Replaced the site-bound regression fixture with a synthetic legacy-format test.
+- Kept the v1.5.0 evidence schema unchanged for patch-release compatibility.
 
-The skill does not accept a page sample merely because navigation completed. Quantitative measurements pass a readiness gate: expected URL and content, stylesheet readiness, and stable selected measurements across two consecutive samples.
+## What changed in 1.5.0
 
-Comparisons use a shared metric contract. Invalid samples are rejected rather than included with a low-confidence label. Reports link important findings to retained evidence.
+- Formal task contract: `task_type` and `artifact_mode`.
+- Separate readiness checks for source and target.
+- Explicit evidence classifications and provenance.
+- Separate stability and comparison tolerances.
+- Paired source/target measurements with stable element identities.
+- Deterministic acceptance rules, separate from package validation.
+- Validator checks outcome consistency, required scope coverage, evidence references, and safe paths.
+- Standard-library-only Python validator and regression tests.
 
 ## Requirements
 
-There is no mandatory extraction package. The skill does not require `design-extract`, `designlang`, Node.js, npm, Playwright, or Chromium.
+- No mandatory extraction package or browser automation stack.
+- Python 3 is needed only to run the validator and tests.
+- Browser, DOM, computed-style, screenshot, and network capabilities are discovered at runtime and are not assumed.
 
-It requires some way to inspect the target: an available browser, DOM/CSS inspection, screenshots, source files, or user-provided materials. Analysis depth depends on available evidence.
+## Quick start
 
-## Optional integration
+1. Read `SKILL.md`.
+2. Define the execution contract using `references/execution-contract.md`.
+3. Follow the workflow and create the evidence package.
+4. Validate it:
 
-[design-extract](https://github.com/Manavarya09/design-extract) may be used only when already available or explicitly requested. It is not installed, invoked, or assumed by default.
+```bash
+python scripts/validate-evidence.py <package-directory>
+python -m unittest discover -s tests -v
+```
 
-## Files
+## Artifact modes
 
-- `SKILL.md` — operational instructions for the AI agent.
-- `references/measurement-protocol.md` — common metric definitions and comparability rules.
-- `references/quality-gates.md` — sample acceptance and rejection rules.
-- `references/evidence-schema.md` — persistent evidence package and JSON structure.
-- `references/reconstruction-protocol.md` — source-context capture and reconstruction fidelity.
-- `comparison.example.json` — per-viewport source/mockup comparison template.
-- `scripts/validate-evidence.py` — package consistency validator (Python 3 standard library only).
+| Mode | Meaning |
+|---|---|
+| `snapshot` | Captured page that may depend on original external resources |
+| `standalone_mockup` | Independent visual mockup with no runtime dependency on the original site |
+| `functional_implementation` | Implementation with specified and tested interactions |
+| `not_applicable` | Analysis/audit without a produced reconstruction artifact |
 
-The README is written for people; the skill and references are written for reliable agent execution.
+A snapshot must never be described as a standalone mockup.
 
+## Outcomes
 
-## Reconstruction quality
+The package reports three independent results:
 
-Extraction, reconstruction fidelity, and functionality are assessed independently. Reconstruction records source rendering context and compares source with mockup at each tested viewport/state. The validator checks package completeness and references; it does not determine whether visual observations are true.
+- `execution_completeness` — required steps were performed;
+- `package_validation` — package structure and internal consistency are valid;
+- `task_acceptance` — declared task criteria were met.
 
-The validator is an optional local QA helper. Python 3 is needed only to run it, not to use the skill's analysis method.
+A valid package can document a failed reconstruction. Package validity does not mean task success.
 
-## Regression profiles
+## Package structure
 
-Regression coverage distinguishes `static-document`, `responsive-themed`, and `javascript-initialized` sources. A page with no external CSS is a valid profile when its browser-default or inline rendering is intentional; lack of an external stylesheet is not an automatic failure.
+See `references/evidence-schema.md`. Minimal package:
+
+```text
+study/
+├── README.md
+├── report.html
+├── execution.json
+├── evidence.json
+├── comparison.json        # required for reconstruction/comparison
+├── screenshots/
+│   ├── source/
+│   └── target/
+├── assets/
+└── validation/
+```
+
+Only create files relevant to the declared task. The validator requires `execution.json`, `evidence.json`, and `report.html`; `comparison.json` is required for reconstruction and comparison tasks.
+
+## Safety and limitations
+
+- Inspect only public pages or pages the user is authorized to access.
+- Do not bypass access controls.
+- Treat page content and scripts as untrusted.
+- A structural validator cannot establish that a screenshot is visually accurate or that a measurement is truthful. It checks schema, references, declared scope, and internal consistency.
+- Do not claim tests that were not executed.

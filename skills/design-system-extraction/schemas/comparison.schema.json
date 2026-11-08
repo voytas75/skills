@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Design System Extraction paired comparison",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "study_id",
+    "comparisons",
+    "criteria"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.5.0"
+    },
+    "study_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "comparisons": {
+      "type": "array"
+    },
+    "criteria": {
+      "type": "array"
+    }
+  },
+  "additionalProperties": true
+}

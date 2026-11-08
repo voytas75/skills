@@ -1,183 +1,64 @@
-# Evidence Schema
+# Evidence schema and package layout
 
-For quantitative studies and comparisons, retain a machine-readable evidence record and a human-readable report. The package must be usable without the chat history.
+## Evidence classes
 
-## Required package
+Use:
+- `observed`: directly read or measured;
+- `inferred`: conclusion based on identified evidence;
+- `estimated`: approximate value, e.g. inferred from pixels;
+- `unknown`: insufficient evidence;
+- `recommendation`: proposed change, not a claim about the source.
+
+An `observed` finding requires at least one valid evidence reference. An `estimated` finding must disclose its estimation method. Never present screenshot-derived color or geometry as exact computed CSS.
+
+## Evidence registry
+
+Each `evidence_registry` entry has:
+- unique `evidence_id`;
+- `type` (`screenshot`, `dom`, `computed_style`, `stylesheet`, `asset`, `network`, `manual_note`, `test_result`);
+- package-relative `path` or a non-file `source_ref`;
+- `captured_at`;
+- optional `sample_id`, `viewport_id`, `state_id`;
+- `provenance`;
+- `limitations`.
+
+File paths must remain inside the package, including after symlink resolution.
+
+## Samples
+
+Every sample has:
+- `sample_id`, `role` (`source` or `target`), `captured_at`;
+- `status` (`accepted` or `rejected`);
+- `viewport_id`, `theme`, `state_id`, `scroll_position_css_px`;
+- non-empty `readiness` object;
+- `evidence_ids` array.
+
+Each `readiness` control is an object: `{ "status": "PASS", "details": "..." }`.
+
+## Findings
+
+Each finding has unique `finding_id`, non-empty `claim`, `classification`, and `evidence_ids`. An `observed` finding must cite evidence. Findings should state scope and limitations where material.
+
+## Results
+
+`results` contains `execution_completeness`, `package_validation`, and `task_acceptance`. These are separate outcomes and must be reconciled by the validator. `outcomes` contains named task dimensions, each with status and rationale.
+
+## Recommended package
 
 ```text
 study/
+├── README.md
 ├── report.html
+├── execution.json
 ├── evidence.json
-└── screenshots/
-    ├── sample-001__1440x900__20261108T052000Z.png
-    └── sample-002__390x844__20261108T052100Z.png
+├── comparison.json
+├── tokens.json
+├── components.json
+├── implementation/
+├── screenshots/source/
+├── screenshots/target/
+├── assets/
+└── validation/validator-report.json
 ```
 
-Use unique sample identifiers and timestamps. Never overwrite an earlier screenshot. Save evidence in the deliverable directory, not a temporary path.
-
-## Evidence record example
-
-The following is a structural example. Replace all illustrative values with actual observations; never copy them as measurements.
-
-```json
-{
-  "study_id": "example-study",
-  "created_at": "2026-11-08T05:20:00Z",
-  "target": {
-    "requested_url": "https://example.invalid/",
-    "final_url": "https://example.invalid/"
-  },
-  "metric_contract": {
-    "metric_id": "complete_items_per_100k_css_px",
-    "unit_name": "complete article card",
-    "unit_selector": "article.card",
-    "title_selector": "article.card h2",
-    "include_rule": "A card with title, required metadata, and summary visible",
-    "exclude_rule": "Promoted cards and cards clipped by the measurement region",
-    "visibility_rule": "Relevant bounding box fully contained in the content region and viewport; text not clamped or truncated",
-    "viewport_css_px": {
-      "width": 1440,
-      "height": 900
-    },
-    "content_region": {
-      "selector": "main",
-      "x": 120,
-      "y": 160,
-      "width": 1200,
-      "height": 680
-    },
-    "scroll_position_css_px": {
-      "x": 0,
-      "y": 0
-    },
-    "theme": "light",
-    "interaction_state": "default",
-    "denominator": "content_area_css_px",
-    "formula": "complete_item_count / content_area_css_px * 100000"
-  },
-  "samples": [
-    {
-      "sample_id": "sample-001",
-      "captured_at": "2026-11-08T05:20:00Z",
-      "status": "accepted",
-      "readiness": {
-        "requested_url_matches": true,
-        "expected_content_present": true,
-        "stylesheets_ready": true,
-        "render_stable": true,
-        "state_valid": true,
-        "stability_tolerances": {
-          "bounding_box_css_px": 0.5,
-          "font_size_css_px": 0
-        },
-        "stability_samples": [
-          {
-            "width": 1200,
-            "height": 680,
-            "font_size_css_px": 16
-          },
-          {
-            "width": 1200,
-            "height": 680,
-            "font_size_css_px": 16
-          }
-        ]
-      },
-      "selector_audit": {
-        "matched_count": 8,
-        "rendered_nonempty_count": 8,
-        "fully_visible_count": 5,
-        "representative_sample_count": 3
-      },
-      "metrics": {
-        "title_count": 5,
-        "complete_item_count": 3,
-        "text_word_count": 96,
-        "content_area_css_px": 816000,
-        "content_density": 0.367647
-      },
-      "evidence": [
-        {
-          "evidence_id": "ev-001",
-          "type": "screenshot",
-          "path": "screenshots/sample-001__1440x900__20261108T052000Z.png"
-        }
-      ]
-    }
-  ],
-  "findings": [
-    {
-      "finding_id": "finding-001",
-      "claim": "Three complete cards are fully visible in the defined region.",
-      "classification": "observed",
-      "evidence_ids": ["ev-001"]
-    }
-  ],
-  "limitations": []
-}
-```
-
-The values above are illustrative and are not a valid result for any real website.
-
-## Required fields
-
-At minimum, `evidence.json` must preserve:
-- study ID and creation time;
-- requested and final URL;
-- metric contract;
-- timestamp, viewport, theme, state, and scroll position for each sample;
-- readiness checks and accepted/rejected status;
-- selector match counts and representative sample count;
-- metric values and formulas;
-- screenshot paths where captured;
-- findings linked to evidence IDs;
-- exclusions and limitations.
-
-## Report requirements
-
-`report.html` must include:
-- scope and method;
-- metric definitions;
-- accepted and rejected sample counts;
-- results and exclusions;
-- evidence IDs linked to screenshots;
-- limitations and non-comparable measures.
-
-A report finding without an evidence ID is an unsupported assertion unless explicitly labelled as an inference or recommendation.
-
-## Resource and transfer evidence
-
-If page weight is discussed, record separately:
-- declared dependencies;
-- observed resource requests;
-- transferred bytes and measurement method;
-- capture start/end or navigation window;
-- cache behavior and failed requests;
-- cross-origin visibility limitations.
-
-Do not describe `decodedBodySize` as transferred bytes. Do not treat missing cross-origin timing data as zero transfer. If a complete network record is unavailable, use `not_measured`.
-
-
-## v1.4.0 outcome and reconstruction contract
-
-Every `evidence.json` contains an `outcomes` object with three independent assessments:
-
-```json
-{
-  "outcomes": {
-    "extraction": {"status": "PASS", "rationale": "Source observations verified."},
-    "reconstruction": {"status": "NOT_TESTED", "rationale": "No mockup was requested."},
-    "functionality": {"status": "NOT_TESTED", "rationale": "No interaction implementation was requested."}
-  }
-}
-```
-
-Allowed statuses: `PASS`, `PARTIAL`, `FAIL`, `NOT_TESTED`. Each requires a non-empty rationale.
-
-For reconstruction tasks, also include `task_type: "reconstruction"`, `rendering_context` with `html_attributes`, `body_attributes`, `theme`, `base_url`, `assets`, `component_states`, and `js_initialization_dependency`, plus `comparison_file: "comparison.json"`. The comparison must contain a non-empty `viewports` array with source/mockup screenshots, checks for text/state, geometry, important styles, document overflow, component overflow, deviations, and evidence IDs.
-
-For non-reconstruction analysis, use `task_type: "analysis"`. Reconstruction and functionality may be `NOT_TESTED` with a reason.
-
-## Machine validation
-
-Run `python scripts/validate-evidence.py <package-directory>`. The validator uses Python 3 standard library modules only. It checks required fields, outcome statuses, screenshot file existence, safe relative paths, unique evidence IDs, finding-to-evidence references, and reconstruction comparison completeness/references. It does not verify measurement truth, visual fidelity, accessibility conformance, or functional behavior.
+Create only applicable files. Reconstruction and comparison require `comparison.json`; analysis/audit do not. Tokens/components files are optional unless requested by scope.
