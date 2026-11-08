@@ -27,6 +27,7 @@ Choose by the outcome you need. Each link opens the full instructions.
 | [Monospace Data Bars](skills/monospace-data-bars/SKILL.md) | Render validated numeric data as aligned text bars with explicit scales, units, and optional supplied targets or deltas. |
 | [Text Presentation Techniques](skills/text-presentation-techniques/SKILL.md) | Choose concise text structures, tables, diagrams, and reference-sheet layouts while preserving scope, conditions, and evidence. |
 | [Unicode Text Charts](skills/unicode-text-charts/SKILL.md) | Create text-native sparklines, heatmaps, hierarchies, timelines, and Gantt charts with explicit mappings and source-backed data; defines requirements for Braille plotting. |
+| [Design System Extraction](skills/design-system-extraction/SKILL.md) | Inspect existing website designs, retain measurement evidence, and verify visual reconstructions with separate extraction, fidelity, and functionality outcomes. |
 
 New to skills? Read the [introduction](SKILLS-INTRODUCTION.md).
 

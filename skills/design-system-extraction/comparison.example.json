@@ -1,0 +1,56 @@
+{
+  "comparison_id": "example-comparison",
+  "created_at": "2026-11-08T08:00:00Z",
+  "source_url": "https://example.invalid/",
+  "mockup_location": "mockup/",
+  "capture_conditions": {
+    "theme": "light",
+    "interaction_state": "default",
+    "scroll_position_css_px": {
+      "x": 0,
+      "y": 0
+    }
+  },
+  "viewports": [
+    {
+      "viewport_id": "desktop-default",
+      "viewport_css_px": {
+        "width": 1440,
+        "height": 900
+      },
+      "source_screenshot": "screenshots/source-1440x900.png",
+      "mockup_screenshot": "screenshots/mockup-1440x900.png",
+      "checks": {
+        "text_and_component_state": {
+          "status": "PASS",
+          "notes": "Replace with observed comparison."
+        },
+        "geometry": {
+          "status": "PASS",
+          "notes": "Replace with measured deviations/tolerances."
+        },
+        "important_styles": {
+          "status": "PASS",
+          "notes": "Replace with observed comparison."
+        },
+        "document_overflow": {
+          "status": "PASS",
+          "notes": "Record x/y overflow and behavior."
+        },
+        "component_overflow": {
+          "status": "PASS",
+          "notes": "Record affected component, axis, and behavior."
+        }
+      },
+      "deviations": [],
+      "evidence_ids": [
+        "ev-source-desktop",
+        "ev-mockup-desktop"
+      ]
+    }
+  ],
+  "overall_status": "NOT_TESTED",
+  "limitations": [
+    "Illustrative template; not evidence of a real comparison."
+  ]
+}
