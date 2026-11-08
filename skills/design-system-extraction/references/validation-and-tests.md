@@ -29,3 +29,15 @@ Retain historical fixtures without rewriting their original results. A legacy pa
 ## Limitations
 
 Validation is a structural and logical gate, not visual QA. The skill must not claim that validator success proves reconstruction quality.
+
+
+## v1.6.0 regression gates
+
+The validator additionally checks:
+- asset readiness PASS cannot coexist with declared substitutions/unresolved assets;
+- reconstruction packages include `measurements/runtime-tests.json`;
+- interactive controls have paired source/target test records;
+- font resolution status and per-run records are explicit;
+- reconstruction packages include `visual-comparison.json` with complete viewport/theme/state coverage;
+- visual-fidelity PASS cannot contradict non-passing screenshot comparisons;
+- task-acceptance PASS requires every fidelity dimension to PASS.

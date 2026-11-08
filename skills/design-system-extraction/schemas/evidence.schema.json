@@ -14,11 +14,12 @@
     "findings",
     "limitations",
     "outcomes",
-    "results"
+    "results",
+    "fidelity"
   ],
   "properties": {
     "schema_version": {
-      "const": "1.5.0"
+      "const": "1.6.0"
     },
     "study_id": {
       "type": "string",
@@ -70,6 +71,159 @@
     },
     "comparison_file": {
       "type": "string"
+    },
+    "fidelity": {
+      "type": "object",
+      "required": [
+        "visual_fidelity",
+        "functional_fidelity",
+        "responsive_fidelity",
+        "content_fidelity",
+        "asset_fidelity"
+      ],
+      "properties": {
+        "visual_fidelity": {
+          "type": "object",
+          "required": [
+            "status",
+            "rationale",
+            "evidence_ids"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "PASS",
+                "PARTIAL",
+                "FAIL",
+                "NOT_TESTED"
+              ]
+            },
+            "rationale": {
+              "type": "string",
+              "minLength": 1
+            },
+            "evidence_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "functional_fidelity": {
+          "type": "object",
+          "required": [
+            "status",
+            "rationale",
+            "evidence_ids"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "PASS",
+                "PARTIAL",
+                "FAIL",
+                "NOT_TESTED"
+              ]
+            },
+            "rationale": {
+              "type": "string",
+              "minLength": 1
+            },
+            "evidence_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "responsive_fidelity": {
+          "type": "object",
+          "required": [
+            "status",
+            "rationale",
+            "evidence_ids"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "PASS",
+                "PARTIAL",
+                "FAIL",
+                "NOT_TESTED"
+              ]
+            },
+            "rationale": {
+              "type": "string",
+              "minLength": 1
+            },
+            "evidence_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "content_fidelity": {
+          "type": "object",
+          "required": [
+            "status",
+            "rationale",
+            "evidence_ids"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "PASS",
+                "PARTIAL",
+                "FAIL",
+                "NOT_TESTED"
+              ]
+            },
+            "rationale": {
+              "type": "string",
+              "minLength": 1
+            },
+            "evidence_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "asset_fidelity": {
+          "type": "object",
+          "required": [
+            "status",
+            "rationale",
+            "evidence_ids"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "PASS",
+                "PARTIAL",
+                "FAIL",
+                "NOT_TESTED"
+              ]
+            },
+            "rationale": {
+              "type": "string",
+              "minLength": 1
+            },
+            "evidence_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "additionalProperties": false
     }
   },
   "additionalProperties": true

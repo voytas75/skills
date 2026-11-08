@@ -15,11 +15,12 @@ Validator = module.Validator
 def make_package(root: Path, *, task="reconstruction", artifact="standalone_mockup"):
     (root / "screenshots" / "source").mkdir(parents=True, exist_ok=True)
     (root / "screenshots" / "target").mkdir(parents=True, exist_ok=True)
+    (root / "measurements").mkdir(exist_ok=True)
     (root / "report.html").write_text("<html><body>test report</body></html>", encoding="utf-8")
     for p in ("screenshots/source/source.png", "screenshots/target/target.png"):
         (root / p).write_bytes(b"fake-image-fixture")
     execution = {
-        "schema_version":"1.5.0","study_id":"test-study","task_type":task,"artifact_mode":artifact,
+        "schema_version":"1.6.0","study_id":"test-study","task_type":task,"artifact_mode":artifact,
         "target":{"requested_url":"https://example.test/","final_url":"https://example.test/"},
         "scope":{"pages":["/"],"viewports":[{"id":"desktop","width":1280,"height":900}],
                  "themes":["light"],"states":["default"],
@@ -28,8 +29,10 @@ def make_package(root: Path, *, task="reconstruction", artifact="standalone_mock
     }
     readiness = {k:{"status":"PASS","details":"verified"} for k in
         ("url_identity","content_identity","stylesheet_readiness","asset_readiness","render_stability","state_integrity","obstruction_check","capture_integrity")}
+    readiness["asset_readiness"]["substitutions"] = []
+    readiness["asset_readiness"]["unresolved"] = []
     evidence = {
-        "schema_version":"1.5.0","study_id":"test-study","task_type":task,"artifact_mode":artifact,
+        "schema_version":"1.6.0","study_id":"test-study","task_type":task,"artifact_mode":artifact,
         "created_at":"2026-11-08T08:00:00Z","target":execution["target"],
         "samples":[
             {"sample_id":"src-1","role":"source","status":"accepted","viewport_id":"desktop","theme":"light","state_id":"default","scroll_position_css_px":{"x":0,"y":0},"readiness":readiness,"evidence_ids":["ev-src"]},
@@ -42,10 +45,12 @@ def make_package(root: Path, *, task="reconstruction", artifact="standalone_mock
         "findings":[{"finding_id":"f1","claim":"The fixture was captured.","classification":"observed","evidence_ids":["ev-src"]}],
         "limitations":[],"outcomes":{"reconstruction":{"status":"PASS","rationale":"fixture passes"}},
         "results":{"execution_completeness":"PASS","package_validation":"PASS","task_acceptance":"PASS"},
-        "dependencies":[]
+        "dependencies":[],
+        "fidelity": {d:{"status":"PASS","rationale":"verified fixture","evidence_ids":["ev-src","ev-dst"]}
+            for d in ("visual_fidelity","functional_fidelity","responsive_fidelity","content_fidelity","asset_fidelity")}
     }
     comparison = {
-        "schema_version":"1.5.0","study_id":"test-study",
+        "schema_version":"1.6.0","study_id":"test-study",
         "criteria":[{"criterion_id":c,"required":True,"status":"PASS","evidence_ids":["ev-src","ev-dst"]}
                     for c in execution["scope"]["required_checks"]],
         "comparisons":[{"comparison_id":"cmp-1","viewport_id":"desktop","theme":"light","state_id":"default",
@@ -55,8 +60,27 @@ def make_package(root: Path, *, task="reconstruction", artifact="standalone_mock
             "deltas":{"geometry":{"height_css_px":0}},"tolerances":{"geometry_css_px":2},
             "result":"PASS","evidence_ids":["ev-src","ev-dst"]}]
     }
-    for name, data in (("execution.json",execution),("evidence.json",evidence),("comparison.json",comparison)):
-        (root / name).write_text(json.dumps(data, indent=2), encoding="utf-8")
+    runtime = {
+        "interactions":[{"control_id":"menu-1","role":"button","accessible_name":"Open menu",
+            "source_status":"PASS","source_action":"activate","source_result":"menu opened",
+            "target_status":"PASS","target_action":"activate","target_result":"menu opened",
+            "result":"PASS","evidence_ids":["ev-src","ev-dst"]}],
+        "resolved_font_status":"PASS",
+        "font_runs":[{"text":"Example","declared_family":"Example Sans","resolved_families":["Example Sans"],"fallback_detected":False}],
+        "limitations":[]
+    }
+    visual = {
+        "schema_version":"1.6.0","study_id":"test-study","method":"SSIM","metric":"ssim",
+        "thresholds":{"minimum":0.98},
+        "pairs":[{"viewport_id":"desktop","theme":"light","state_id":"default",
+            "source_screenshot":"screenshots/source/source.png","target_screenshot":"screenshots/target/target.png",
+            "dimensions":{"width":1280,"height":900},"metric_value":0.99,"threshold":0.98,
+            "masked_regions":[],"result":"PASS","evidence_ids":["ev-src","ev-dst"]}]
+    }
+    for name,data in (("execution.json",execution),("evidence.json",evidence),("comparison.json",comparison)):
+        (root/name).write_text(json.dumps(data,indent=2),encoding="utf-8")
+    (root/"measurements/runtime-tests.json").write_text(json.dumps(runtime,indent=2),encoding="utf-8")
+    (root/"visual-comparison.json").write_text(json.dumps(visual,indent=2),encoding="utf-8")
 
 class ValidatorTests(unittest.TestCase):
     def setUp(self):
@@ -135,7 +159,7 @@ class ValidatorTests(unittest.TestCase):
 
     def test_unsupported_schema_version_rejected(self):
         d=self.data("execution.json"); d["schema_version"]="1.4.0"; self.save("execution.json",d)
-        self.assertTrue(any("schema_version must be 1.5.0" in e for e in self.errors()))
+        self.assertTrue(any("schema_version must be 1.6.0" in e for e in self.errors()))
 
     def test_duplicate_sample_id_rejected(self):
         d=self.data("evidence.json"); d["samples"][1]["sample_id"]="src-1"; self.save("evidence.json",d)
@@ -176,6 +200,24 @@ class ValidatorTests(unittest.TestCase):
     def test_estimated_finding_without_method_rejected(self):
         d=self.data("evidence.json"); d["findings"][0]["classification"]="estimated"; d["findings"][0].pop("method",None); self.save("evidence.json",d)
         self.assertTrue(any("estimated claim requires method" in e for e in self.errors()))
+
+
+
+    def test_asset_readiness_pass_with_substitution_is_rejected(self):
+        d=self.data("evidence.json")
+        d["samples"][0]["readiness"]["asset_readiness"]["substitutions"]=[{"asset":"font","replacement":"Arial","reason":"unavailable"}]
+        self.save("evidence.json",d)
+        self.assertTrue(any("asset_readiness PASS contradicts" in e for e in self.errors()))
+
+    def test_reconstruction_requires_visual_comparison(self):
+        (self.root/"visual-comparison.json").unlink()
+        self.assertTrue(any("requires visual-comparison.json" in e for e in self.errors()))
+
+    def test_functional_pass_cannot_hide_untested_control(self):
+        d=self.data("measurements/runtime-tests.json")
+        d["interactions"][0]["source_status"]="NOT_TESTED"
+        self.save("measurements/runtime-tests.json",d)
+        self.assertTrue(any("functional_fidelity PASS contradicts" in e for e in self.errors()))
 
 if __name__ == "__main__":
     unittest.main()

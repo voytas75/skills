@@ -1,8 +1,17 @@
 # Design System Extraction Skill
 
-**Version:** 1.5.1
+**Version:** 1.6.0
 
 Agent skill for evidence-based inspection, documentation, reconstruction, and comparison of website design systems.
+
+## What changed in 1.6.0
+
+- Added independent fidelity dimensions: visual, functional, responsive, content, and asset.
+- Added explicit asset substitution and resolved-font reporting.
+- Added controlled, reversible interaction discovery and source/target behavior tests.
+- Added screenshot-based visual regression requirements for reconstruction.
+- Strengthened acceptance gates so incomplete interaction or visual checks cannot be reported as PASS.
+- Extended validator and regression tests to reject contradictory readiness and untested interactive controls.
 
 ## What changed in 1.5.1
 

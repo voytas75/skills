@@ -2,7 +2,7 @@
 name: design-system-extraction
 description: "Inspect and document an existing website's design system, extract evidence-backed tokens and components, reconstruct or compare interfaces, and audit responsive behavior. Uses only capabilities already available in the agent environment; no dedicated extraction stack is required."
 metadata:
-  version: "1.5.1"
+  version: "1.6.0"
 ---
 
 # Design System Extraction
@@ -134,3 +134,14 @@ Deliver the report, evidence package, artifact, validation report, and concise l
 - `references/comparison-engine.md` — paired comparisons.
 - `references/acceptance-engine.md` — status aggregation and acceptance.
 - `references/validation-and-tests.md` — validator, test matrix, and limitations.
+- `references/fidelity-and-runtime.md` — fidelity dimensions, font/assets, interaction and visual regression contract.
+- `schemas/visual-comparison.schema.json` and `schemas/runtime-tests.schema.json` — v1.6.0 runtime evidence formats.
+
+
+## v1.6.0 acceptance additions
+
+- Explicit source/target asset substitutions and unresolved assets.
+- Resolved-font verification, including per-glyph fallback checks where supported.
+- Reversible interaction discovery and source/target behavior comparison.
+- Screenshot-based visual regression with masks, metric, threshold, and per-viewport result.
+- Independent fidelity dimensions and stricter acceptance gates.

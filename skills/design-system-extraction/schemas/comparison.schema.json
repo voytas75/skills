@@ -10,7 +10,7 @@
   ],
   "properties": {
     "schema_version": {
-      "const": "1.5.0"
+      "const": "1.6.0"
     },
     "study_id": {
       "type": "string",

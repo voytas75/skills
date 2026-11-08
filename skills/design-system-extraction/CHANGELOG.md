@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.6.0 — 2026-11-08
+
+- Introduced independent fidelity dimensions and acceptance gates.
+- Added explicit asset substitution and resolved-font evidence requirements.
+- Added controlled reversible source interaction discovery and target behavior tests.
+- Required paired screenshot visual regression for reconstruction tasks.
+- Strengthened validator checks for readiness contradictions, interaction coverage, and visual comparison completeness.
+
 ## 1.5.1 — 2026-11-08
 
 - Removed site-specific QA artifacts from the distributable package.

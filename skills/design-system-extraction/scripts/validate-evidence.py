@@ -6,8 +6,8 @@ import sys
 from pathlib import Path
 from datetime import datetime, timezone
 
-VERSION = "1.5.1"
-SCHEMA_VERSION = "1.5.0"
+VERSION = "1.6.0"
+SCHEMA_VERSION = "1.6.0"
 TASKS = {"analysis", "reconstruction", "comparison", "audit"}
 ARTIFACTS = {"snapshot", "standalone_mockup", "functional_implementation", "not_applicable"}
 OUTCOMES = {"PASS", "PARTIAL", "FAIL", "NOT_TESTED"}
@@ -95,7 +95,7 @@ class Validator:
             if isinstance(evidence, dict):
                 self.err("legacy_schema_requires_migration: execution.json is absent or invalid; legacy packages are not silently upgraded")
             else:
-                self.err("execution.json is required for schema v1.5.0 validation")
+                self.err("execution.json is required for schema v1.6.0 validation")
             return self.report()
         if not isinstance(evidence, dict):
             return self.report()
@@ -165,6 +165,14 @@ class Validator:
                     ctrl = readiness[name]
                     if isinstance(ctrl, dict) and ctrl.get("status") not in {"PASS", "NOT_APPLICABLE"}:
                         self.err(f"samples[{i}]: accepted sample has non-passing readiness {name}")
+            asset_ctrl = readiness.get("asset_readiness") if isinstance(readiness, dict) else None
+            if isinstance(asset_ctrl, dict):
+                substitutions = asset_ctrl.get("substitutions", [])
+                unresolved = asset_ctrl.get("unresolved", [])
+                if not isinstance(substitutions, list): self.err(f"samples[{i}].readiness.asset_readiness.substitutions must be array")
+                if not isinstance(unresolved, list): self.err(f"samples[{i}].readiness.asset_readiness.unresolved must be array")
+                if asset_ctrl.get("status") == "PASS" and (substitutions or unresolved):
+                    self.err(f"samples[{i}]: asset_readiness PASS contradicts non-empty substitutions/unresolved assets")
             if not isinstance(sample.get("evidence_ids"), list): self.err(f"samples[{i}].evidence_ids must be array")
 
         registry = evidence.get("evidence_registry")
@@ -276,6 +284,78 @@ class Validator:
                     if isinstance(dep, dict) and dep.get("disposition") == "retained" and dep.get("runtime_origin") == "source_origin":
                         self.err("standalone_mockup cannot retain runtime dependency on source origin")
 
+        # v1.6.0 fidelity, interaction, and screenshot gates.
+        if task == "reconstruction":
+            self.checks.append("fidelity-runtime")
+            fidelity = evidence.get("fidelity")
+            required_dims = {"visual_fidelity", "functional_fidelity", "responsive_fidelity", "content_fidelity", "asset_fidelity"}
+            if not isinstance(fidelity, dict):
+                self.err("evidence.json: fidelity object required for reconstruction")
+                fidelity = {}
+            for dim in required_dims:
+                item = fidelity.get(dim)
+                if not isinstance(item, dict) or item.get("status") not in OUTCOMES or not self.nonempty(item.get("rationale")):
+                    self.err(f"fidelity.{dim}: requires valid status and rationale")
+                elif item.get("status") == "PASS" and not item.get("evidence_ids"):
+                    self.err(f"fidelity.{dim}: PASS requires evidence_ids")
+                elif isinstance(item, dict):
+                    for eid in item.get("evidence_ids", []):
+                        if eid not in evidence_ids: self.err(f"fidelity.{dim}: unknown evidence_id {eid}")
+
+            runtime = self.read_json("measurements/runtime-tests.json", required=False)
+            if not isinstance(runtime, dict):
+                self.err("reconstruction requires measurements/runtime-tests.json")
+                runtime = {}
+            interactions = runtime.get("interactions")
+            if not isinstance(interactions, list):
+                self.err("runtime-tests.json: interactions array required")
+                interactions = []
+            controls = [x for x in interactions if isinstance(x, dict)]
+            for i, control in enumerate(controls):
+                for field in ("control_id", "role", "accessible_name", "source_status", "source_action", "source_result", "target_status", "target_action", "target_result", "result", "evidence_ids"):
+                    if field not in control: self.err(f"runtime-tests.interactions[{i}]: missing {field}")
+                if control.get("source_status") not in OUTCOMES or control.get("target_status") not in OUTCOMES or control.get("result") not in OUTCOMES:
+                    self.err(f"runtime-tests.interactions[{i}]: invalid source/target/result status")
+                for eid in control.get("evidence_ids", []):
+                    if eid not in evidence_ids: self.err(f"runtime-tests.interactions[{i}]: unknown evidence_id {eid}")
+            if fidelity.get("functional_fidelity", {}).get("status") == "PASS" and any(
+                x.get("source_status") != "PASS" or x.get("target_status") != "PASS" or x.get("result") != "PASS"
+                for x in controls
+            ):
+                self.err("functional_fidelity PASS contradicts untested or failed interaction coverage")
+            if runtime.get("resolved_font_status") not in {"PASS", "FAIL", "NOT_TESTED"}:
+                self.err("runtime-tests.json: resolved_font_status required")
+            if not isinstance(runtime.get("font_runs"), list): self.err("runtime-tests.json: font_runs array required")
+
+            visual = self.read_json("visual-comparison.json", required=False)
+            if not isinstance(visual, dict):
+                self.err("reconstruction requires visual-comparison.json")
+                visual = {}
+            if visual.get("schema_version") != SCHEMA_VERSION: self.err("visual-comparison.json: schema_version must be 1.6.0")
+            if visual.get("study_id") != execution.get("study_id"): self.err("visual-comparison.json: study_id mismatch")
+            pairs = visual.get("pairs")
+            if not isinstance(pairs, list): self.err("visual-comparison.json: pairs array required"); pairs = []
+            visual_coverage = set()
+            for i, pair in enumerate(pairs):
+                if not isinstance(pair, dict): self.err(f"visual-comparison.pairs[{i}] must be object"); continue
+                for field in ("viewport_id", "theme", "state_id", "source_screenshot", "target_screenshot", "dimensions", "metric_value", "threshold", "masked_regions", "result", "evidence_ids"):
+                    if field not in pair: self.err(f"visual-comparison.pairs[{i}]: missing {field}")
+                for field in ("source_screenshot", "target_screenshot"):
+                    self.safe_file(pair.get(field))
+                if pair.get("result") not in OUTCOMES: self.err(f"visual-comparison.pairs[{i}]: invalid result")
+                if not isinstance(pair.get("dimensions"), dict): self.err(f"visual-comparison.pairs[{i}]: dimensions object required")
+                if not isinstance(pair.get("masked_regions"), list): self.err(f"visual-comparison.pairs[{i}]: masked_regions array required")
+                for eid in pair.get("evidence_ids", []):
+                    if eid not in evidence_ids: self.err(f"visual-comparison.pairs[{i}]: unknown evidence_id {eid}")
+                visual_coverage.add((pair.get("viewport_id"), pair.get("theme"), pair.get("state_id")))
+            required_visual = {(v.get("id"), t, st) for v in viewports if isinstance(v, dict) for t in scope.get("themes", []) for st in scope.get("states", [])}
+            missing_visual = required_visual - visual_coverage
+            if missing_visual: self.err(f"visual-comparison.json: missing screenshot comparison coverage: {sorted(missing_visual)}")
+            if fidelity.get("visual_fidelity", {}).get("status") == "PASS" and any(
+                p.get("result") != "PASS" for p in pairs if isinstance(p, dict)
+            ):
+                self.err("visual_fidelity PASS contradicts non-passing screenshot comparison")
+
         # Enforce outcome consistency against required comparison criteria.
         if task in {"reconstruction","comparison"} and isinstance(comp, dict):
             req_statuses = [c.get("status") for c in comp.get("criteria", []) if isinstance(c,dict) and c.get("required") is True]
@@ -286,6 +366,12 @@ class Validator:
                 self.err("task_acceptance PASS requires every required criterion to PASS")
             if acceptance == "PASS" and not req_statuses:
                 self.err("task_acceptance PASS requires at least one required criterion")
+            if acceptance == "PASS" and task == "reconstruction":
+                fidelity = evidence.get("fidelity", {})
+                required_dims = {"visual_fidelity", "functional_fidelity", "responsive_fidelity", "content_fidelity", "asset_fidelity"}
+                nonpassing = [d for d in required_dims if not isinstance(fidelity.get(d), dict) or fidelity[d].get("status") != "PASS"]
+                if nonpassing:
+                    self.err(f"task_acceptance PASS requires all fidelity dimensions to PASS: {sorted(nonpassing)}")
         if task in {"analysis","audit"} and results.get("task_acceptance") == "PASS":
             if not samples or any(s.get("status") != "accepted" for s in samples if isinstance(s,dict)):
                 self.err("analysis/audit task_acceptance PASS requires accepted samples")

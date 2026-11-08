@@ -1,37 +1,21 @@
-# Acceptance engine
+# Acceptance engine (v1.6.0)
 
-## Independent results
+## Independent outcomes
 
-- `execution_completeness`: whether all steps required by the manifest were performed;
-- `package_validation`: whether package structure, references, scope, and status consistency are valid;
-- `task_acceptance`: whether the declared task criteria were met.
+Report `execution_completeness`, `package_validation`, and `task_acceptance` independently. They are not interchangeable.
 
-Do not infer one from another.
+## Fidelity dimensions
 
-## Statuses
+For reconstruction, report `visual_fidelity`, `functional_fidelity`, `responsive_fidelity`, `content_fidelity`, and `asset_fidelity` independently. Each requires status, rationale, and evidence IDs. Read `fidelity-and-runtime.md`.
 
-- `PASS`: all required criteria met with evidence.
-- `PARTIAL`: useful result, but some criteria are incomplete or partially met.
-- `FAIL`: at least one material requirement failed.
-- `NOT_TESTED`: insufficient execution to assess.
+## Hard gates
 
-## Aggregation
-
-- A required `FAIL` blocks task acceptance `PASS`.
-- A required `NOT_TESTED` blocks task acceptance `PASS`.
-- A required `PARTIAL` blocks `PASS`, unless excluded in the manifest before execution.
-- Missing required viewport/state or paired measurement blocks `PASS`.
-- Outcome `PASS` cannot coexist with a required criterion `FAIL`.
-- `package_validation: PASS` never upgrades task acceptance.
-- A valid package may document a failed task.
-- Package validation failure prevents delivery as a validated complete package, but does not erase recorded test outcomes.
-
-## Profiles
-
-For analysis/audit, assess source readiness, declared inspection coverage, provenance, and limitations.
-
-For snapshot reconstruction, document dependencies and omissions; do not claim standalone independence.
-
-For standalone reconstruction, require no runtime dependency on the source origin, complete required pairs, and all required checks passing.
-
-For functional implementation, additionally require executed behavior tests for all required interactions.
+- Required comparison criterion FAIL/PARTIAL/NOT_TESTED blocks task acceptance PASS.
+- Missing required viewport/state or paired measurement blocks PASS.
+- Missing screenshot visual-comparison pair blocks PASS.
+- Missing source or target interaction test for an in-scope visible control blocks functional PASS.
+- Asset readiness PASS with any substitution or unresolved asset is invalid.
+- Resolved-font status cannot be inferred from a loaded font face alone.
+- Any required fidelity dimension other than PASS blocks task acceptance PASS.
+- Element ID coverage is not visual fidelity.
+- Package validation PASS never upgrades task acceptance.
