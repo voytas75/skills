@@ -3,7 +3,7 @@ name: visual-knowledge-design
 description: Select and create evidence-informed visual representations that improve comprehension, knowledge organization, recall, and retention. Use when a user asks to explain, learn, teach, summarize, compare, document, or remember information; requests a mind map, concept map, flowchart, infographic, diagram, chart, visual notes, study aid, or a visual equivalent of supplied content; or needs help choosing the most effective information-visualization technique.
 metadata:
   author: voytas75
-  version: "1.0.0"
+  version: "1.1.0"
   category: learning-and-information-design
   language: multilingual
   output: visual-artifact
@@ -202,8 +202,25 @@ Unless the user explicitly asks for recommendation-only, provide at least one co
 - If only a text response is supported, provide a legible text-native diagram and state that it is a text representation.
 - If the environment has no image-generation or file-rendering capability, do not claim to have generated an image. Give the best supported visual equivalent.
 
+### Mind-map perspectives
+
+For mind-map requests, use **06 — concentric sector layout** by default unless the user selects another perspective or it would make the supplied content unreadable. This default applies to mind maps, not to every visualization in the catalogue. All six perspectives were visually accepted by the user:
+
+1. **01 — Organic, two-sided:** curved branches; central topic with balanced left/right subtrees.
+2. **02 — Geometric, two-sided:** orthogonal connections and regular columns.
+3. **03 — Radial:** central topic with branches distributed around it.
+4. **04 — Horizontal tree:** left-to-right hierarchy.
+5. **05 — Vertical tree:** top-to-bottom hierarchy.
+6. **06 — Concentric sectors (default):** topic at the center, main areas and details on successive rings; reserve a distinct sector for each main branch.
+
+Use the [six-perspective HTML reference](assets/mindmap-perspectives.html) as the accepted visual baseline. It is a self-contained DNS example, not a general-purpose renderer. Replace its example content with verified task data; never reuse DNS facts for unrelated tasks. Use standard Python and inline SVG/HTML/CSS/vanilla JavaScript when browser-only, dependency-free output is requested; no CDN or diagram library is required.
+
+For comparison views, preserve identical node IDs, labels, relationships and source facts across perspectives. Compute subtree spacing, wrap labels and inspect collisions. Provide zoom, pan, reset and fit controls for wide maps; preserve readable text on mobile rather than shrinking the entire diagram. Verify controls and inspect representative screenshots before claiming visual acceptance. User acceptance of the reference does not prove automatic layout quality for new or larger datasets.
+
+If 06 cannot remain readable because of deep branching or long labels, prefer 04 as the strongest alternative and explain the concrete readability conflict. Do not switch merely for cosmetic variety.
+
 ### Diagram syntax
-- Prefer Mermaid for flowcharts, sequence diagrams, timelines, mind maps, and simple concept/system diagrams when supported.
+- For mind maps, follow the six-perspective policy above; for flowcharts, sequence diagrams, timelines, and simple concept/system diagrams, prefer Mermaid when supported.
 - Use Graphviz/DOT for graph layouts when explicit node/edge control matters.
 - Use SVG for precise static vector diagrams and labeled compositions.
 - Use HTML/CSS/SVG for self-contained interactive or responsive visual documents when supported.
@@ -340,6 +357,6 @@ Useful foundational references:
 
 ## Versioning
 
-- Current version: `1.0.0`
+- Current version: `1.1.0`
 - SemVer: MAJOR = incompatible workflow/output changes; MINOR = new techniques, workflows, or output capabilities; PATCH = clarifications, corrections, and non-breaking refinements.
 - Keep the frontmatter `metadata.version` synchronized with this section.
