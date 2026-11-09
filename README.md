@@ -29,6 +29,7 @@ Choose by the outcome you need. Each link opens the full instructions.
 | [Visual Knowledge Design](skills/visual-knowledge-design/SKILL.md) | Choose and create diagrams, charts, and visual learning aids that preserve source meaning, with retrieval practice when retention matters. |
 | [Unicode Text Charts](skills/unicode-text-charts/SKILL.md) | Create text-native sparklines, heatmaps, hierarchies, timelines, and Gantt charts with explicit mappings and source-backed data; defines requirements for Braille plotting. |
 | [Mnemonic Design](skills/mnemonic-design/SKILL.md) | Design memory hooks, cards, stories, and memory palaces using imagery, associations, and recall cues; memory-strength ratings are heuristic. |
+| [Learning Design](skills/learning-design/SKILL.md) | Design competency-focused learning paths with practice, feedback, retrieval, transfer tasks, and assessment; verify capability rather than content completion. |
 | [Design System Extraction](skills/design-system-extraction/SKILL.md) | Inspect existing website designs, retain measurement evidence, and verify visual reconstructions with separate extraction, fidelity, and functionality outcomes. |
 
 New to skills? Read the [introduction](SKILLS-INTRODUCTION.md).
