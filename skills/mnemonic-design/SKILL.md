@@ -1,257 +1,358 @@
 ---
 name: mnemonic-design
-description: Designs memorable representations of information using imagery, association, narrative, spatial memory, retrieval cues and memory architecture principles. Optimized for long-term retention and rapid recall.
+description: Transform information into durable memory structures using imagery, metaphor, association, narrative, spatial memory, pattern recognition and retrieval cue design. Use when long-term retention, recall speed and memorability are more important than explanation or visualization.
 ---
 
-# Purpose
+# Mnemonic Design
 
-Transform information into durable memory traces.
+## Purpose
 
-The goal is NOT explanation.
+Mnemonic Design transforms information into memory-friendly representations.
 
-The goal is NOT summarization.
+The primary objective is:
 
-The goal is maximizing:
+- maximize memorability
+- maximize recall speed
+- maximize retention duration
 
-- memorability
-- recall speed
-- retention duration
-- retrieval accuracy
+The objective is NOT:
 
-while preserving correctness.
+- explanation
+- visualization
+- summarization
+- teaching
+
+Those objectives belong to other skills.
+
+Mnemonic Design focuses exclusively on memory architecture.
+
+---
+
+# Use When
+
+Use this skill when the user asks to:
+
+- remember information
+- memorize information
+- learn facts quickly
+- retain concepts
+- create memory aids
+- prepare for exams
+- remember procedures
+- remember terminology
+- remember vocabulary
+- remember numbers
+- remember sequences
+
+---
+
+# Do Not Use When
+
+Do not use as primary skill when user asks:
+
+- explain something
+- visualize something
+- create diagrams
+- organize knowledge
+- design a learning curriculum
+
+Understanding → Visual Knowledge Design
+
+Learning Process → Learning Design
+
+Knowledge Structure → Knowledge Structure Design
+
+---
 
 # Core Principle
 
-Information becomes memorable when it is transformed through one or more memory mechanisms:
+People rarely remember information.
 
-1. Imagery
-2. Association
-3. Narrative
-4. Spatiality
-5. Emotion
-6. Pattern
-7. Retrieval
+They remember:
 
-The skill must identify which mechanisms will create the strongest memory trace.
+- images
+- stories
+- locations
+- emotions
+- patterns
+- surprising events
 
-# Memory Design Process
+Transform abstract knowledge into memorable experiences.
 
-For every request:
+Never memorize facts directly if they can be transformed.
 
-Step 1:
-Analyze information structure.
-
-Determine:
-
-- facts
-- concepts
-- sequences
-- procedures
-- relationships
-- numbers
-- abstractions
-
-Step 2:
-Determine memory difficulty.
-
-Classify:
-
-LOW
-MEDIUM
-HIGH
-
-memorization complexity.
-
-Step 3:
-Select memory mechanisms.
-
-Choose the smallest effective combination.
-
-Step 4:
-Generate memory design.
-
-Step 5:
-Score memory strength.
-
-If score is weak:
-improve automatically.
+---
 
 # Memory Mechanisms
 
-## Imagery
+## 1. Imagery
 
-Transform concepts into vivid visual objects.
-
-Prioritize:
-
-- oversized objects
-- impossible scenarios
-- exaggerated features
-- vivid colors
-- movement
-
-Avoid generic imagery.
-
-## Association
-
-Connect new information to existing knowledge.
-
-Use:
-
-- analogies
-- metaphors
-- familiar objects
-- real-world systems
-
-Preference:
-
-known -> unknown
-
-## Narrative
-
-Encode information inside events.
+Create vivid mental images.
 
 Prefer:
 
-- cause and effect
-- character interaction
-- conflict
-- action
+- large objects
+- impossible objects
+- exaggerated size
+- strong color
+- movement
 
-## Spatial
+## 2. Association
 
-Attach knowledge to locations.
+Attach unknown information to known information.
 
-Use:
+Rule:
 
-- memory palace
-- journey method
-- room mapping
+Known → Unknown
 
-## Emotional
+## 3. Narrative
 
-Increase retention through emotional amplification.
+Encode information in stories.
 
-Use:
+## 4. Spatial Memory
+
+Use locations.
+
+Techniques:
+
+- Memory Palace
+- Method of Loci
+- Journey Method
+- Room Mapping
+
+## 5. Emotion
+
+Increase retention through:
 
 - humor
 - surprise
 - absurdity
-- achievement
+- success
+- danger
 
-## Pattern
+## 6. Pattern Recognition
 
-Compress information into recognizable patterns.
+Create structure.
 
-Use:
+Techniques:
 
 - chunking
-- grouping
 - hierarchy
-- acronym construction
+- grouping
+- categorization
+- acronym formation
 
-## Retrieval
+## 7. Retrieval
 
-Design recall triggers.
+Design future recall.
 
-Generate:
+Create:
 
 - cues
-- challenge questions
 - prompts
-- memory hooks
+- challenge questions
+- flashcard-style triggers
 
-# Technique Selection
+---
+
+# Memory Design Workflow
+
+1. Analyze Content
+2. Assess Memorization Difficulty
+3. Select Memory Mechanisms
+4. Generate Memory Architecture
+5. Score Strength
+
+---
+
+# Memory Strength Score
+
+Rate:
+
+- Vividness (1-10)
+- Novelty (1-10)
+- Emotional Impact (1-10)
+- Association Strength (1-10)
+- Retrieval Ease (1-10)
+
+Interpretation:
+
+- 40-50 Exceptional
+- 30-39 Strong
+- 20-29 Acceptable
+- Below 20 Redesign
+
+---
+
+# Technique Selection Engine
 
 ## Lists
 
-Prefer:
+Preferred:
 
-- story chains
-- memory palace
-- journey method
-- peg systems
+- Story Chain
+- Journey Method
+- Memory Palace
 
 ## Procedures
 
-Prefer:
+Preferred:
 
-- narrative encoding
-- location encoding
+- Journey Method
+- Story Method
+- Location Anchors
+
+## Vocabulary
+
+Preferred:
+
+- keyword mnemonics
+- imagery
+- associations
+
+## Technical Concepts
+
+Preferred:
+
+- analogies
+- metaphorization
+- personification
 
 ## Abstract Concepts
 
-Prefer:
+Preferred:
 
-- metaphor
-- personification
-- analogy
+- characters
+- worlds
+- metaphors
 
 ## Numbers
 
-Prefer:
+Preferred:
 
-- major system
-- peg systems
+- Major System
 - PAO
+- Peg System
 
-## Dense Knowledge
+---
 
-Prefer:
+# Memory Design Rules
 
-- chunking
-- conceptual clustering
-- layered encoding
+Strong mnemonics usually contain:
 
-# Memory Strength Checklist
+- absurdity
+- movement
+- emotion
+- visual contrast
+- exaggeration
+- uniqueness
 
-Rate 1-10:
+---
 
-- vividness
-- novelty
-- emotional impact
-- association strength
-- retrieval ease
+# Anti-Patterns
 
-If below Strong:
-redesign automatically.
+- Literal Restatement
+- Weak Analogies
+- Excessive Complexity
+- Mixed Metaphors
 
-# Output Modes
+---
 
-## Quick Memory Hook
+# Output Formats
+
+## Memory Hook
 
 Concept
-Memory Image
+
+Image
+
 Recall Cue
 
-## Memory Cards
+Strength Score
+
+## Memory Card
 
 Concept
-Image
-Association
-Question
-Answer
+
+Mnemonic
+
+Meaning
+
+Retrieval Question
+
+Strength Score
 
 ## Memory Palace
 
 Location
+
 Stored Concept
+
 Anchor Image
 
-## Story Encoding
+Recall Trigger
 
-Fact
-Character
-Action
-Outcome
+Strength Score
 
-# Relationship to Other Skills
+## Story Chain
 
-Visual Knowledge Design
-→ How should this be presented?
+Concepts
 
-Mnemonic Design
-→ How should this be remembered?
+Story
 
-Learning Design
-→ How should this be learned and retained over time?
+Recall Path
+
+Strength Score
+
+## Exam Pack
+
+Key Concept
+
+Memory Device
+
+Common Confusion
+
+Recall Prompt
+
+Strength Score
+
+---
+
+# Child-Friendly Mode
+
+Prefer:
+
+- animals
+- fantasy
+- superheroes
+- cartoons
+- magical locations
+
+---
+
+# Expert Mode
+
+Prefer:
+
+- domain analogies
+- system analogies
+- architecture metaphors
+- process mappings
+
+---
+
+# Relationship To Other Skills
+
+Visual Knowledge Design = How should this be understood?
+
+Mnemonic Design = How should this be remembered?
+
+Learning Design = How should this be mastered over time?
+
+---
+
+# Final Rule
+
+Do not generate mnemonics mechanically.
+
+Design memory experiences.
