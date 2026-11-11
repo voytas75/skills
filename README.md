@@ -12,6 +12,7 @@ Choose by the outcome you need. Each link opens the full instructions.
 
 | Skill | What it helps you do |
 | :--- | :--- |
+| [Task Execution Planner](skills/task-execution-planner/SKILL.md) | Plan a task with explicit LLM, APP, and TOOL roles, dependencies, data validation, human decision and approval gates, and stopping criteria; planning does not execute or authorize the task. |
 | [Feature Slice Planner](skills/feature-slice-planner/SKILL.md) | Turn a feature into one manageable change with clear acceptance checks. |
 | [Implementation Reviewer](skills/implementation-reviewer/SKILL.md) | Compare an implementation with the requirements and find missing work or changes outside the agreed scope. |
 | [Divide and Conquer Analysis](skills/divide-and-conquer-analysis/SKILL.md) | Break down a complex subject and bring the findings back into one conclusion. |
