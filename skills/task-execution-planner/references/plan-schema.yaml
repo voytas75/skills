@@ -1,0 +1,82 @@
+# Reference contract only; not JSON Schema and not an executable workflow.
+# Omit optional fields that do not apply. Do not invent data or capability availability.
+
+plan:
+  schema_version: "1.1"
+  goal: "Concrete user outcome"
+  assessment:
+    complexity: "DIRECT | SEQUENTIAL | PARALLEL | MIXED"
+    scope:
+      included: []
+      excluded: []
+      definitions: []
+    assumptions: []
+    unknowns: []
+    constraints: []
+    overall_risk: "LOW | MEDIUM | HIGH"
+
+  tasks:
+    - id: "T1"
+      action: "Verb + object; one distinct outcome"
+      method: "LLM | APP | TOOL | HYBRID"
+      rationale: "Why this is the simplest reliable method"
+      input: []
+      output:
+        description: "Observable expected result"
+        format: "Optional"
+      depends_on: []
+      capability:
+        name: "Tool, runtime, API, application, or model capability"
+        availability: "AVAILABLE | NEEDS_ACCESS | NOT_AVAILABLE | UNKNOWN"
+        requirements: []
+      provenance:
+        source: "Primary/secondary source or N/A"
+        retrieved_at: "Timestamp and timezone, if applicable"
+        query_or_parameters: []
+        coverage: "Time/entity/record coverage"
+        units_and_semantics: "Definitions, units, granularity"
+        status: "PRIMARY_VERIFIED | SECONDARY_VERIFIED | PARTIAL | CONFLICTING | UNVERIFIED"
+        transformations: []
+      input_gate:
+        status: "PASS | PARTIAL | BLOCKED"
+        checks: []
+        blocking_conditions: []
+      processing_contract:
+        algorithm: "Formula or method, if deterministic"
+        precision_and_units: "Precision, rounding, units"
+        edge_cases: []
+        known_answer_tests: []
+      validation:
+        - type: "MECHANICAL | SEMANTIC | HUMAN"
+          criterion: "Observable acceptance condition"
+      human_gate:
+        type: "HUMAN_DECISION | HUMAN_APPROVAL"
+        decision_or_action: "What the person must decide or approve"
+        options_or_consequences: []
+      failure_handling:
+        detection: "How failure is identified"
+        retry: "SAFE | CONDITIONAL | UNSAFE | NOT_APPLICABLE"
+        fallback: "Smallest valid fallback or STOP"
+      risk: "LOW | MEDIUM | HIGH"
+
+  execution_order:
+    parallel_groups: []
+    sequential_after: []
+
+  stopping_criteria: []
+  approval_gates:
+    - before_task: "Tn"
+      reason: "Why approval is required"
+
+  overall_validation:
+    - "Observable criterion proving the requested outcome is complete"
+
+  deliverables:
+    - name: "Expected artifact or result"
+      format: "Optional format"
+
+  recommendation:
+    strategy: "Concise chosen strategy"
+    compromise: "Material trade-off, if any"
+
+  status: "PLANNED"

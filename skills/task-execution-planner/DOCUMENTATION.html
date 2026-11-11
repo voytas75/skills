@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Dokumentacja Task Execution Planner v0.2.0">
+<title>Task Execution Planner — dokumentacja v0.2.0</title>
+<style>
+:root{color-scheme:light dark;--bg:#fff;--fg:#18212f;--muted:#5b6677;--line:#d9e0e8;--panel:#f4f7fa;--accent:#2458a6;--code:#eef2f7}
+@media(prefers-color-scheme:dark){:root{--bg:#111827;--fg:#e5eaf1;--muted:#aab5c4;--line:#354154;--panel:#1b2636;--accent:#8db8ff;--code:#202c3d}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.65 system-ui,-apple-system,Segoe UI,sans-serif}
+main{max-width:1000px;margin:auto;padding:34px 24px 80px}h1,h2,h3{line-height:1.2}h1{font-size:2.2rem}h2{font-size:1.45rem;margin-top:2.4rem;border-bottom:1px solid var(--line);padding-bottom:.4rem}h3{font-size:1.08rem;margin-top:1.5rem}
+.meta,.muted{color:var(--muted)}nav,.panel{background:var(--panel);border:1px solid var(--line);padding:16px 20px;border-radius:10px}nav ul{columns:2}a{color:var(--accent)}code,pre{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}code{background:var(--code);padding:.12em .3em;border-radius:4px}pre{background:var(--code);padding:14px;overflow:auto}
+table{border-collapse:collapse;width:100%;margin:14px 0}th,td{border:1px solid var(--line);padding:9px;text-align:left;vertical-align:top}th{background:var(--panel)}.note{border-left:4px solid var(--accent);padding:10px 16px;background:var(--panel);margin:16px 0}.tag{display:inline-block;border:1px solid var(--line);border-radius:99px;padding:2px 8px;font-size:.82rem}
+footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:var(--muted);font-size:.9rem}
+@media(max-width:650px){main{padding:22px 15px 55px}nav ul{columns:1}table{font-size:.9rem}}
+</style>
+</head>
+<body><main>
+<header>
+<p class="tag">SPECIFICATION · v0.2.0 · EXPERIMENTAL</p>
+<h1>Task Execution Planner</h1>
+<p class="meta">Dokumentacja projektowa i użytkowa · 11 listopada 2026 · autor: Voytas</p>
+<p>Ogólny skill planistyczny. Dla konkretnego zadania wybiera najprostszy wiarygodny podział pracy pomiędzy LLM, kod/aplikację i narzędzia zewnętrzne, definiując wejścia, wyjścia, zależności oraz bramki jakości i decyzji.</p>
+</header>
+<nav><strong>Spis treści</strong><ul>
+<li><a href="#summary">Podsumowanie zmian</a></li><li><a href="#scope">Cel i granice</a></li>
+<li><a href="#methods">Metody wykonania</a></li><li><a href="#workflow">Proces planowania</a></li>
+<li><a href="#scopegate">Scope Gate</a></li><li><a href="#provenance">Data Provenance Gate</a></li>
+<li><a href="#completeness">Input Completeness Gate</a></li><li><a href="#determinism">Deterministic Boundary</a></li>
+<li><a href="#human">Human Decision / Approval Gates</a></li><li><a href="#replan">Failure & Replanning</a></li>
+<li><a href="#stopping">Stopping Criteria</a></li><li><a href="#contract">Kontrakt planu</a></li>
+<li><a href="#tests">Testy regresyjne</a></li><li><a href="#tradeoffs">Kompromisy</a></li>
+</ul></nav>
+
+<section id="summary"><h2>1. Podsumowanie zmian 0.2.0</h2>
+<p>Wersja 0.2.0 jest rewizją 0.1.0 po trzech testach zachowania. Zmiany dotyczą procesu planowania, nie domen testowych.</p>
+<table><thead><tr><th>Test</th><th>Ujawniona słabość</th><th>Uogólniona poprawka</th></tr></thead><tbody>
+<tr><td>Research ofert flat-rate</td><td>Nieostre kryteria włączenia, pomylenie deklaracji z rzeczywistymi limitami, ryzyko opierania się na cenie bez warunków.</td><td>Scope Gate, kryteria klasyfikacji, źródła pierwotne, evidence/provenance, jawne limity i stopping criteria.</td></tr>
+<tr><td>Średni kierunek wiatru z 10 dób</td><td>Niepełne dane i ryzyko zastosowania niewłaściwej średniej arytmetycznej do danych kołowych.</td><td>Input Completeness Gate, poprawny model matematyczny, jawny processing contract, blokada obliczeń przy brakach.</td></tr>
+<tr><td>API + kod + scenariusze + wybór człowieka</td><td>Niezweryfikowane źródło zastępcze, brak rozdzielenia pobrania/obliczeń/interpretacji i decyzji.</td><td>Data Provenance Gate, Deterministic Boundary, Human Decision Gate, Action Safety Boundary.</td></tr>
+</tbody></table>
+<div class="note"><strong>Zakres pozostaje ogólny.</strong> Przykłady rynku, pogody czy subskrypcji nie są regułami domenowymi skilla. Są jedynie przypadkami testowymi dla uniwersalnych zasad planowania.</div>
+</section>
+
+<section id="scope"><h2>2. Cel i granice</h2>
+<p><strong>Cel:</strong> dla pojedynczego zadania zaproponować minimalny plan, który wskazuje co zrobić, czym, na jakich danych, w jakiej kolejności, jak sprawdzić poprawność i gdzie potrzebna jest decyzja lub zgoda człowieka.</p>
+<ul><li>Skill tworzy plan, nie wykonuje go.</li><li>Nie jest runtime, schedulerem, agentem autonomicznym ani menedżerem połączeń.</li><li>Plan nie jest zgodą na działanie.</li><li>Jeśli użytkownik osobno zleca wykonanie, wykonawca musi korzystać z rzeczywiście dostępnych i autoryzowanych zdolności oraz raportować dowody wykonania.</li></ul>
+</section>
+
+<section id="methods"><h2>3. Metody wykonania</h2>
+<table><thead><tr><th>Metoda</th><th>Rola</th><th>Przykłady</th></tr></thead><tbody>
+<tr><td><code>LLM</code></td><td>Rozumienie i ocena.</td><td>Interpretacja, synteza, priorytety, rekomendacja jakościowa.</td></tr>
+<tr><td><code>APP</code></td><td>Jawne, powtarzalne reguły.</td><td>Obliczenia, walidacja, parsowanie, transformacja, agregacja, testy.</td></tr>
+<tr><td><code>TOOL</code></td><td>Zewnętrzne dane lub istniejąca zdolność.</td><td>Wyszukiwarka, API, repozytorium, pliki, baza, konektor.</td></tr>
+<tr><td><code>HYBRID</code></td><td>Metody praktycznie nierozdzielne.</td><td>Rzadki przypadek, gdy nie da się wyodrębnić osobnych wyników etapów.</td></tr>
+</tbody></table>
+<p>Domyślnie rozdziel pobieranie, walidację, obliczenia, interpretację i decyzję. APP nie oznacza automatycznie budowy aplikacji: może oznaczać mały skrypt lub istniejące środowisko. Wdrożenie kodu musi być uzasadnione precyzją, skalą, powtarzalnością, audytowalnością lub integracją.</p>
+</section>
+
+<section id="workflow"><h2>4. Proces planowania</h2>
+<ol><li>Ustal wynik, zakres i wykluczenia.</li><li>Oceń złożoność: DIRECT, SEQUENTIAL, PARALLEL, MIXED.</li><li>Podziel na zadania z osobnymi wynikami.</li><li>Wybierz metodę dla każdego zadania.</li><li>Sprawdź dostępność narzędzi, danych, runtime i uprawnień.</li><li>Zdefiniuj pochodzenie danych i bramki kompletności.</li><li>Określ algorytmy, jednostki i przypadki brzegowe dla APP.</li><li>Ułóż zależności, bramki ludzkie i bezpieczeństwa.</li><li>Określ awarie, fallbacki, kryteria stop i walidację końcową.</li><li>Przedstaw zwięzły plan z wyraźnym statusem PLANNED.</li></ol>
+<p>Nie wypełniaj wszystkich pól mechanicznie. Pomijaj elementy nieistotne dla danego zadania.</p>
+</section>
+
+<section id="scopegate"><h2>5. Scope Gate</h2>
+<p>Przed wyszukiwaniem lub implementacją zapisz kryteria, które determinują poprawny wynik:</p>
+<ul><li>co wchodzi i nie wchodzi w zakres;</li><li>jak definiowane są porównywane kategorie i terminy;</li><li>jakie podmioty, lokalizacje, okresy, interwały, jednostki i poziom szczegółowości są wymagane;</li><li>jakie ograniczenia budżetu, dostępu, czasu i formatu obowiązują;</li><li>jakie warunki oznaczają wynik wystarczający.</li></ul>
+<p>Jeżeli brak definicji zmienia rezultat, zadaj jedno konkretne pytanie. W przeciwnym razie jawnie przyjmij rozsądne założenie.</p>
+</section>
+
+<section id="provenance"><h2>6. Data Provenance Gate</h2>
+<p>W przypadku istotnych danych zewnętrznych plan ma określić źródło, czas pobrania, zakres, parametry, jednostki, znaczenie pól i transformacje. Preferuj źródła pierwotne. Dla faktów zmiennych w czasie nie polegaj na pamięci modelu.</p>
+<table><thead><tr><th>Status</th><th>Znaczenie</th></tr></thead><tbody>
+<tr><td><code>PRIMARY_VERIFIED</code></td><td>Sprawdzone bezpośrednio w źródle pierwotnym.</td></tr>
+<tr><td><code>SECONDARY_VERIFIED</code></td><td>Sprawdzone w źródle wtórnym; nie jest równoważne źródłu pierwotnemu.</td></tr>
+<tr><td><code>PARTIAL</code></td><td>Niepełny zakres lub brakujące pola.</td></tr>
+<tr><td><code>CONFLICTING</code></td><td>Źródła istotnie się różnią.</td></tr>
+<tr><td><code>UNVERIFIED</code></td><td>Brak niezależnej weryfikacji.</td></tr>
+</tbody></table>
+<p><strong>Zakaz cichej substytucji:</strong> nie zastępuj wskazanego API, instrumentu, okresu, populacji ani miary danymi proxy bez oznaczenia różnicy. Fallback powinien ujawnić utratę porównywalności; jeśli zmienia znaczenie zadania, wymaga zgody użytkownika.</p>
+</section>
+
+<section id="completeness"><h2>7. Input Completeness Gate</h2>
+<p>Przed obliczeniami i wnioskami sprawdź właściwe dla zadania warunki:</p>
+<ul><li>obecność pól, typy i oczekiwaną liczbę rekordów;</li><li>pokrycie czasu/encji, kolejność, duplikaty i luki;</li><li>świeżość, tożsamość źródła, jednostki i semantykę;</li><li>wartości null, błędne, skrajne i zakresy plausibility;</li><li>zgodność danych surowych z agregatami i transformacjami.</li></ul>
+<table><thead><tr><th>Status</th><th>Działanie</th></tr></thead><tbody>
+<tr><td><code>PASS</code></td><td>Można wykonać zależne zadania.</td></tr>
+<tr><td><code>PARTIAL</code></td><td>Dozwolony tylko jawnie ograniczony wynik częściowy.</td></tr>
+<tr><td><code>BLOCKED</code></td><td>Zatrzymaj obliczenie/wniosek; wskaż brak i sposób odblokowania.</td></tr>
+</tbody></table>
+<p>Nie wolno podawać definitywnego wyniku, gdy wymagane wejścia są zablokowane. Sam fakt, że API zwróciło HTTP 200, nie potwierdza kompletności semantycznej danych.</p>
+</section>
+
+<section id="determinism"><h2>8. Deterministic Boundary</h2>
+<p>Dla zadań APP określ algorytm, formuły, jednostki, precyzję, zaokrąglenie, normalizację, obsługę braków i wartości brzegowych. Zaplanuj test znanego wyniku lub inwariant. Zachowaj surowe wejścia lub odtwarzalny identyfikator danych.</p>
+<p>Dobierz model matematyczny do semantyki danych: średnia arytmetyczna nie jest uniwersalna (np. dane kołowe, ważone lub porządkowe wymagają właściwej metody). Kod wylicza; LLM interpretuje i wyjaśnia. Nie przypisuj LLM odpowiedzialności za formalną poprawność obliczenia.</p>
+</section>
+
+<section id="human"><h2>9. Human Decision / Approval Gates</h2>
+<table><thead><tr><th>Typ</th><th>Znaczenie</th><th>Wymagane zachowanie</th></tr></thead><tbody>
+<tr><td><code>HUMAN_DECISION</code></td><td>Użytkownik wybiera preferencję, wariant lub kierunek.</td><td>Przedstaw porównywalne opcje, kryteria i kompromisy; zatrzymaj się do wyboru.</td></tr>
+<tr><td><code>HUMAN_APPROVAL</code></td><td>Użytkownik zatwierdza działanie o skutkach.</td><td>Opisz zakres, skutki i odwracalność; nie wykonuj bez wystarczającej zgody.</td></tr>
+</tbody></table>
+<p>Wybór wariantu do dalszej analizy nie jest automatycznie zgodą na wykonanie działania zewnętrznego. Bramka decyzji i bramka autoryzacji to dwa odrębne mechanizmy.</p>
+</section>
+
+<section id="replan"><h2>10. Failure Handling & Adaptive Replanning</h2>
+<p>Dla materialnych awarii określ sygnał wykrycia, wpływ na zależności, bezpieczeństwo ponowienia, minimalny fallback i warunek zatrzymania. Po niepowodzeniu zmieniaj tylko dotknięte kroki, zachowując poprawne wyniki. Ujawniaj zmianę źródła, założeń lub zakresu.</p>
+<ul><li><code>SAFE</code> — retry nie powoduje dodatkowych skutków.</li><li><code>CONDITIONAL</code> — retry po sprawdzeniu stanu lub warunku.</li><li><code>UNSAFE</code> — nie ponawiaj automatycznie.</li><li><code>NOT_APPLICABLE</code> — retry nie dotyczy.</li></ul>
+</section>
+
+<section id="stopping"><h2>11. Stopping Criteria</h2>
+<p>Ustal, kiedy dalsze poszukiwanie lub przetwarzanie przestaje wnosić wartość. Przykładowe warunki: pełne pokrycie wymaganych rekordów, sprawdzenie źródeł pierwotnych, osiągnięcie limitu czasu/kosztu, brak istotnej niepewności albo jawne zaakceptowanie pozostałych ograniczeń.</p>
+<p>Nie twierdź, że research jest wyczerpujący, jeśli nie sprawdzono całego zdefiniowanego zakresu. W raporcie podaj, co sprawdzono i czego nie sprawdzono.</p>
+</section>
+
+<section id="contract"><h2>12. Kontrakt planu</h2>
+<p>Markdown jest domyślny. YAML stosuj tylko, gdy potrzebny jest handoff maszynowy. Referencyjna struktura znajduje się w <code>references/plan-schema.yaml</code>. Pola obejmują: goal, scope, tasks, method, input/output, dependencies, capability availability, provenance, input gate, processing contract, validation, human gate, failure handling, stopping criteria, deliverables i status.</p>
+<p>Każdy plan ma status <code>PLANNED</code>. Plan musi odróżniać propozycję od wykonania i zawierać kryterium zakończenia całego celu. Nie wypełniaj pól nieistotnych placeholderami.</p>
+</section>
+
+<section id="tests"><h2>13. Testy regresyjne</h2>
+<table><thead><tr><th>Test</th><th>Oczekiwane zachowanie</th></tr></thead><tbody>
+<tr><td>Prosta redakcja tekstu</td><td>DIRECT/LLM; brak sztucznej dekompozycji.</td></tr>
+<tr><td>Aktualny research porównawczy</td><td>Scope Gate; źródła pierwotne; kryteria klasyfikacji; limity/warunki; provenance; stopping criteria.</td></tr>
+<tr><td>Obliczenie z 10 wartości dobowych</td><td>TOOL dla pozyskania; APP dla walidacji i właściwej matematyki; BLOCKED przy niekompletnych danych.</td></tr>
+<tr><td>API + kod + scenariusze + wybór człowieka</td><td>TOOL → APP → LLM → HUMAN_DECISION; źródła nie mogą być cicho zastępowane; brak działań bez autoryzacji.</td></tr>
+<tr><td>Nieznana dostępność API</td><td>UNKNOWN/NEEDS_ACCESS; bez fikcyjnego wywołania lub wyniku.</td></tr>
+<tr><td>Niepoprawne dane wejściowe</td><td>BLOCKED/PARTIAL; bez definitywnego wyniku.</td></tr>
+<tr><td>Źródła sprzeczne</td><td>CONFLICTING; wyjaśnienie różnic i ograniczenie wniosku.</td></tr>
+<tr><td>Operacja nieodwracalna</td><td>HUMAN_APPROVAL; retry safety i recovery plan.</td></tr>
+<tr><td>Nowe dane unieważniają założenie</td><td>Adaptive replanning dotkniętych kroków; zachowanie poprawnych wyników.</td></tr>
+</tbody></table>
+<h3>13.1 Kryteria wydania</h3>
+<ul><li>Poprawny frontmatter z <code>name</code> i <code>description</code>.</li><li>Nazwa katalogu zgodna z <code>name</code>.</li><li>Brak domenowych ograniczeń w core skill.</li><li>Scope, provenance, completeness, deterministic, human, failure i stopping gates są spójne w całym pakiecie.</li><li>Brak twierdzeń o wykonaniu bez dowodów.</li><li>Instrukcje pozostają proporcjonalne i nie wymuszają zbędnego APP/HYBRID.</li></ul>
+</section>
+
+<section id="tradeoffs"><h2>14. Kompromisy i ograniczenia</h2>
+<table><thead><tr><th>Decyzja</th><th>Korzyść</th><th>Koszt/ograniczenie</th></tr></thead><tbody>
+<tr><td>Więcej bramek jakości</td><td>Mniej niejawnych założeń i błędnych obliczeń.</td><td>Nieco dłuższy plan dla zadań danych.</td></tr>
+<tr><td>Provenance</td><td>Łatwiej wykryć proxy, stare i sprzeczne źródła.</td><td>Wymaga metadanych źródłowych.</td></tr>
+<tr><td>Human gates</td><td>Oddziela decyzję od autoryzacji.</td><td>Może zatrzymać automatyzację w oczekiwanym miejscu.</td></tr>
+<tr><td>Bez scoringu</td><td>Brak pozornej precyzji.</td><td>Dobór metod pozostaje jakościowy.</td></tr>
+<tr><td>Brak runtime</td><td>Skill jest przenośny i prosty.</td><td>Nie egzekwuje planu ani nie monitoruje wykonania.</td></tr>
+</tbody></table>
+<p>Wersja pozostaje eksperymentalna. Trzy testy uzasadniają rozszerzenie reguł, ale nie dowodzą jeszcze skuteczności w każdej domenie. Kolejny etap to testy regresyjne na różnych klasach zadań, a nie dodawanie kolejnych domenowych wyjątków.</p>
+</section>
+
+<footer>Task Execution Planner · v0.2.0 · Voytas · Dokumentacja opisuje zamierzony kontrakt; nie jest dowodem testów na wszystkich hostach Agent Skills.</footer>
+</main></body></html>
