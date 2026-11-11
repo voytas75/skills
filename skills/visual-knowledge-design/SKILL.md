@@ -2,7 +2,7 @@
 name: visual-knowledge-design
 description: Select and create evidence-informed visual representations that improve comprehension, knowledge organization, recall, and retention. Use when a user asks to explain, learn, teach, summarize, compare, document, or remember information; requests a mind map, concept map, flowchart, infographic, diagram, chart, visual notes, study aid, or a visual equivalent of supplied content; or needs help choosing the most effective information-visualization technique.
 metadata:
-  author: voytas75
+  author: "https://github.com/voytas75"
   version: "1.1.0"
   category: learning-and-information-design
   language: multilingual

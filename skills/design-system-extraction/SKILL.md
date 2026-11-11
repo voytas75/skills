@@ -2,6 +2,7 @@
 name: design-system-extraction
 description: "Extract evidence-backed website design systems; analyze, reconstruct, compare, and audit responsive interfaces using available browser and file capabilities."
 metadata:
+  author: "https://github.com/voytas75"
   version: "1.6.1"
 ---
 

@@ -3,7 +3,7 @@ name: task-execution-planner
 description: Analyze a concrete task and produce a proportionate execution plan. Decompose work only where useful; assign each step to LLM reasoning, deterministic code/application (APP), or external tools (TOOL); define dependencies, data/evidence requirements, validation gates, human decisions, and stopping conditions. Use when choosing how a task should be completed or when a multi-step task needs a reliable plan.
 compatibility: Works with compatible Agent Skills hosts; planning requires no runtime or network dependency.
 metadata:
-  author: Voytas
+  author: "https://github.com/voytas75"
   version: "0.2.0"
   status: experimental
   category: task-planning

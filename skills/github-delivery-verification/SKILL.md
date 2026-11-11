@@ -3,6 +3,8 @@ name: github-delivery-verification
 description: "Verify GitHub delivery against a fixed revision."
 license: MIT
 metadata:
+  author: "https://github.com/voytas75"
+  version: "1.0.0"
   status: ready
   provenance: owner-confirmed
 ---

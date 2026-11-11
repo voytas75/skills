@@ -1,6 +1,9 @@
 ---
 name: "evidence-led-deliberation"
 description: "Coordinate native OpenClaw subagents for complex, verifiable work using a lightweight ledger, evidence, and bounded repair rounds."
+metadata:
+  author: "https://github.com/voytas75"
+  version: "1.0.0"
 ---
 
 # Evidence-led Deliberation (OpenClaw)

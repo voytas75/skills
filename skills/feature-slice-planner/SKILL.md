@@ -1,6 +1,9 @@
 ---
 name: feature-slice-planner
 description: Turn a broad feature idea, project goal, refactor target, or vague implementation request into one bounded next slice with acceptance checks, rollback, and anti-goals. Use when the user asks to narrow scope, choose the next implementation step, break work into a small shippable slice, plan before coding, decide what to do now vs later, or prepare a concise build brief before delegating to a coding agent. Do not use when the next step is already obvious and small enough to do directly.
+metadata:
+  author: "https://github.com/voytas75"
+  version: "1.0.0"
 ---
 
 # Feature Slice Planner

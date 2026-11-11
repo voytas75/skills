@@ -3,6 +3,8 @@ name: uv-sync-vs-dev-extras
 description: "Diagnose uv groups, extras, and environment drift."
 license: MIT
 metadata:
+  author: "https://github.com/voytas75"
+  version: "1.0.0"
   status: ready
   provenance: owner-confirmed
 ---

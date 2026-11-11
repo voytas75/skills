@@ -1,6 +1,9 @@
 ---
 name: ai-image-prompt-analyzer-and-refactorer
 description: Refactor image-generation or editing prompts into explicit change/preserve constraints and functional reference-image roles.
+metadata:
+  author: "https://github.com/voytas75"
+  version: "1.0.0"
 ---
 
 # Image prompt refactoring

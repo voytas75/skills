@@ -7,7 +7,7 @@ description: >-
   Use when designing training, curricula, study plans, technical learning paths,
   skill acquisition systems, exam preparation, or mastery-based learning.
 metadata:
-  author: voytas75
+  author: "https://github.com/voytas75"
   version: "2.0.0"
   category: education
   domain: instructional-design

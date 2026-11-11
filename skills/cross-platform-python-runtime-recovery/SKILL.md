@@ -3,6 +3,8 @@ name: cross-platform-python-runtime-recovery
 description: "Recover Python runtimes with separate host evidence."
 license: MIT
 metadata:
+  author: "https://github.com/voytas75"
+  version: "1.0.0"
   status: ready
   provenance: owner-confirmed
 ---

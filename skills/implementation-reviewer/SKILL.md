@@ -1,6 +1,9 @@
 ---
 name: implementation-reviewer
 description: Review implemented work against a plan, SSOT, slice brief, DoD, or stated scope and report what matches, what drifted, what is missing, and what the next action should be. Use when shipped work needs a bounded compliance/review pass after implementation, refactor, migration, repo cleanup, or delegated coding work. Do not use for broad codebase discovery, style-only review, or open-ended architecture critique.
+metadata:
+  author: "https://github.com/voytas75"
+  version: "1.0.0"
 ---
 
 # Implementation Reviewer

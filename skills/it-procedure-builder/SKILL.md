@@ -1,6 +1,9 @@
 ---
 name: "it-procedure-builder"
 description: "Builds and critiques chat-only IT implementation procedure packages from bounded evidence."
+metadata:
+  author: "https://github.com/voytas75"
+  version: "1.0.0"
 ---
 
 # IT-Procedure-Builder

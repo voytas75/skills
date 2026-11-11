@@ -2,7 +2,7 @@
 name: divide-and-conquer-analysis
 description: Use when analyzing a specific element by divide and conquer.
 version: 1.0.0
-author: Wojciech Napierała + Hermes Agent
+author: "https://github.com/voytas75"
 license: MIT
 metadata:
   hermes:

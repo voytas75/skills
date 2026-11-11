@@ -9,7 +9,7 @@ description: >-
   technical concepts, procedures, and exam material. Not a substitute for
   conceptual explanation, full curriculum design, or hands-on skill practice.
 metadata:
-  author: voytas75
+  author: "https://github.com/voytas75"
   version: "2.0.0"
   category: learning-and-information-design
   domain: memory-design

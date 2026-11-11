@@ -1,6 +1,9 @@
 ---
 name: operational-dashboard-design
 description: Use when designing operational dashboards.
+metadata:
+  author: "https://github.com/voytas75"
+  version: "1.0.0"
 ---
 
 # Operational Dashboard Design
