@@ -19,6 +19,7 @@ Choose by the outcome you need. Each link opens the full instructions.
 | [Image Prompt Analyzer and Refactorer](skills/ai-image-prompt-analyzer-and-refactorer/SKILL.md) | Clarify what an image edit should change, preserve, and take from each reference. |
 | [IT Procedure Builder](skills/it-procedure-builder/SKILL.md) | Write an IT procedure and check for missing or inconsistent steps. |
 | [Evidence-led Deliberation](skills/evidence-led-deliberation/SKILL.md) | Have OpenClaw agents investigate a question, compare their findings, and resolve disagreements. |
+| [Evidence-driven Debugging](skills/evidence-driven-debugging/SKILL.md) | Diagnose defects with checked runtime evidence, discriminating experiments, scoped repairs, and outcome verification; evaluated on limited cases, not proven generally superior. |
 | [Operational Dashboard Design](skills/operational-dashboard-design/SKILL.md) | Design dashboards with clear problem indicators and checks for readability and accessibility. |
 | [GitHub Delivery Verification](skills/github-delivery-verification/SKILL.md) | Verify the pushed commit, remote content, and CI results before calling delivery complete. |
 | [Cross-platform Python Runtime Recovery](skills/cross-platform-python-runtime-recovery/SKILL.md) | Trace Python startup failures across Windows and Linux without mixing their environments. |
