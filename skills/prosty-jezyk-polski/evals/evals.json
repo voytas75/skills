@@ -1,0 +1,20 @@
+{
+  "skill": "prosty-jezyk-polski",
+  "test_cases": [
+    {
+      "name": "rewrite_official_text",
+      "input": "Przepisz prostym językiem: W celu złożenia wniosku należy wypełnić formularz i przesłać go do organu.",
+      "assertions": ["Uses short sentences", "Uses direct address", "Avoids passive voice", "One idea per sentence"]
+    },
+    {
+      "name": "instruction_procedure",
+      "input": "Napisz prostym językiem instrukcję, jak zmienić hasło w systemie.",
+      "assertions": ["Uses numbered list or clear steps", "Imperative or direct address", "Sentences under 20 words"]
+    },
+    {
+      "name": "explain_term",
+      "input": "Wyjaśnij prostym językiem, co to jest deklaracja zgodności CE.",
+      "assertions": ["Explains jargon", "Uses plain words", "Short sentences"]
+    }
+  ]
+}

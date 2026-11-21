@@ -1,0 +1,11 @@
+{
+  "skill": "prosty-jezyk-polski",
+  "test_cases": [
+    {"input": "przepisz to prostym językiem", "should_trigger": true},
+    {"input": "użyj prostego języka polskiego", "should_trigger": true},
+    {"input": "uproszcz ten tekst urzędowy", "should_trigger": true},
+    {"input": "napisz w STE", "should_trigger": false},
+    {"input": "wyjaśnij w ASD-STE100", "should_trigger": false},
+    {"input": "jaka jest pogoda", "should_trigger": false}
+  ]
+}
