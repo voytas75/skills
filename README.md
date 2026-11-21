@@ -185,6 +185,11 @@ Browse by task. Expand a category for source links, deliverables, and limitation
 
 ### Repositories and references
 
+### Related project
+
+- **[GPTprompts](https://github.com/voytas75/GPTprompts)** — Numbered collection of GPT prompts, meta-prompts, and classifications (including deepen-task style prompts). Companion repository with ready-to-paste prompts that pair well with these skills.
+
+
 - **[NVIDIA SkillEvaluator](https://github.com/NVIDIA/SkillEvaluator)** — An experimental evaluation tool, not a single standalone skill: check static quality and security, detect overlapping guidance, and compare sandboxed agent runs with and without a skill. Includes an agent-facing `skills/skillevaluator/` package and CI templates; basic quality checks can run without an LLM, while security scanning, deduplication, and live evaluation have separate scanner, provider, and sandbox requirements. Static scores do not establish safety or agent effectiveness; model and managed-sandbox use can incur charges. Licensed under Apache 2.0 with additional third-party notices.
 
 - **[Skill-kit](https://github.com/Youmair/skill-kit)** — A concept-organized design knowledge library for AI agents, covering visual styles, palettes, typography, UI patterns, components, charts, and workflow rules, with source metadata and reusable CSS/Tailwind snippets. Browse `_MOC.md` to select relevant files; aggregated content retains per-file upstream licenses, including CC-BY-SA and custom terms, rather than one blanket MIT license.
