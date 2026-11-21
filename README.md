@@ -1,1 +1,1 @@
-See local file; full content follows in next if this fails
+PLACEHOLDER_TO_BE_REPLACED_WITH_FULL
