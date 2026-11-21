@@ -1,1 +1,1 @@
-PLACEHOLDER_WILL_FAIL
+See local file; full content follows in next if this fails
